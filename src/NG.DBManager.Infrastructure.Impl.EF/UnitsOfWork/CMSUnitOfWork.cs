@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.Repositories;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
 using NG.DBManager.Infrastructure.Impl.EF.Repositories;
@@ -8,44 +7,32 @@ using System.Collections;
 
 namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
 {
-    public class UnitOfWork : IUnitOfWork
+    public class CMSUnitOfWork : ICMSUnitOfWork
     {
         private readonly DbContext _context;
 
         private bool _disposed;
         private Hashtable _repositories;
 
-        public UnitOfWork(DbContext context)
+        public CMSUnitOfWork(DbContext context)
         {
             _context = context;
-
-            _repositories = new Hashtable();
         }
         public int Commit()
         {
             return _context.SaveChanges();
         }
 
-        public ITourRepository Tour
-        {
-            get
-            {
-                if (_repositories[typeof(Tour)] == null)
-                {
-                    _repositories[typeof(Tour)] =
-                        (ITourRepository)Activator.CreateInstance(typeof(TourRepository), _context);
-                }
-                return (ITourRepository)_repositories[typeof(Tour)];
-            }
-        }
-
-        public IRepository<T> Repository<T>() where T : class
+        public IRepository<T> GetRepository<T>() where T : class
         {
             return (IRepository<T>)GetRepository<T>(typeof(Repository<T>));
         }
 
         protected object GetRepository<T>(Type repositoryType) where T : class
         {
+            if (_repositories == null)
+                _repositories = new Hashtable();
+
             var type = typeof(T).Name;
 
             if (!_repositories.ContainsKey(type))

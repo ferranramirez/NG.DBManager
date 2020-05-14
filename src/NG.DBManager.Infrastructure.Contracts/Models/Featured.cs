@@ -7,7 +7,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
     public class Featured
     {
         [Key]
-        [ForeignKey("Tour")]
+        [ForeignKey(nameof(Tour))]
         public Guid TourId { get; set; }
 
         public Tour Tour { get; set; }

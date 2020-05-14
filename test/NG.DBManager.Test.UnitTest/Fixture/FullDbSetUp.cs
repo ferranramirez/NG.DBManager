@@ -1,4 +1,5 @@
-﻿using NG.DBManager.Infrastructure.Contracts.Contexts;
+﻿using Microsoft.EntityFrameworkCore;
+using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Test.UnitTest.Fixture.Utils;
 using System;
@@ -9,13 +10,11 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure.Fixture
 {
     public class FullDbSetup
     {
-        public ICollection<Audio> Audios;
         public ICollection<AudioImage> AudioImages;
         public ICollection<Location> Coordinates;
         public ICollection<Featured> FeaturedTours;
         public ICollection<Image> Images;
         public ICollection<Node> Nodes;
-        public ICollection<NodeAudio> NodeAudios;
         public ICollection<Restaurant> Restaurants;
         public ICollection<Review> Reviews;
         public ICollection<Tag> Tags;
@@ -148,38 +147,28 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure.Fixture
                     Location = newLocation,
                 };
 
-                var NodeImages = new List<NodeImage>();
-
-                const int imagesPerNode = 4;
-
-                for (int j = 0; j < imagesPerNode; j++)
-                {
-
-                    NodeImage newNodeImage = new NodeImage
-                    {
-                        Node = newNode,
-                        Image = Images.ElementAt(j),
-                    };
-
-                    NodeImages.Add(newNodeImage);
-                }
-
-                newNode.NodeImages = NodeImages;
+                newNode.Images = Images;
                 Nodes.Add(newNode);
             }
             FirstCoordinatesAreRestaurant();
         }
         private void FirstCoordinatesAreRestaurant()
         {
-            Restaurant newRestaurant = new Restaurant { LocationId = Nodes.First().Location.Id };
+            var restaurantId = Guid.NewGuid();
+            Commerce newCommerce = new Commerce
+            {
+                Id = restaurantId,
+                Name = "Restaurant One",
+                LocationId = Nodes.First().Location.Id,
+            };
+            Restaurant newRestaurant = new Restaurant { CommerceId = restaurantId, Commerce = newCommerce };
             Restaurants.Add(newRestaurant);
         }
 
         private void GenerateAudios()
         {
-            Audios = new List<Audio>();
+            var Audios = new List<Audio>();
             AudioImages = new List<AudioImage>();
-            NodeAudios = new List<NodeAudio>();
 
             for (int i = 0; i < audiosToGenerate; i++)
             {
@@ -191,10 +180,11 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure.Fixture
 
                 FillAudioImages(newAudio);
 
-                AddAudioToFirstNode(i, newAudio);
 
                 Audios.Add(newAudio);
             }
+
+            Nodes.First().Audios = Audios;
         }
 
         private void FillAudioImages(Audio newAudio)
@@ -213,18 +203,6 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure.Fixture
 
                 AudioImages.Add(newAudioImage);
             }
-        }
-
-        private void AddAudioToFirstNode(int i, Audio newAudio)
-        {
-            NodeAudio newNodeAudio = new NodeAudio
-            {
-                NodeId = Nodes.FirstOrDefault().Id,
-                AudioId = newAudio.Id,
-                Order = i
-            };
-
-            NodeAudios.Add(newNodeAudio);
         }
 
         private void GenerateUsers()
@@ -270,7 +248,7 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure.Fixture
             }
         }
 
-        public void FillDb(NgContext context)
+        public void FillDatabase(DBManager.Infrastructure.Contracts.Contexts.NgContext context)
         {
             context.Image.AddRange(Images);
             context.Tag.AddRange(Tags);
@@ -278,12 +256,21 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure.Fixture
             context.TourTag.AddRange(TourTags);
             context.Node.AddRange(Nodes);
             context.Restaurant.AddRange(Restaurants);
-            context.Audio.AddRange(Audios);
-            context.AudioImage.AddRange(AudioImages);
-            context.NodeAudio.AddRange(NodeAudios);
             context.User.AddRange(Users);
             context.Review.AddRange(Reviews);
             context.SaveChanges();
+        }
+
+        public DBManager.Infrastructure.Contracts.Contexts.NgContext GenerateInMemoryContext()
+        {
+            var builder = new DbContextOptionsBuilder<DBManager.Infrastructure.Contracts.Contexts.NgContext>();
+            builder.UseInMemoryDatabase(Guid.NewGuid().ToString());
+
+            DBManager.Infrastructure.Contracts.Contexts.NgContext context = new DBManager.Infrastructure.Contracts.Contexts.NgContext(builder.Options);
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+
+            return context;
         }
     }
 }

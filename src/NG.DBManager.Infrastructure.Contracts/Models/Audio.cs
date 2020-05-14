@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NG.DBManager.Infrastructure.Contracts.Models
@@ -8,7 +7,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
     {
         public Audio()
         {
-            AudioImages = new HashSet<AudioImage>();
+            //AudioImages = new HashSet<AudioImage>();
         }
 
         public Guid Id { get; set; }
@@ -16,6 +15,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
         [Column(TypeName = "nvarchar(20)")]
         public string Name { get; set; }
 
-        public IEnumerable<AudioImage> AudioImages { get; set; }
+        public Guid NodeId { get; set; }
+        //public IEnumerable<AudioImage> AudioImages { get; set; }
     }
 }

@@ -22,12 +22,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
         [Column(TypeName = "decimal(9, 6)")]
         public decimal Longitude { get; set; }
 
-        public Restaurant Restaurant { get; set; }
         public IEnumerable<Node> Nodes { get; set; }
 
-        public bool IsRestaurant()
-        {
-            return !Restaurant.Equals(null);
-        }
     }
 }

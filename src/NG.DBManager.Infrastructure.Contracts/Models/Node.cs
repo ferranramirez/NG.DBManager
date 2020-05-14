@@ -8,8 +8,8 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
     {
         public Node()
         {
-            NodeAudios = new HashSet<NodeAudio>();
-            NodeImages = new HashSet<NodeImage>();
+            Audios = new HashSet<Audio>();
+            Images = new HashSet<Image>();
         }
 
         public Guid Id { get; set; }
@@ -27,7 +27,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
         public Guid TourId { get; set; }
 
         public Location Location { get; set; }
-        public IEnumerable<NodeAudio> NodeAudios { get; set; }
-        public IEnumerable<NodeImage> NodeImages { get; set; }
+        public IEnumerable<Audio> Audios { get; set; }
+        public IEnumerable<Image> Images { get; set; }
     }
 }

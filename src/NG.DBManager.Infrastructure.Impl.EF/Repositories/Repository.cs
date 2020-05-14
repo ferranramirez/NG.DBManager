@@ -7,14 +7,13 @@ using System.Linq.Expressions;
 
 namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 {
-    public class Repository<TContext, TEntity> : IRepository<TEntity>
-        where TContext : DbContext
+    public class Repository<TEntity> : IRepository<TEntity>
         where TEntity : class
     {
-        protected readonly TContext Context;
+        protected readonly DbContext Context;
         protected readonly DbSet<TEntity> DbSet;
 
-        public Repository(TContext context)
+        public Repository(DbContext context)
         {
             Context = context;
             DbSet = context.Set<TEntity>();
@@ -35,7 +34,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return DbSet.Where(predicate);
         }
 
-        public TEntity Get(object id)
+        public virtual TEntity Get(object id)
         {
             return DbSet.Find(id);
         }

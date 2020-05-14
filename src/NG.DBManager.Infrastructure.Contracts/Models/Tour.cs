@@ -22,7 +22,8 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
         public int Duration { get; set; }
         public bool IsPremium { get; set; }
 
-        public Guid FeaturedId { get; set; }
+        public Guid ImageId { get; set; }
+
         public Featured Featured { get; set; }
         public Image Image { get; set; }
         public IEnumerable<Node> Nodes { get; set; }

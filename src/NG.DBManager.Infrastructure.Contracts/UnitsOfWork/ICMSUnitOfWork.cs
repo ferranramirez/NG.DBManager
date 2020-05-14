@@ -3,10 +3,9 @@ using System;
 
 namespace NG.DBManager.Infrastructure.Contracts.UnitsOfWork
 {
-    public interface IUnitOfWork : IDisposable
+    public interface ICMSUnitOfWork : IDisposable
     {
         int Commit();
-        IRepository<T> Repository<T>() where T : class;
-        ITourRepository Tour { get; }
+        IRepository<T> GetRepository<T>() where T : class;
     }
 }

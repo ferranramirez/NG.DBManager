@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\NG.DBManager.Infrastructure.Contracts\NG.DBManager.Infrastructure.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\NG.DBManager.Infrastructure.Impl.EF\NG.DBManager.Infrastructure.Impl.EF.csproj" />
   </ItemGroup>
 
 </Project>

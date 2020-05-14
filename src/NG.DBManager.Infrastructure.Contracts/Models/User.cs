@@ -15,6 +15,9 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
         public string Surname { get; set; }
         public DateTime Birthdate { get; set; }
 
+        [Column(TypeName = "nvarchar(50)")]
+        public string PhoneNumber { get; set; }
+
         [Column(TypeName = "nvarchar(254)")]
         public string Email { get; set; }
 
