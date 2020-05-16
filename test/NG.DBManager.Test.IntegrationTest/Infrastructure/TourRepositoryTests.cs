@@ -1,29 +1,32 @@
-﻿using NG.DBManager.Infrastructure.Contracts.Contexts;
+﻿using Microsoft.Extensions.DependencyInjection;
+using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
-using NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork;
+using NG.DBManager.Test.IntegrationTest.Fixture;
 using NG.DBManager.Test.Utilities;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace NG.DBManager.Test.UnitTest.Infrastructure
+namespace NG.DBManager.Test.IntegrationTest.Infrastructure.Fixture
 {
-    public class TourRepositoryTests : IClassFixture<DatabaseUtilities>
+    public class TourRepositoryTests
+        : IClassFixture<IoCModuleFixture>, IClassFixture<DatabaseUtilities>
     {
         private readonly DatabaseUtilities _databaseUtilities;
 
         private readonly NgContext Context;
         private readonly IUnitOfWork UnitOfWork;
 
-
-        public TourRepositoryTests(DatabaseUtilities databaseUtilities)
+        public TourRepositoryTests(IoCModuleFixture ioCModule, DatabaseUtilities databaseUtilities)
         {
             _databaseUtilities = databaseUtilities;
 
-            Context = databaseUtilities.GenerateInMemoryContext();
-            UnitOfWork = new UnitOfWork(Context);
+            var serviceProvider = ioCModule._serviceProvider;
+
+            Context = serviceProvider.GetService<NgContext>();
+            UnitOfWork = serviceProvider.GetService<IUnitOfWork>();
         }
 
 
@@ -31,6 +34,9 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure
         public void AddTour()
         {
             //ARRANGE
+            Context.Database.EnsureDeleted();
+            Context.Database.EnsureCreated();
+
             Guid newTourId = Guid.NewGuid();
             Tour newTour = new Tour
             {
@@ -55,9 +61,13 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure
         public async Task GetAllFeaturedTours()
         {
             //ARRANGE
+            Context.Database.EnsureDeleted();
+            Context.Database.EnsureCreated();
+
             _databaseUtilities.Seed(Context);
             var expected = _databaseUtilities.Tours
                             .Where(t => t.IsFeatured)
+                            .OrderBy(t => t.Name)
                             .ToList();
 
             //ACT
@@ -71,6 +81,9 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure
         public async Task GetLastOnesCreated()
         {
             //ARRANGE
+            Context.Database.EnsureDeleted();
+            Context.Database.EnsureCreated();
+
             _databaseUtilities.Seed(Context);
 
             //ACT
@@ -89,7 +102,8 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure
         public async Task GetToursByFullTagAsync()
         {
             //ARRANGE
-            // _database.FullTagName = "Supercalifragilisticexpialidocious"
+            Context.Database.EnsureDeleted();
+            Context.Database.EnsureCreated();
 
             _databaseUtilities.Seed(Context);
 
@@ -98,6 +112,7 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure
                                 .Any(tt => tt.Tag.Name
                                     .Equals("Supercalifragilisticexpialidocious",
                                         StringComparison.CurrentCultureIgnoreCase)))
+                            .OrderBy(t => t.Name)
                             .ToList();
 
             //ACT
@@ -111,6 +126,9 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure
         public async Task GetToursByTag()
         {
             //ARRANGE
+            Context.Database.EnsureDeleted();
+            Context.Database.EnsureCreated();
+
             _databaseUtilities.Seed(Context);
 
             var expected = _databaseUtilities.Tours
@@ -118,6 +136,7 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure
                                 .Any(tt => tt.Tag.Name
                                     .Contains("CaliFRAGIListIcexpIaLidoc",
                                         StringComparison.CurrentCultureIgnoreCase)))
+                            .OrderBy(t => t.Name)
                             .ToList();
 
             //ACT
@@ -132,13 +151,17 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure
         public async Task GetByTagOrName()
         {
             //ARRANGE
-            // _database.TourExistingName = "Custom Tour, Random But Unique Name"
+            Context.Database.EnsureDeleted();
+            Context.Database.EnsureCreated();
+
             _databaseUtilities.Seed(Context);
 
             var expected = _databaseUtilities.Tours
                             .Where(tour => tour.Name
                                 .Contains("Tour, Random But Unique",
-                                    StringComparison.CurrentCultureIgnoreCase));
+                                    StringComparison.CurrentCultureIgnoreCase))
+                            .OrderBy(t => t.Name)
+                            .ToList();
 
             //ACT
             var actual = await UnitOfWork.Tour.GetByTagOrName("Tour, Random But Unique");

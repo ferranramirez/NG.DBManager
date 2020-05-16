@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.Repositories;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
@@ -10,12 +10,12 @@ namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly DbContext _context;
+        private readonly NgContext _context;
 
         private bool _disposed;
         private Hashtable _repositories;
 
-        public UnitOfWork(DbContext context)
+        public UnitOfWork(NgContext context)
         {
             _context = context;
 

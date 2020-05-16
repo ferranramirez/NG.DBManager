@@ -19,49 +19,60 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             Context.Entry(entity).Property("Created").CurrentValue = DateTime.UtcNow;
         }
 
-        public async Task<IEnumerable<Tour>> GetFeaturedTours()
+        public async Task<IEnumerable<Tour>> GetFeatured()
         {
             return await DbSet
                 .AsNoTracking()
-                .Where(t => t.Featured != null)
+                .Where(t => t.IsFeatured)
+                .OrderBy(t => t.Name)
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Tour>> GetLastTours(int numOfTours)
+        public async Task<IEnumerable<Tour>> GetLastOnesCreated(int numOfTours)
         {
             return await DbSet
                 .AsNoTracking()
-                .OrderBy(t => Property<DateTime>(t, "LastUpdated"))
+                .OrderBy(t => Property<DateTime>(t, "Created"))
                 .Take(numOfTours)
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Tour>> GetToursByTag(string filter)
+        public async Task<IEnumerable<Tour>> GetByFullTag(string fullTag)
         {
+            var LowCaseFilter = fullTag.ToLower();
+
             return await DbSet
                 .AsNoTracking()
                 .Where(tour => tour.TourTags
-                    .Any(tourTag => tourTag.Tag.Name
-                        .Contains(filter, StringComparison.InvariantCultureIgnoreCase)))
-                .ToListAsync();
-        }
-        public async Task<IEnumerable<Tour>> GetToursByFullTag(string fullTag)
-        {
-            return await DbSet
-                .AsNoTracking()
-                .Where(tour => tour.TourTags
-                    .Any(tourTag => tourTag.Tag.Name
-                        .Equals(fullTag, StringComparison.InvariantCultureIgnoreCase)))
+                    .Any(tourTag => tourTag.Tag.Name.ToLower()
+                        .Equals(LowCaseFilter)))
+                .OrderBy(t => t.Name)
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Tour>> GetToursByTagOrName(string filter)
+        public async Task<IEnumerable<Tour>> GetByTag(string filter)
         {
+            var LowCaseFilter = filter.ToLower();
+
             return await DbSet
                 .AsNoTracking()
-                .Where(tour => tour.Name.Contains(filter, StringComparison.InvariantCultureIgnoreCase)
+                .Where(tour => tour.TourTags
+                    .Any(tourTag => tourTag.Tag.Name.ToLower()
+                        .Contains(LowCaseFilter)))
+                .OrderBy(t => t.Name)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Tour>> GetByTagOrName(string filter)
+        {
+            var LowCaseFilter = filter.ToLower();
+
+            return await DbSet
+                .AsNoTracking()
+                .Where(tour => tour.Name.ToLower().Contains(LowCaseFilter)
                     || tour.TourTags
-                        .Any(tourTag => tourTag.Tag.Name.Contains(filter, StringComparison.InvariantCultureIgnoreCase)))
+                    .Any(tourTag => tourTag.Tag.Name.ToLower().Contains(LowCaseFilter)))
+                .OrderBy(t => t.Name)
                 .ToListAsync();
         }
     }

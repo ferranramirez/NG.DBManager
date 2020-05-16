@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NG.DBManager.Infrastructure.Contracts.Contexts;
+using NG.DBManager.Infrastructure.Impl.EF.IoCModule;
 
 namespace NG.DBManager.Presentation.API
 {
@@ -20,11 +20,9 @@ namespace NG.DBManager.Presentation.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<Infrastructure.Contracts.Contexts.NgContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("Default"));
-            });
             services.AddControllers();
+
+            services.AddInfrastructureServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

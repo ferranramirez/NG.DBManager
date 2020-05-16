@@ -31,8 +31,9 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
     public enum Role
     {
         Admin = 0,
-        Basic = 1,
-        Standard = 2,
-        Premium = 3
+        Commerce = 1,
+        Basic = 2,
+        Standard = 3,
+        Premium = 4
     }
 }

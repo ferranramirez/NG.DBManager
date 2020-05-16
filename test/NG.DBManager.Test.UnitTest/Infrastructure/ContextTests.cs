@@ -1,19 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NG.DBManager.Infrastructure.Contracts.Contexts;
-using NG.DBManager.Test.UnitTest.Infrastructure.Fixture;
+using NG.DBManager.Test.Utilities;
 using System;
 using System.Linq;
 using Xunit;
 
 namespace NG.DBManager.Test.UnitTest.Infrastructure
 {
-    public class ContextTests : IClassFixture<FullDbSetup>
+    public class ContextTests : IClassFixture<DatabaseUtilities>
     {
-        private readonly FullDbSetup _dbSetup;
+        private readonly DatabaseUtilities _databaseUtilities;
 
-        public ContextTests(FullDbSetup dbSetup)
+        public ContextTests(DatabaseUtilities databaseUtilities)
         {
-            _dbSetup = dbSetup;
+            _databaseUtilities = databaseUtilities;
         }
 
         [Fact]
@@ -28,11 +28,10 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure
             using (var context = new NgContext(options))
             {
                 // ACT
-                _dbSetup.FillDatabase(context);
+                _databaseUtilities.Seed(context);
 
                 var audios = context.Audio.ToList();
                 var locations = context.Location.ToList();
-                var featuredTours = context.Featured.ToList();
                 var images = context.Image.ToList();
                 var nodes = context.Node.ToList();
                 var restaurants = context.Restaurant.ToList();
@@ -45,7 +44,6 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure
                 // ASSERT
                 Assert.NotEmpty(audios);
                 Assert.NotEmpty(locations);
-                Assert.NotEmpty(featuredTours);
                 Assert.NotEmpty(images);
                 Assert.NotEmpty(nodes);
                 Assert.NotEmpty(restaurants);
@@ -70,20 +68,29 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure
 
             using (var context = new NgContext(options))
             {
-                _dbSetup.FillDatabase(context);
+                _databaseUtilities.Seed(context);
 
                 // ACT
-                var firstTour = _dbSetup.Tours.First();
-                var tourImage = firstTour.Image;
-                var featuredTour = firstTour.Featured;
-                var nodes = firstTour.Nodes;
-                var nodesDb1 = context.Node.ToList();
-                Assert.Equal(nodes, nodesDb1);
+                var firstTour = _databaseUtilities.Tours.First();
+                var tourImageId = firstTour.ImageId;
+                var nodes = firstTour.Nodes
+                    .OrderBy(n => n.Id)
+                    .ToList();
+                var nodesDb0 = context.Node
+                    .Where(n => n.TourId == firstTour.Id)
+                    .OrderBy(n => n.Id)
+                    .ToList();
+                Assert.Equal(nodes, nodesDb0);
+
+                var nodesDb1 = context.Node
+                    .ToList();
 
                 var tourTags = firstTour.TourTags;
-                var locations = firstTour.Nodes.Select(n => n.Location);
-                var locationsDb1 = context.Location.ToList();
-                Assert.Equal(locations, locationsDb1);
+                var locations = firstTour.Nodes
+                    .Select(n => n.Location)
+                    .ToList();
+                var locationsDb1 = context.Location
+                    .ToList();
 
                 var imagesDb1 = context.Image.ToList();
 
@@ -93,8 +100,6 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure
                 var tagsDb1 = context.Tag.ToList();
 
                 Assert.NotNull(firstTour);
-                Assert.NotNull(tourImage);
-                Assert.NotNull(featuredTour);
                 Assert.NotEmpty(nodes);
                 Assert.NotEmpty(tourTags);
                 Assert.NotEmpty(locations);
@@ -102,7 +107,7 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure
                 var imagesNodeDb1 = context.Node.SelectMany(n => n.Images).ToList();
 
 
-                var tourImageDb1 = context.Image.Find(tourImage.Id);
+                var tourImageDb1 = context.Image.Find(tourImageId);
                 Assert.NotNull(tourImageDb1);
 
                 context.Tour.Remove(firstTour);
@@ -112,11 +117,8 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure
                 var firstTourDb = context.Tour.Find(firstTour.Id);
                 Assert.Null(firstTourDb);
 
-                var tourImageDb2 = context.Image.Find(tourImage.Id);
+                var tourImageDb2 = context.Image.Find(tourImageId);
                 //Assert.Null(tourImageDb2);
-
-                var featuredTourDb = context.Featured.Where(f => f.TourId == firstTour.Id).ToList();
-                Assert.Empty(featuredTourDb);
 
                 var nodesDb2 = context.Node.Where(n => n.TourId == firstTour.Id).ToList();
                 Assert.Empty(nodesDb2);

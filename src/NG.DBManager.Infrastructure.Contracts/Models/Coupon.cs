@@ -9,7 +9,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
 
         [Column(TypeName = "text")]
         public string Content { get; set; }
-        public DateTime Redemption { get; set; }
+        public DateTime ValidationDate { get; set; }
 
         public User User { get; set; }
         public Commerce Commerce { get; set; }
@@ -17,6 +17,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
         public Guid UserId { get; set; }
         public Guid CommerceId { get; set; }
 
-        public bool IsRedeemed => Redemption != default;
+        public bool IsValidated => ValidationDate != default;
     }
 }
