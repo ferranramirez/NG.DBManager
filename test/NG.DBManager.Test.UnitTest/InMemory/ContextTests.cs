@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace NG.DBManager.Test.UnitTest.Infrastructure
+namespace NG.DBManager.Test.UnitTest.InMemory
 {
     public class ContextTests : IClassFixture<DatabaseUtilities>
     {

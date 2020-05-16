@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
+using NG.DBManager.Test.Utilities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,11 +15,14 @@ namespace NG.DBManager.Presentation.API.Controllers
     {
         private readonly ILogger<TestController> _logger;
         private readonly IUnitOfWork _uow;
+        private readonly NgContext _context;
 
-        public TestController(ILogger<TestController> logger, IUnitOfWork uow)
+        public TestController(ILogger<TestController> logger,
+            IUnitOfWork uow, NgContext context)
         {
             _logger = logger;
             _uow = uow;
+            _context = context;
         }
 
         /// <summary>
@@ -45,6 +50,16 @@ namespace NG.DBManager.Presentation.API.Controllers
             var response = _uow.Tour.GetByTag(filter);
 
             return Ok(response);
+        }
+
+        [HttpGet("Seed")]
+        [ProducesResponseType(typeof(List<Tour>), 200)]
+        public IActionResult Seed()
+        {
+            var dbUtilities = new DatabaseUtilities();
+            var rows = dbUtilities.Seed(_context);
+
+            return Ok(rows);
         }
     }
 }

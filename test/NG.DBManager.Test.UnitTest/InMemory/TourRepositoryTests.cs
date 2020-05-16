@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace NG.DBManager.Test.UnitTest.Infrastructure
+namespace NG.DBManager.Test.UnitTest.InMemory
 {
     public class TourRepositoryTests : IClassFixture<DatabaseUtilities>
     {
@@ -22,7 +22,7 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure
         {
             _databaseUtilities = databaseUtilities;
 
-            Context = databaseUtilities.GenerateInMemoryContext();
+            Context = databaseUtilities.GenerateSQLiteContext();
             UnitOfWork = new UnitOfWork(Context);
         }
 
@@ -58,6 +58,7 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure
             _databaseUtilities.Seed(Context);
             var expected = _databaseUtilities.Tours
                             .Where(t => t.IsFeatured)
+                            .OrderBy(t => t.Name)
                             .ToList();
 
             //ACT
@@ -98,6 +99,7 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure
                                 .Any(tt => tt.Tag.Name
                                     .Equals("Supercalifragilisticexpialidocious",
                                         StringComparison.CurrentCultureIgnoreCase)))
+                            .OrderBy(t => t.Name)
                             .ToList();
 
             //ACT
@@ -118,6 +120,7 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure
                                 .Any(tt => tt.Tag.Name
                                     .Contains("CaliFRAGIListIcexpIaLidoc",
                                         StringComparison.CurrentCultureIgnoreCase)))
+                            .OrderBy(t => t.Name)
                             .ToList();
 
             //ACT
@@ -138,7 +141,9 @@ namespace NG.DBManager.Test.UnitTest.Infrastructure
             var expected = _databaseUtilities.Tours
                             .Where(tour => tour.Name
                                 .Contains("Tour, Random But Unique",
-                                    StringComparison.CurrentCultureIgnoreCase));
+                                    StringComparison.CurrentCultureIgnoreCase))
+                            .OrderBy(t => t.Name)
+                            .ToList();
 
             //ACT
             var actual = await UnitOfWork.Tour.GetByTagOrName("Tour, Random But Unique");

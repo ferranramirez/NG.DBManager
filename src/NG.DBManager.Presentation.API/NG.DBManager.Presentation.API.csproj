@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\test\NG.DBManager.Test.Utilities\NG.DBManager.Test.Utilities.csproj" />
     <ProjectReference Include="..\NG.DBManager.Infrastructure.Contracts\NG.DBManager.Infrastructure.Contracts.csproj" />
     <ProjectReference Include="..\NG.DBManager.Infrastructure.Impl.EF\NG.DBManager.Infrastructure.Impl.EF.csproj" />
   </ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using FizzWare.NBuilder;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.Models;
@@ -63,9 +64,29 @@ namespace NG.DBManager.Test.Utilities
         public NgContext GenerateInMemoryContext()
         {
             var builder = new DbContextOptionsBuilder<NgContext>();
-            builder.UseInMemoryDatabase(Guid.NewGuid().ToString());
+            builder.UseInMemoryDatabase("InMemoryDb");
 
             NgContext context = new NgContext(builder.Options);
+
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+
+            return context;
+        }
+        public NgContext GenerateSQLiteContext()
+        {
+            var connection = new SqliteConnection("Filename=:memory:");
+            connection.Open();
+
+
+            var option = new DbContextOptionsBuilder<NgContext>()
+                .UseSqlite(connection).Options;
+
+            //var builder = new DbContextOptionsBuilder<NgContext>();
+            //builder.UseSqlite(Guid.NewGuid().ToString());
+
+            NgContext context = new NgContext(option);
+
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
