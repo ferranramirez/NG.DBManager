@@ -3,7 +3,6 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.Models;
-using NG.DBManager.Infrastructure.Contracts.Validations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,27 +23,14 @@ namespace NG.DBManager.Test.Utilities
         public List<User> Users;
         public List<Coupon> Coupons;
 
-
-        public Tag TagWithManyTours;
-
-        public string FullTagName = "Supercalifragilisticexpialidocious";
-
-        public const string TourExistingName = "Custom Tour, Random But Unique Name";
+        private Tag TagWithManyTours;
+        private string FullTagName = "Supercalifragilisticexpialidocious";
+        private const string TourExistingName = "Custom Tour, Random But Unique Name";
 
         Hashtable ReviewUserCheck;
         public DatabaseUtilities()
         {
             GenerateData();
-            IValidator<Tour> validator = new TourValidator();
-            //foreach (var t in Tours)
-            //{
-            //    bool errorValidation = validator.Validate(t);
-            //    Console.WriteLine(t.Name);
-            //    Console.ReadLine();
-            //}
-
-            //var longNodeDesc = Tours.Where(t => t.Name.Length > 50);
-            //var longAudioName = Nodes.Where(t => t.Audios.Any(a => a.Name.Length > 20));
         }
 
         public int Seed(NgContext context)
@@ -61,6 +47,7 @@ namespace NG.DBManager.Test.Utilities
             return context.SaveChanges();
         }
 
+        #region Context generator
         public NgContext GenerateInMemoryContext()
         {
             var builder = new DbContextOptionsBuilder<NgContext>();
@@ -82,9 +69,6 @@ namespace NG.DBManager.Test.Utilities
             var option = new DbContextOptionsBuilder<NgContext>()
                 .UseSqlite(connection).Options;
 
-            //var builder = new DbContextOptionsBuilder<NgContext>();
-            //builder.UseSqlite(Guid.NewGuid().ToString());
-
             NgContext context = new NgContext(option);
 
             context.Database.EnsureDeleted();
@@ -92,7 +76,9 @@ namespace NG.DBManager.Test.Utilities
 
             return context;
         }
+        #endregion Context generator
 
+        #region Data generator
         // All the data is generated in the order it should be added into the DB, but the Images list
         private void GenerateData()
         {
@@ -169,8 +155,8 @@ namespace NG.DBManager.Test.Utilities
                 .CreateListOfSize(200)
                     .All()
                         .With(tour => tour.Id = Guid.NewGuid())
-                        //.With(tour => tour.Name = new string(Faker.Company.CatchPhrase().Take(10).ToArray()))
-                        //.With(tour => tour.Description = new string(Faker.Lorem.Paragraph().Take(10).ToArray()))
+                        .With(tour => tour.Name = LimitMaxLength(Faker.Company.CatchPhrase(), 50))
+                        .With(tour => tour.Description = Faker.Lorem.Paragraph())
                         .With(tour => tour.Duration = Faker.RandomNumber.Next())
                         .With(tour => tour.IsPremium = Faker.Boolean.Random())
                         .With(tour => tour.IsFeatured = false)
@@ -225,6 +211,11 @@ namespace NG.DBManager.Test.Utilities
                     .ToList();
         }
 
+        private static string LimitMaxLength(string str, int maxLength)
+        {
+            return new string(str.Take(maxLength).ToArray());
+        }
+
         private Tour AddTourNotReviewedByUser(Review review)
         {
             var isReviewed = true;
@@ -261,7 +252,7 @@ namespace NG.DBManager.Test.Utilities
             var generatedCommerce = Builder<Commerce>
                 .CreateNew()
                 .With(c => c.Id = Guid.NewGuid())
-                //.With(c => c.Name = Faker.Finance.Isin())
+                .With(c => c.Name = LimitMaxLength(Faker.Finance.Isin(), 80))
                 .With(c => c.Location = Pick<Location>.RandomItemFrom(Locations))
                 .With(c => c.LocationId = c.Location.Id)
                 .Build();
@@ -311,9 +302,9 @@ namespace NG.DBManager.Test.Utilities
                 .CreateListOfSize(10) // Number of Nodes for each Tour
                 .All()
                     .With(node => node.Id = Guid.NewGuid())
-                    //.With(node => node.Name = Faker.Company.BS())
+                    .With(node => node.Name = LimitMaxLength(Faker.Company.BS(), 50))
                     .With(node => node.Order = Faker.RandomNumber.Next())
-                    //.With(node => node.Description = new string(Faker.Lorem.Paragraph(5).Take(100).ToArray()))
+                    .With(node => node.Description = Faker.Lorem.Paragraph())
                     .With(node => node.Images = Pick<Image>.UniqueRandomList(
                         With.Between(5).And(10).Elements).From(Images))
                     .With(node => node.Location = Pick<Location>.RandomItemFrom(Locations))
@@ -334,10 +325,11 @@ namespace NG.DBManager.Test.Utilities
                 .CreateListOfSize(4) // Number of Audios for each Node
                 .All()
                     .With(a => a.Id = Guid.NewGuid())
-                    //.With(a => a.Name = string.Concat(new string(Faker.Address.Country().Take(15).ToArray()), ".mp3"))
+                    .With(a => a.Name = LimitMaxLength(Faker.Address.Country(), 20))
                     .With(a => a.NodeId = node.Id)
                 .Build()
                 .ToList();
         }
+        #endregion Data generator
     }
 }
