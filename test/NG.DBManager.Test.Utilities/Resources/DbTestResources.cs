@@ -1,4 +1,4 @@
-﻿namespace NG.DBManager.Test.IntegrationTest.Resources
+﻿namespace NG.DBManager.Test.Utilities.Resources
 {
     public static class DbTestResources
     {

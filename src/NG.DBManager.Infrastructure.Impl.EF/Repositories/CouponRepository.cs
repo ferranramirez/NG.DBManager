@@ -5,7 +5,7 @@ using System;
 
 namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 {
-    public class CouponRepository : Repository<Coupon>, ICouponRepository
+    public class CouponRepository : Repository<Coupon>, IRepository
     {
         public CouponRepository(DbContext context) : base(context) { }
 

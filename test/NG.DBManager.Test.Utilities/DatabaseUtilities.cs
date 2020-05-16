@@ -3,6 +3,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.Models;
+using NG.DBManager.Test.Utilities.Resources;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -60,11 +61,24 @@ namespace NG.DBManager.Test.Utilities
 
             return context;
         }
+
+        public NgContext GenerateSqlServerContext()
+        {
+            var builder = new DbContextOptionsBuilder<NgContext>();
+            builder.UseSqlServer(DbTestResources.CONNECTIONSTRING);
+
+            NgContext context = new NgContext(builder.Options);
+
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+
+            return context;
+        }
+
         public NgContext GenerateSQLiteContext()
         {
             var connection = new SqliteConnection("Filename=:memory:");
             connection.Open();
-
 
             var option = new DbContextOptionsBuilder<NgContext>()
                 .UseSqlite(connection).Options;

@@ -14,11 +14,11 @@ namespace NG.DBManager.Presentation.API.Controllers
     public class TestController : ControllerBase
     {
         private readonly ILogger<TestController> _logger;
-        private readonly IUnitOfWork _uow;
+        private readonly IAPIUnitOfWork _uow;
         private readonly NgContext _context;
 
         public TestController(ILogger<TestController> logger,
-            IUnitOfWork uow, NgContext context)
+            IAPIUnitOfWork uow, NgContext context)
         {
             _logger = logger;
             _uow = uow;

@@ -10,20 +10,21 @@ using Xunit;
 
 namespace NG.DBManager.Test.UnitTest.InMemory
 {
-    public class TourRepositoryTests : IClassFixture<DatabaseUtilities>
+    public class TourRepositoryTests : IDisposable,
+        IClassFixture<DatabaseUtilities>
     {
         private readonly DatabaseUtilities _databaseUtilities;
 
         private readonly NgContext Context;
-        private readonly IUnitOfWork UnitOfWork;
+        private readonly IAPIUnitOfWork UnitOfWork;
 
 
         public TourRepositoryTests(DatabaseUtilities databaseUtilities)
         {
             _databaseUtilities = databaseUtilities;
 
-            Context = databaseUtilities.GenerateSQLiteContext();
-            UnitOfWork = new UnitOfWork(Context);
+            Context = databaseUtilities.GenerateInMemoryContext();
+            UnitOfWork = new APIUnitOfWork(Context);
         }
 
 
@@ -150,6 +151,12 @@ namespace NG.DBManager.Test.UnitTest.InMemory
 
             //ASSERT
             Assert.Equal(expected, actual);
+        }
+
+        public void Dispose()
+        {
+            Context.Dispose();
+            UnitOfWork.Dispose();
         }
     }
 }

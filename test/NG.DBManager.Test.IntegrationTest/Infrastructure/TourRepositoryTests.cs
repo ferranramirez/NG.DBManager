@@ -1,8 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using NG.DBManager.Infrastructure.Contracts.Contexts;
+﻿using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
-using NG.DBManager.Test.IntegrationTest.Fixture;
+using NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork;
 using NG.DBManager.Test.Utilities;
 using System;
 using System.Linq;
@@ -11,32 +10,26 @@ using Xunit;
 
 namespace NG.DBManager.Test.IntegrationTest.Infrastructure.Fixture
 {
-    public class TourRepositoryTests
-        : IClassFixture<IoCModuleFixture>, IClassFixture<DatabaseUtilities>
+    public class TourRepositoryTests : IDisposable,
+        IClassFixture<DatabaseUtilities>
     {
         private readonly DatabaseUtilities _databaseUtilities;
 
         private readonly NgContext Context;
-        private readonly IUnitOfWork UnitOfWork;
+        private readonly IAPIUnitOfWork UnitOfWork;
 
-        public TourRepositoryTests(IoCModuleFixture ioCModule, DatabaseUtilities databaseUtilities)
+        public TourRepositoryTests(DatabaseUtilities databaseUtilities)
         {
             _databaseUtilities = databaseUtilities;
 
-            var serviceProvider = ioCModule._serviceProvider;
-
-            Context = serviceProvider.GetService<NgContext>();
-            UnitOfWork = serviceProvider.GetService<IUnitOfWork>();
+            Context = databaseUtilities.GenerateSqlServerContext();
+            UnitOfWork = new APIUnitOfWork(Context);
         }
-
 
         [Fact]
         public void AddTour()
         {
             //ARRANGE
-            Context.Database.EnsureDeleted();
-            Context.Database.EnsureCreated();
-
             Guid newTourId = Guid.NewGuid();
             Tour newTour = new Tour
             {
@@ -61,9 +54,6 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure.Fixture
         public async Task GetAllFeaturedTours()
         {
             //ARRANGE
-            Context.Database.EnsureDeleted();
-            Context.Database.EnsureCreated();
-
             _databaseUtilities.Seed(Context);
             var expected = _databaseUtilities.Tours
                             .Where(t => t.IsFeatured)
@@ -81,9 +71,6 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure.Fixture
         public async Task GetLastOnesCreated()
         {
             //ARRANGE
-            Context.Database.EnsureDeleted();
-            Context.Database.EnsureCreated();
-
             _databaseUtilities.Seed(Context);
 
             //ACT
@@ -102,9 +89,6 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure.Fixture
         public async Task GetToursByFullTagAsync()
         {
             //ARRANGE
-            Context.Database.EnsureDeleted();
-            Context.Database.EnsureCreated();
-
             _databaseUtilities.Seed(Context);
 
             var expected = _databaseUtilities.Tours
@@ -126,9 +110,6 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure.Fixture
         public async Task GetToursByTag()
         {
             //ARRANGE
-            Context.Database.EnsureDeleted();
-            Context.Database.EnsureCreated();
-
             _databaseUtilities.Seed(Context);
 
             var expected = _databaseUtilities.Tours
@@ -151,9 +132,6 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure.Fixture
         public async Task GetByTagOrName()
         {
             //ARRANGE
-            Context.Database.EnsureDeleted();
-            Context.Database.EnsureCreated();
-
             _databaseUtilities.Seed(Context);
 
             var expected = _databaseUtilities.Tours
@@ -168,6 +146,12 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure.Fixture
 
             //ASSERT
             Assert.Equal(expected, actual);
+        }
+
+        public void Dispose()
+        {
+            Context.Dispose();
+            UnitOfWork.Dispose();
         }
     }
 }

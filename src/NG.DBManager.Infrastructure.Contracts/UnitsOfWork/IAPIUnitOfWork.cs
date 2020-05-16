@@ -2,8 +2,8 @@
 
 namespace NG.DBManager.Infrastructure.Contracts.UnitsOfWork
 {
-    public interface IFullUnitOfWork : IUnitOfWork
+    public interface IAPIUnitOfWork : IFullUnitOfWork
     {
-        IRepository<T> Repository<T>() where T : class;
+        ITourRepository Tour { get; }
     }
 }

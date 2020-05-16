@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.Repositories;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
 using NG.DBManager.Infrastructure.Impl.EF.Repositories;
@@ -7,23 +7,17 @@ using System.Collections;
 
 namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
 {
-    public class CMSUnitOfWork : ICMSUnitOfWork
+    public class FullUnitOfWork : UnitOfWork, IFullUnitOfWork
     {
-        private readonly DbContext _context;
-
-        private bool _disposed;
+        private readonly NgContext _context;
         private Hashtable _repositories;
 
-        public CMSUnitOfWork(DbContext context)
+        public FullUnitOfWork(NgContext context) : base(context)
         {
             _context = context;
         }
-        public int Commit()
-        {
-            return _context.SaveChanges();
-        }
 
-        public IRepository<T> GetRepository<T>() where T : class
+        public IRepository<T> Repository<T>() where T : class
         {
             return (IRepository<T>)GetRepository<T>(typeof(Repository<T>));
         }
@@ -55,21 +49,6 @@ namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
             {
                 return Activator.CreateInstance(repositoryType, _context);
             }
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!_disposed && disposing)
-            {
-                _context.Dispose();
-            }
-            _disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
     }
 }

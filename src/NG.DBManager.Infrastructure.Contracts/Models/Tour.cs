@@ -32,8 +32,8 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
 
         public override bool Equals(object obj)
         {
-            return obj is Tour tour &&
-                   Id.Equals(tour.Id);
+            return obj is Tour tour
+                && Id.Equals(tour.Id);
         }
 
         public override int GetHashCode()

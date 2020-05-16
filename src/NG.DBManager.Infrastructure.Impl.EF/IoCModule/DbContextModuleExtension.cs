@@ -22,7 +22,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.IoCModule
             {
                 builder.UseSqlServer(provider.GetService<IConfiguration>().GetConnectionString("Default"));
             })
-            .AddScoped<IUnitOfWork, UnitOfWork>();
+            .AddScoped<IUnitOfWork, APIUnitOfWork>();
 
             return services;
         }
