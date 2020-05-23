@@ -3,6 +3,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.Models;
+using NG.DBManager.Infrastructure.Contracts.Models.Enums;
 using NG.DBManager.Test.Utilities.Resources;
 using System;
 using System.Collections;

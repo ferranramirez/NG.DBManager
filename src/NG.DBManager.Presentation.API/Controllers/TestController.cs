@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.Models;
@@ -28,6 +29,7 @@ namespace NG.DBManager.Presentation.API.Controllers
         /// <summary>
         /// This is a test Test 
         /// </summary>
+        [Authorize]
         [HttpGet]
 
         [ProducesResponseType(typeof(List<Tour>), 200)]

@@ -2,8 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NG.DBManager.Infrastructure.Contracts.Contexts;
-using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
-using NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork;
 using System;
 
 namespace NG.DBManager.Infrastructure.Impl.EF.IoCModule
@@ -20,9 +18,8 @@ namespace NG.DBManager.Infrastructure.Impl.EF.IoCModule
 
             services.AddDbContext<NgContext>((provider, builder) =>
             {
-                builder.UseSqlServer(provider.GetService<IConfiguration>().GetConnectionString("Default"));
-            })
-            .AddScoped<IUnitOfWork, APIUnitOfWork>();
+                builder.UseSqlServer(provider.GetService<IConfiguration>().GetConnectionString("NotGuiriDb"));
+            });
 
             return services;
         }

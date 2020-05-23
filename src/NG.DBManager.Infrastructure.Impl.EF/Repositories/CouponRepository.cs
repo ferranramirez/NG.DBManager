@@ -5,7 +5,7 @@ using System;
 
 namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 {
-    public class CouponRepository : Repository<Coupon>, IRepository
+    public class CouponRepository : Repository<Coupon>, ICouponRepository
     {
         public CouponRepository(DbContext context) : base(context) { }
 
@@ -13,11 +13,6 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
         {
             DbSet.Add(entity);
             Context.Entry(entity).Property("Created").CurrentValue = DateTime.UtcNow;
-        }
-
-        public override Coupon Get(object id)
-        {
-            return DbSet.Find(id);
         }
     }
 }

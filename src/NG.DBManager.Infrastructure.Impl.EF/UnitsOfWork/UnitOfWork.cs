@@ -1,6 +1,7 @@
 ﻿using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
 using System;
+using System.Threading.Tasks;
 
 namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
 {
@@ -14,9 +15,9 @@ namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
             _context = context;
         }
 
-        public int Commit()
+        public async Task<int> CommitAsync()
         {
-            return _context.SaveChanges();
+            return await _context.SaveChangesAsync();
         }
         protected virtual void Dispose(bool disposing)
         {

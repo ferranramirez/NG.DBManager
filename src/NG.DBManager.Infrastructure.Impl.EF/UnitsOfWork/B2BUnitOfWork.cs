@@ -1,5 +1,4 @@
 ﻿using NG.DBManager.Infrastructure.Contracts.Contexts;
-using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.Repositories;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
 using NG.DBManager.Infrastructure.Impl.EF.Repositories;
@@ -11,18 +10,18 @@ namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
     {
         private readonly NgContext _context;
 
-        private IRepository<Coupon> _couponRepository;
+        private ICouponRepository _couponRepository;
 
         public B2BUnitOfWork(NgContext context) : base(context)
         {
             _context = context;
         }
 
-        public IRepository<Coupon> Coupon
+        public ICouponRepository Coupon
         {
             get
             {
-                return _couponRepository ?? (_couponRepository = (IRepository)Activator.CreateInstance(typeof(CouponRepository), _context));
+                return _couponRepository ?? (_couponRepository = (ICouponRepository)Activator.CreateInstance(typeof(CouponRepository), _context));
             }
         }
     }

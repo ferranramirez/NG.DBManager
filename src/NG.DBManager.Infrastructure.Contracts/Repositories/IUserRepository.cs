@@ -2,7 +2,8 @@
 
 namespace NG.DBManager.Infrastructure.Contracts.Repositories
 {
-    public interface ICouponRepository : IRepository<Coupon>
+    public interface IUserRepository : IRepository<User>
     {
+        User GetByEmail(string emailAddress);
     }
 }

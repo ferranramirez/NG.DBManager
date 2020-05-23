@@ -1,10 +1,14 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NG.Common.Presentation.Extensions;
+using NG.Common.Presentation.Filters;
+using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
 using NG.DBManager.Infrastructure.Impl.EF.IoCModule;
+using NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork;
+using System.Reflection;
 
 namespace NG.DBManager.Presentation.API
 {
@@ -22,6 +26,20 @@ namespace NG.DBManager.Presentation.API
         {
             services.AddControllers();
 
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            services.AddSwaggerDocumentation(Configuration.GetSection("Documentation"), xmlFile);
+
+            services.AddJwtAuthentication(Configuration.GetSection("Secrets"));
+
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(ApiExceptionFilter));
+            });
+
+            services.Configure<IConfiguration>(Configuration);
+
+            services.AddScoped<IAPIUnitOfWork, APIUnitOfWork>();
+
             services.AddInfrastructureServices();
         }
 
@@ -36,6 +54,10 @@ namespace NG.DBManager.Presentation.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseSwaggerDocumentation(Configuration.GetSection("Documentation"));
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

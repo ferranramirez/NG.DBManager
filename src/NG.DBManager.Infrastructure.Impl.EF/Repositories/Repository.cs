@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 {
@@ -39,9 +40,9 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return DbSet.Find(id);
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public async Task<IEnumerable<TEntity>> GetAll()
         {
-            return DbSet.ToList();
+            return await DbSet.ToListAsync();
         }
 
         public void Remove(object id)

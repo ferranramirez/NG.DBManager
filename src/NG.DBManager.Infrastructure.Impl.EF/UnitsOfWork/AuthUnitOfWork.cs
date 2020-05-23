@@ -1,7 +1,7 @@
 ﻿using NG.DBManager.Infrastructure.Contracts.Contexts;
-using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.Repositories;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
+using NG.DBManager.Infrastructure.Impl.EF.Repositories;
 using System;
 
 namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
@@ -10,23 +10,23 @@ namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
     {
         private readonly NgContext _context;
 
-        private IRepository<User> _couponRepository;
+        private IUserRepository _userRepository { get; set; }
 
         public AuthUnitOfWork(NgContext context) : base(context)
         {
             _context = context;
         }
 
-        public IRepository<User> User
+        public IUserRepository User
         {
             get
             {
-                if (_couponRepository == null)
+                if (_userRepository == null)
                 {
-                    return (_couponRepository =
-                        (IRepository<User>)Activator.CreateInstance(typeof(IRepository<User>), _context));
+                    return (_userRepository =
+                        (IUserRepository)Activator.CreateInstance(typeof(UserRepository), _context));
                 }
-                return _couponRepository;
+                return _userRepository;
             }
         }
     }

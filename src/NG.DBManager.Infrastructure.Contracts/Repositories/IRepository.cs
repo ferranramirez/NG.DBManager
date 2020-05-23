@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace NG.DBManager.Infrastructure.Contracts.Repositories
 {
@@ -8,7 +9,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Repositories
     {
 
         TEntity Get(object id);
-        IEnumerable<TEntity> GetAll();
+        Task<IEnumerable<TEntity>> GetAll();
         IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
 
         void Add(TEntity entity);

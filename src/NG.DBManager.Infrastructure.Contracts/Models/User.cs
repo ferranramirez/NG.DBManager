@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NG.DBManager.Infrastructure.Contracts.Models.Enums;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NG.DBManager.Infrastructure.Contracts.Models
@@ -21,19 +22,10 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
         [Column(TypeName = "nvarchar(254)")]
         public string Email { get; set; }
 
-        [Column(TypeName = "nvarchar(40)")]
+        [Column(TypeName = "text")]
         public string Password { get; set; }
         public Role Role { get; set; }
 
         public Image Image { get; set; }
-    }
-
-    public enum Role
-    {
-        Admin = 0,
-        Commerce = 1,
-        Basic = 2,
-        Standard = 3,
-        Premium = 4
     }
 }
