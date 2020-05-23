@@ -36,8 +36,6 @@ namespace NG.DBManager.Presentation.API
                 options.Filters.Add(typeof(ApiExceptionFilter));
             });
 
-            services.Configure<IConfiguration>(Configuration);
-
             services.AddScoped<IAPIUnitOfWork, APIUnitOfWork>();
 
             services.AddInfrastructureServices();
