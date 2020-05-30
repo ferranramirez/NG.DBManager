@@ -27,8 +27,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
         {
             //modelBuilder.Entity<AudioImage>().HasKey(ai => new { ai.AudioId, ai.ImageId });
 
-            modelBuilder.Entity<Coupon>().Property<DateTime>("Created");
-
             modelBuilder.Entity<Location>().HasIndex(l => new { l.Latitude, l.Longitude }).IsUnique();
 
             modelBuilder.Entity<Review>().HasKey(r => new { r.UserId, r.TourId });

@@ -10,6 +10,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
         [Column(TypeName = "text")]
         public string Content { get; set; }
         public DateTime ValidationDate { get; set; }
+        public DateTime GenerationDate { get; set; }
 
         public User User { get; set; }
         public Commerce Commerce { get; set; }
