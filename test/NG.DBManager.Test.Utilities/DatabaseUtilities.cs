@@ -55,12 +55,7 @@ namespace NG.DBManager.Test.Utilities
             var builder = new DbContextOptionsBuilder<NgContext>();
             builder.UseInMemoryDatabase("InMemoryDb");
 
-            NgContext context = new NgContext(builder.Options);
-
-            context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
-
-            return context;
+            return new NgContext(builder.Options);
         }
 
         public NgContext GenerateSqlServerContext()
@@ -68,12 +63,8 @@ namespace NG.DBManager.Test.Utilities
             var builder = new DbContextOptionsBuilder<NgContext>();
             builder.UseSqlServer(DbTestResources.CONNECTIONSTRING);
 
-            NgContext context = new NgContext(builder.Options);
 
-            context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
-
-            return context;
+            return new NgContext(builder.Options);
         }
 
         public NgContext GenerateSQLiteContext()
@@ -84,12 +75,7 @@ namespace NG.DBManager.Test.Utilities
             var option = new DbContextOptionsBuilder<NgContext>()
                 .UseSqlite(connection).Options;
 
-            NgContext context = new NgContext(option);
-
-            context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
-
-            return context;
+            return new NgContext(option);
         }
         #endregion Context generator
 
@@ -126,8 +112,8 @@ namespace NG.DBManager.Test.Utilities
                 .All()
                     .With(l => l.Id = Guid.NewGuid())
                     // .With(l => l.Name = Faker.Address.StreetName())
-                    .With(l => l.Latitude = 72.123M)
-                    .With(l => l.Longitude = 75.765M)
+                    .With(l => l.Latitude = decimal.Parse(Faker.RandomNumber.Next(-999, 999).ToString()))
+                    .With(l => l.Longitude = decimal.Parse(Faker.RandomNumber.Next(-999, 999).ToString()))
                 .Build()
                 .ToList();
 

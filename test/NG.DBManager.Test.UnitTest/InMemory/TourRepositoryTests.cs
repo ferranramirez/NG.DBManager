@@ -24,6 +24,7 @@ namespace NG.DBManager.Test.UnitTest.InMemory
             _databaseUtilities = databaseUtilities;
 
             Context = databaseUtilities.GenerateInMemoryContext();
+            Context.Database.EnsureCreated();
             UnitOfWork = new APIUnitOfWork(Context);
         }
 
@@ -42,14 +43,20 @@ namespace NG.DBManager.Test.UnitTest.InMemory
 
             //ACT
             UnitOfWork.Tour.Add(newTour);
+            UnitOfWork.CommitAsync();
 
             //ASSERT
-            var tourFromDb = UnitOfWork.Tour.Get(newTourId);
-            Assert.NotNull(tourFromDb);
-            Assert.Equal(tourFromDb, newTour);
+            using (var assertContext = _databaseUtilities.GenerateInMemoryContext())
+            {
+                var assertUOW = new APIUnitOfWork(assertContext);
+                var tourFromDb = assertUOW.Tour.Get(newTourId);
 
-            var createdProperty = Context.Entry(tourFromDb).Property("Created").CurrentValue;
-            Assert.NotNull(createdProperty);
+                Assert.NotNull(tourFromDb);
+                Assert.Equal(tourFromDb, newTour);
+
+                var createdProperty = Context.Entry(tourFromDb).Property("Created").CurrentValue;
+                Assert.NotNull(createdProperty);
+            }
         }
 
         [Fact]
@@ -153,10 +160,23 @@ namespace NG.DBManager.Test.UnitTest.InMemory
             Assert.Equal(expected, actual);
         }
 
-        public void Dispose()
+
+        // Dispose pattern 
+        private bool _disposed;
+        public void Dispose() => Dispose(true);
+        protected virtual void Dispose(bool disposing)
         {
-            Context.Dispose();
-            UnitOfWork.Dispose();
+            if (_disposed)
+            {
+                return;
+            }
+            if (disposing)
+            {
+                Context.Database.EnsureDeleted();
+                Context.Dispose();
+                UnitOfWork.Dispose();
+            }
+            _disposed = true;
         }
     }
 }

@@ -5,5 +5,6 @@ namespace NG.DBManager.Infrastructure.Contracts.UnitsOfWork
     public interface IAPIUnitOfWork : IFullUnitOfWork
     {
         ITourRepository Tour { get; }
+        IUserRepository User { get; }
     }
 }

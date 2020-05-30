@@ -16,6 +16,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
         public string Name { get; set; }
 
         public Guid NodeId { get; set; }
-        //public IEnumerable<AudioImage> AudioImages { get; set; }
+        // public IEnumerable<AudioImage> AudioImages { get; set; }
     }
 }

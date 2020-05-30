@@ -24,6 +24,7 @@ namespace NG.DBManager.Test.UnitTest.SQLite
             _databaseUtilities = databaseUtilities;
 
             Context = databaseUtilities.GenerateSQLiteContext();
+            Context.Database.EnsureCreated();
             UnitOfWork = new APIUnitOfWork(Context);
         }
 
@@ -42,9 +43,11 @@ namespace NG.DBManager.Test.UnitTest.SQLite
 
             //ACT
             UnitOfWork.Tour.Add(newTour);
+            UnitOfWork.CommitAsync();
 
             //ASSERT
             var tourFromDb = UnitOfWork.Tour.Get(newTourId);
+
             Assert.NotNull(tourFromDb);
             Assert.Equal(tourFromDb, newTour);
 
@@ -153,10 +156,22 @@ namespace NG.DBManager.Test.UnitTest.SQLite
             Assert.Equal(expected, actual);
         }
 
-        public void Dispose()
+        // Dispose pattern 
+        private bool _disposed;
+        public void Dispose() => Dispose(true);
+        protected virtual void Dispose(bool disposing)
         {
-            Context.Dispose();
-            UnitOfWork.Dispose();
+            if (_disposed)
+            {
+                return;
+            }
+            if (disposing)
+            {
+                Context.Database.EnsureDeleted();
+                Context.Dispose();
+                UnitOfWork.Dispose();
+            }
+            _disposed = true;
         }
     }
 }

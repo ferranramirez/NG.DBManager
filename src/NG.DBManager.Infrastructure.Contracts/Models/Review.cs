@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace NG.DBManager.Infrastructure.Contracts.Models
 {
     public class Review
     {
+        [Required]
         public int Score { get; set; }
 
         public Guid UserId { get; set; }

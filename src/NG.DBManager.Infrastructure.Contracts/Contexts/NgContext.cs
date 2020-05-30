@@ -25,29 +25,22 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<AudioImage>(entity =>
-            //{
-            //    entity.HasKey(ai => new { ai.AudioId, ai.ImageId });
-            //});
+            //modelBuilder.Entity<AudioImage>().HasKey(ai => new { ai.AudioId, ai.ImageId });
 
-            modelBuilder.Entity<Coupon>(entity =>
-            {
-                entity.Property<DateTime>("Created");
-            });
+            modelBuilder.Entity<Coupon>().Property<DateTime>("Created");
 
-            modelBuilder.Entity<Review>(entity =>
-            {
-                entity.HasKey(r => new { r.UserId, r.TourId });
-            });
+            modelBuilder.Entity<Location>().HasIndex(l => new { l.Latitude, l.Longitude }).IsUnique();
 
-            modelBuilder.Entity<Tour>(entity =>
-            {
-                entity.Property<DateTime>("Created");
-            });
+            modelBuilder.Entity<Review>().HasKey(r => new { r.UserId, r.TourId });
 
-            modelBuilder.Entity<TourTag>(entity =>
+            modelBuilder.Entity<Tour>().Property<DateTime>("Created");
+
+            modelBuilder.Entity<TourTag>().HasKey(tt => new { tt.TourId, tt.TagId });
+
+            modelBuilder.Entity<User>(entity =>
             {
-                entity.HasKey(tt => new { tt.TourId, tt.TagId });
+                entity.HasIndex(u => u.Email).IsUnique();
+                entity.HasIndex(u => u.PhoneNumber).IsUnique();
             });
         }
     }

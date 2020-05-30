@@ -18,5 +18,16 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
         public Guid CommerceId { get; set; }
 
         public bool IsValidated => ValidationDate != default;
+
+        public override bool Equals(object obj)
+        {
+            return obj is Coupon coupon
+                && Id.Equals(coupon.Id);
+        }
+
+        public override int GetHashCode()
+        {
+            return new { Id }.GetHashCode();
+        }
     }
 }

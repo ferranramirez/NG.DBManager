@@ -5,10 +5,9 @@ using NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork;
 using NG.DBManager.Test.Utilities;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
-namespace NG.DBManager.Test.IntegrationTest.Infrastructure.Fixture
+namespace NG.DBManager.Test.IntegrationTest.Infrastructure
 {
     public class TourRepositoryTests : IDisposable,
         IClassFixture<DatabaseUtilities>
@@ -23,6 +22,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure.Fixture
             _databaseUtilities = databaseUtilities;
 
             Context = databaseUtilities.GenerateSqlServerContext();
+            Context.Database.EnsureCreated();
             UnitOfWork = new APIUnitOfWork(Context);
         }
 
@@ -40,18 +40,24 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure.Fixture
 
             //ACT
             UnitOfWork.Tour.Add(newTour);
+            UnitOfWork.CommitAsync();
 
             //ASSERT
-            var tourFromDb = UnitOfWork.Tour.Get(newTourId);
-            Assert.NotNull(tourFromDb);
-            Assert.Equal(tourFromDb, newTour);
+            using (var assertContext = _databaseUtilities.GenerateSqlServerContext())
+            {
+                var assertUOW = new APIUnitOfWork(assertContext);
+                var tourFromDb = assertUOW.Tour.Get(newTourId);
 
-            var createdProperty = Context.Entry(tourFromDb).Property("Created").CurrentValue;
-            Assert.NotNull(createdProperty);
+                Assert.NotNull(tourFromDb);
+                Assert.Equal(tourFromDb, newTour);
+
+                var createdProperty = Context.Entry(tourFromDb).Property("Created").CurrentValue;
+                Assert.NotNull(createdProperty);
+            }
         }
 
         [Fact]
-        public async Task GetAllFeaturedTours()
+        public void GetAllFeaturedTours()
         {
             //ARRANGE
             _databaseUtilities.Seed(Context);
@@ -61,20 +67,20 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure.Fixture
                             .ToList();
 
             //ACT
-            var actual = await UnitOfWork.Tour.GetFeatured();
+            var actual = UnitOfWork.Tour.GetFeatured().Result;
 
             //ASSERT
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public async Task GetLastOnesCreated()
+        public void GetLastOnesCreated()
         {
             //ARRANGE
             _databaseUtilities.Seed(Context);
 
             //ACT
-            var actual = await UnitOfWork.Tour.GetLastOnesCreated(1);
+            var actual = UnitOfWork.Tour.GetLastOnesCreated(1).Result;
 
 
             //ASSERT
@@ -86,7 +92,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure.Fixture
         }
 
         [Fact]
-        public async Task GetToursByFullTagAsync()
+        public void GetToursByFullTagAsync()
         {
             //ARRANGE
             _databaseUtilities.Seed(Context);
@@ -100,14 +106,14 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure.Fixture
                             .ToList();
 
             //ACT
-            var actual = await UnitOfWork.Tour.GetByFullTag("Supercalifragilisticexpialidocious");
+            var actual = UnitOfWork.Tour.GetByFullTag("Supercalifragilisticexpialidocious").Result;
 
             //ASSERT
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public async Task GetToursByTag()
+        public void GetToursByTag()
         {
             //ARRANGE
             _databaseUtilities.Seed(Context);
@@ -121,7 +127,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure.Fixture
                             .ToList();
 
             //ACT
-            var actual = await UnitOfWork.Tour.GetByTag("CaliFRAGIListIcexpIaLidoc");
+            var actual = UnitOfWork.Tour.GetByTag("CaliFRAGIListIcexpIaLidoc").Result;
 
             //ASSERT
             Assert.Equal(expected, actual);
@@ -129,7 +135,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure.Fixture
 
 
         [Fact]
-        public async Task GetByTagOrName()
+        public void GetByTagOrName()
         {
             //ARRANGE
             _databaseUtilities.Seed(Context);
@@ -142,16 +148,33 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure.Fixture
                             .ToList();
 
             //ACT
-            var actual = await UnitOfWork.Tour.GetByTagOrName("Tour, Random But Unique");
+            var actual = UnitOfWork.Tour.GetByTagOrName("Tour, Random But Unique").Result;
 
             //ASSERT
             Assert.Equal(expected, actual);
         }
 
+
+        // Dispose pattern 
+        private bool _disposed;
         public void Dispose()
         {
-            Context.Dispose();
-            UnitOfWork.Dispose();
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+            if (disposing)
+            {
+                Context.Database.EnsureDeleted();
+                Context.Dispose();
+                UnitOfWork.Dispose();
+            }
+            _disposed = true;
         }
     }
 }

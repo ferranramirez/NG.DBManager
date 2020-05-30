@@ -31,5 +31,18 @@ namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
                 return (ITourRepository)_repositories[typeof(Tour)];
             }
         }
+
+        public IUserRepository User
+        {
+            get
+            {
+                if (_repositories[typeof(User)] == null)
+                {
+                    _repositories[typeof(User)] =
+                        (IUserRepository)Activator.CreateInstance(typeof(UserRepository), _context);
+                }
+                return (IUserRepository)_repositories[typeof(User)];
+            }
+        }
     }
 }
