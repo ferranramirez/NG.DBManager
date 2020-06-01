@@ -29,6 +29,7 @@ steps:
     databasecontexts: NgContext
     startupprojectpath: src/NG.DBManager.Presentation.API
     targetfolder: '$(build.artifactstagingdirectory)/migrations'
+    installdependencies: true
 
 - powershell: |
    $branch = "$(Build.SourceBranchName)"
