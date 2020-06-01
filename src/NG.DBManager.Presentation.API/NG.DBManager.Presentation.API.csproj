@@ -25,17 +25,15 @@
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
     <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="8.1.0" />
   </ItemGroup>
+
+  <ItemGroup Label="NotGuiri Nuget">
+    <PackageReference Include="NG.Common.Library" Version="1.0.0" />    
+  </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\..\test\NG.DBManager.Test.Utilities\NG.DBManager.Test.Utilities.csproj" />
     <ProjectReference Include="..\NG.DBManager.Infrastructure.Contracts\NG.DBManager.Infrastructure.Contracts.csproj" />
     <ProjectReference Include="..\NG.DBManager.Infrastructure.Impl.EF\NG.DBManager.Infrastructure.Impl.EF.csproj" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Reference Include="NG.Common.Library">
-      <HintPath>..\..\..\NG.Common\src\NG.Common.Library\bin\Debug\netcoreapp3.1\NG.Common.Library.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

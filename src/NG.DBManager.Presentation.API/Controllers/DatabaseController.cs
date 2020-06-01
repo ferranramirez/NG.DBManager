@@ -6,7 +6,6 @@ using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
 using NG.DBManager.Test.Utilities;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace NG.DBManager.Presentation.API.Controllers
 {
@@ -32,7 +31,7 @@ namespace NG.DBManager.Presentation.API.Controllers
         [Authorize]
         [HttpGet]
         [ProducesResponseType(typeof(List<Tour>), 200)]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
             return Ok();
         }

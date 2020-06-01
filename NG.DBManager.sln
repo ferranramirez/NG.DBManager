@@ -19,9 +19,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NG.DBManager.Test.UnitTest", "test\NG.DBManager.Test.UnitTest\NG.DBManager.Test.UnitTest.csproj", "{840B9C9E-C1F3-405F-BE31-E1832731CD80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NG.DBManager.Test.IntegrationTest", "test\NG.DBManager.Test.IntegrationTest\NG.DBManager.Test.IntegrationTest.csproj", "{7C83F622-74E0-451B-A8A2-6E9866C0B813}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NG.DBManager.Test.IntegrationTest", "test\NG.DBManager.Test.IntegrationTest\NG.DBManager.Test.IntegrationTest.csproj", "{7C83F622-74E0-451B-A8A2-6E9866C0B813}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NG.DBManager.Test.Utilities", "test\NG.DBManager.Test.Utilities\NG.DBManager.Test.Utilities.csproj", "{54DA278C-1670-4BE9-974C-126A7751D14C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NG.DBManager.Test.Utilities", "test\NG.DBManager.Test.Utilities\NG.DBManager.Test.Utilities.csproj", "{54DA278C-1670-4BE9-974C-126A7751D14C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A5E26F74-84D4-49D5-8CE0-B5C220350FB2}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
