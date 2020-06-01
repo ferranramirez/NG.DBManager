@@ -1,0 +1,83 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'vs2017-win2016'
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: Restore
+  inputs:
+    command: restore
+    projects: '**/*.csproj'
+    vstsFeed: 'ntguiri'
+    verbosityRestore: Minimal
+    includeNuGetOrg: true
+
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    projects: '**/*.csproj'
+    configuration: $(BuildConfiguration)
+    arguments: '--no-restore'
+
+- task: pekspro.pekspro-efcore-migration-script-generator.efcore-migration-script-generator.efcore-migration-script-generator-task@0
+  displayName: 'Generate Migration Scripts'
+  inputs:
+    projectpath: NG.DBManager.Infrastructure.Contracts
+    databasecontexts: NgContext
+    startupprojectpath: NG.DBManager.Presentation.API
+    installdependencies: '$(Parameters.installdependencies)'
+
+- powershell: |
+   $branch = "$(Build.SourceBranchName)"
+   if($branch -ne "master")
+   {
+       $workingDirectory = "$(System.DefaultWorkingDirectory)"
+       $filePattern = "*AssemblyInfo*"
+       $pattern = '^(?!//)(?=\[assembly: AssemblyVersion\("(.*)"\)\])'
+       Get-ChildItem -Path $workingDirectory -Recurse -Filter $filePattern | ForEach-Object {
+           $path = $_.FullName
+           Write-Host $path
+           (Get-Content $path) | ForEach-Object{
+               if($_ -match $pattern){
+                   # We have found the matching line
+                   # Edit the version number and put back.
+                   $fileVersion = $matches[1]
+                   $newVersion = "$fileVersion-beta"
+                   '[assembly: AssemblyVersion("{0}")]{1}[assembly: AssemblyInformationalVersion("{2}")]' -f $fileVersion,"`r`n",$newVersion 
+               } else {
+                   # Output line as is
+                   $_
+               }
+           } | Set-Content $path
+       }
+   }
+  displayName: 'Add beta tag for non-master branches'
+
+- task: PublishSymbols@2
+  displayName: 'Publish symbols path'
+  inputs:
+    symbolsFolder: '$(Build.SourcesDirectory)'
+    searchPattern: '**/bin/**/*.pdb' 
+    indexSources: true
+    publishSymbols: true
+    symbolServerType: teamServices
+    detailedLog: true
+    symbolsArtifactName: 'Symbols_$(BuildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Nuget Pack'
+  inputs:
+    command: 'pack'
+    packagesToPack: '**/*.csproj'
+    packDirectory: '$(Build.ArtifactStagingDirectory)/nuget'
+    nobuild: true
+    includesymbols: true
+    versioningScheme: 'off'
+    
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish Pipeline Artifact'
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)'
+    artifact: drop
