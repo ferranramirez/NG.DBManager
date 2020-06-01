@@ -22,19 +22,12 @@ steps:
     configuration: $(BuildConfiguration)
     arguments: '--no-restore'
 
-- task: DotNetCoreCLI@2
-  displayName: "Install dotnet ef"
-  inputs:
-    command: custom
-    custom: tool
-    arguments: install -g --configfile NuGet_Only.conf dotnet-ef
-
 - task: efcore-migration-script-generator-task@0
   displayName: 'Generate Migration Scripts'
   inputs:
-    projectpath: NG.DBManager.Infrastructure.Contracts
+    projectpath: src/NG.DBManager.Infrastructure.Contracts
     databasecontexts: NgContext
-    startupprojectpath: NG.DBManager.Presentation.API
+    startupprojectpath: src/NG.DBManager.Presentation.API
     targetfolder: '$(build.artifactstagingdirectory)/migrations'
 
 - powershell: |
