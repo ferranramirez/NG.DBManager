@@ -6,28 +6,28 @@ pool:
 
 steps:
 - task: DotNetCoreCLI@2
-  displayName: Restore
   inputs:
-    command: restore
+    command: 'restore'
     projects: '**/*.csproj'
-    vstsFeed: 'ntguiri'
-    verbosityRestore: Minimal
-    includeNuGetOrg: true
+    feedsToUse: 'select'
+    vstsFeed: 'd73bd4e5-9a0c-45fc-ae19-1c2a40bfc9ee'
+    verbosityRestore: 'Minimal'
 
 - task: DotNetCoreCLI@2
-  displayName: Build
   inputs:
+    command: 'build'
     projects: '**/*.csproj'
     configuration: $(BuildConfiguration)
     arguments: '--no-restore'
 
-- task: pekspro.pekspro-efcore-migration-script-generator.efcore-migration-script-generator.efcore-migration-script-generator-task@0
+- task: efcore-migration-script-generator-task@0
   displayName: 'Generate Migration Scripts'
   inputs:
     projectpath: NG.DBManager.Infrastructure.Contracts
     databasecontexts: NgContext
     startupprojectpath: NG.DBManager.Presentation.API
-    installdependencies: '$(Parameters.installdependencies)'
+    targetfolder: '$(build.artifactstagingdirectory)/migrations'
+    installdependencies: true
 
 - powershell: |
    $branch = "$(Build.SourceBranchName)"
