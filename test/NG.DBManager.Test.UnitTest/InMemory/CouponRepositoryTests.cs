@@ -56,9 +56,31 @@ namespace NG.DBManager.Test.UnitTest.InMemory
                 var couponFromDb = assertUOW.Repository<Coupon>().Get(newCouponId);
                 Assert.NotNull(couponFromDb);
                 Assert.Equal(couponFromDb, newCoupon);
+            }
+        }
 
-                var createdProperty = Context.Entry(couponFromDb).Property("Created").CurrentValue;
-                Assert.NotNull(createdProperty);
+        [Fact]
+        public void ValidateCoupon()
+        {
+            //ARRANGE
+            _databaseUtilities.Seed(Context);
+
+            var firstCoupon = _databaseUtilities.Coupons.First(c => !c.IsValidated);
+
+            //var couponDb = UnitOfWork.Repository<Coupon>().Get(firstCoupon.Id);
+            firstCoupon.ValidationDate = DateTime.Now;
+
+            //ACT
+            UnitOfWork.Repository<Coupon>().Update(firstCoupon);
+            UnitOfWork.CommitAsync();
+
+            //ASSERT
+            using (var assertContext = _databaseUtilities.GenerateInMemoryContext())
+            {
+                var assertUOW = new APIUnitOfWork(assertContext);
+                var couponFromDb = assertUOW.Repository<Coupon>().Get(firstCoupon.Id);
+                Assert.NotNull(couponFromDb);
+                Assert.Equal(couponFromDb, firstCoupon);
             }
         }
 

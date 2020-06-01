@@ -5,6 +5,7 @@ using NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork;
 using NG.DBManager.Test.Utilities;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace NG.DBManager.Test.UnitTest.SQLite
@@ -53,9 +54,21 @@ namespace NG.DBManager.Test.UnitTest.SQLite
             var couponFromDb = UnitOfWork.Repository<Coupon>().Get(newCouponId);
             Assert.NotNull(couponFromDb);
             Assert.Equal(couponFromDb, newCoupon);
+        }
 
-            var createdProperty = Context.Entry(couponFromDb).Property("Created").CurrentValue;
-            Assert.NotNull(createdProperty);
+        [Fact]
+        public async Task GetAllCoupons()
+        {
+            //ARRANGE
+            _databaseUtilities.Seed(Context);
+            Guid couponId = _databaseUtilities.Coupons.First().Id;
+
+            //ACT
+            var coupons = await UnitOfWork.Repository<Coupon>().GetAll();
+            var fisrtCoupon = UnitOfWork.Repository<Coupon>().Get(couponId);
+
+            //ASSERT
+            Assert.NotNull(coupons);
         }
 
         // Dispose pattern 

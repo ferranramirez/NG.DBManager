@@ -28,11 +28,17 @@ namespace NG.DBManager.Test.Utilities
         private Tag TagWithManyTours;
         private string FullTagName = "Supercalifragilisticexpialidocious";
         private const string TourExistingName = "Custom Tour, Random But Unique Name";
-
+        private readonly string CommonPassword = "10000.3ETjO6DdE/yDNjDOmPC4Xw==.EROLcKmnMnnl7k8GaBN2NukE5+ClhMJa9nh+DcbtGM0=";
         Hashtable ReviewUserCheck;
         public DatabaseUtilities()
         {
             GenerateData();
+        }
+
+        public void Reset(NgContext context)
+        {
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
         }
 
         public int Seed(NgContext context)
@@ -95,15 +101,17 @@ namespace NG.DBManager.Test.Utilities
                     .With(u => u.Birthdate = Faker.Identification.DateOfBirth())
                     .With(u => u.Email = Faker.Internet.Email())
                     .With(u => u.PhoneNumber = Faker.Phone.Number())
-                    .With(u => u.Password = Faker.Identification.SocialSecurityNumber())
+                    .With(u => u.Password = CommonPassword)
                     .With(u => u.Role = Role.Basic)
                     .With(u => u.Image = GenerateImages(1).First())
                 .Random(40)
                     .With(u => u.Role = Role.Premium)
                 .Random(20)
-                    .With(u => u.Role = Role.Commerce)
+                    .With(u => u.Role = Role.Standard)
                 .Random(5)
                     .With(u => u.Role = Role.Admin)
+                .Random(1)
+                    .With(u => u.Role = Role.Commerce)
                 .Build()
                 .ToList();
 
@@ -256,11 +264,34 @@ namespace NG.DBManager.Test.Utilities
                 .With(c => c.Name = LimitMaxLength(Faker.Finance.Isin(), 80))
                 .With(c => c.Location = Pick<Location>.RandomItemFrom(Locations))
                 .With(c => c.LocationId = c.Location.Id)
+                .With(c => c.User = GenerateCommerceUser(c))
+                .With(c => c.UserId = c.User.Id)
                 .Build();
 
             Commerces.Add(generatedCommerce);
 
             return generatedCommerce;
+        }
+
+        private User GenerateCommerceUser(Commerce commerce)
+        {
+            var generatedUser = Builder<User>
+                .CreateNew()
+                .With(u => u.Id = Guid.NewGuid())
+                .With(u => u.Name = Faker.Name.First())
+                .With(u => u.Surname = Faker.Name.Last())
+                .With(u => u.Birthdate = Faker.Identification.DateOfBirth())
+                .With(u => u.Email = Faker.Internet.Email())
+                .With(u => u.PhoneNumber = Faker.Phone.Number())
+                .With(u => u.Password = CommonPassword)
+                .With(u => u.Role = Role.Commerce)
+                .With(u => u.Commerce = commerce)
+                .With(u => u.Image = GenerateImages(1).First())
+                .Build();
+
+            Users.Add(generatedUser);
+
+            return generatedUser;
         }
 
         private IEnumerable<TourTag> AttachToTag(Tour tour)

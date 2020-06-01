@@ -45,6 +45,16 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return await DbSet.ToListAsync();
         }
 
+        public void Update(TEntity entity)
+        {
+            if (entity == null) { return; }
+
+            if (Context.Entry(entity).State != EntityState.Detached) { return; }
+
+            Context.Entry(entity).State = EntityState.Modified;
+            //DbSet.Update(entity);
+        }
+
         public void Remove(object id)
         {
             var entity = Get(id);

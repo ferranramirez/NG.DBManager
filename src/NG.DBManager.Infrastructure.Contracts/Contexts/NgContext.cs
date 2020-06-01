@@ -27,6 +27,12 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
         {
             //modelBuilder.Entity<AudioImage>().HasKey(ai => new { ai.AudioId, ai.ImageId });
 
+            //modelBuilder.Entity<Commerce>()
+            //    .HasOne(c => c.User)
+            //    .WithOne(u => u.Commerce)
+            //    .HasForeignKey<User>(c => c.CommerceId)
+            //    .OnDelete(DeleteBehavior.ClientSetNull);
+
             modelBuilder.Entity<Location>().HasIndex(l => new { l.Latitude, l.Longitude }).IsUnique();
 
             modelBuilder.Entity<Review>().HasKey(r => new { r.UserId, r.TourId });

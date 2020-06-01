@@ -56,9 +56,6 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
                 var couponFromDb = assertUOW.Repository<Coupon>().Get(newCouponId);
                 Assert.NotNull(couponFromDb);
                 Assert.Equal(couponFromDb, newCoupon);
-
-                var createdProperty = Context.Entry(couponFromDb).Property("Created").CurrentValue;
-                Assert.NotNull(createdProperty);
             }
         }
 

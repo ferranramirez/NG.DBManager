@@ -12,14 +12,14 @@ namespace NG.DBManager.Presentation.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class TestController : ControllerBase
+    public class DatabaseController : ControllerBase
     {
-        private readonly ILogger<TestController> _logger;
-        private readonly IAPIUnitOfWork _uow;
+        private readonly ILogger<DatabaseController> _logger;
+        private readonly IFullUnitOfWork _uow;
         private readonly NgContext _context;
 
-        public TestController(ILogger<TestController> logger,
-            IAPIUnitOfWork uow, NgContext context)
+        public DatabaseController(ILogger<DatabaseController> logger,
+            IFullUnitOfWork uow, NgContext context)
         {
             _logger = logger;
             _uow = uow;
@@ -31,29 +31,13 @@ namespace NG.DBManager.Presentation.API.Controllers
         /// </summary>
         [Authorize]
         [HttpGet]
-
         [ProducesResponseType(typeof(List<Tour>), 200)]
         public async Task<IActionResult> Get()
         {
-            var tours = await _uow.Tour.GetFeatured();
-
-            return Ok(tours);
+            return Ok();
         }
 
-        [HttpGet("GetByTag/{Filter}")]
-        [ProducesResponseType(typeof(List<Tour>), 200)]
-        public IActionResult GetByTag(string filter)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var response = _uow.Tour.GetByTag(filter);
-
-            return Ok(response);
-        }
-
+        //[Authorize(Roles = "Admin")]
         [HttpGet("Seed")]
         [ProducesResponseType(typeof(List<Tour>), 200)]
         public IActionResult Seed()
@@ -62,6 +46,16 @@ namespace NG.DBManager.Presentation.API.Controllers
             var rows = dbUtilities.Seed(_context);
 
             return Ok(rows);
+        }
+
+        [HttpGet("Reset")]
+        [ProducesResponseType(typeof(List<Tour>), 200)]
+        public IActionResult Reset()
+        {
+            var dbUtilities = new DatabaseUtilities();
+            dbUtilities.Reset(_context);
+
+            return NoContent();
         }
     }
 }

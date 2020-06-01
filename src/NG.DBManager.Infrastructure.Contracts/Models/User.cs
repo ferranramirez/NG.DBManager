@@ -35,6 +35,19 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
         [Required]
         public Role Role { get; set; }
 
-        public Image Image { get; set; }
+        public virtual Commerce Commerce { get; set; }
+        public virtual Image Image { get; set; }
+
+
+        public override bool Equals(object obj)
+        {
+            return obj is User user
+                && Id.Equals(user.Id);
+        }
+
+        public override int GetHashCode()
+        {
+            return new { Id }.GetHashCode();
+        }
     }
 }

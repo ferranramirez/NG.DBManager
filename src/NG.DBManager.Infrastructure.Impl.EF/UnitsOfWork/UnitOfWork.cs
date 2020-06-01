@@ -19,6 +19,12 @@ namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
         {
             return await _context.SaveChangesAsync();
         }
+
+        public int Commit()
+        {
+            return _context.SaveChanges();
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             if (!_disposed && disposing)
