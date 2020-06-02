@@ -20,7 +20,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
         [Required]
         public DateTime Birthdate { get; set; }
 
-        [Required]
         [Column(TypeName = "nvarchar(50)")]
         public string PhoneNumber { get; set; }
 
