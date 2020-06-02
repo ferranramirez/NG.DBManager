@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  ngdbmanager:
+    container_name: ngdbmanager
+    build:
+      context: .
+      args: 
+        - "PAT=${PAT}"
+    # image: ferranramirez/ngdbmanager
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+    ports: 
+      - "8081:80"
+    networks:
+      - local
+
+networks:
+  local:
+    external: true
+

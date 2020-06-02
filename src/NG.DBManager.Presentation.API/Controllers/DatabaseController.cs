@@ -54,7 +54,7 @@ namespace NG.DBManager.Presentation.API.Controllers
             var dbUtilities = new DatabaseUtilities();
             dbUtilities.Reset(_context);
 
-            return NoContent();
+            return Ok();
         }
     }
 }
