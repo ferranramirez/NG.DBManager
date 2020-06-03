@@ -2,7 +2,7 @@ trigger:
 - master
 
 stages:
-- stage: Build NuGet
+- stage: NuGet
   displayName: Build NuGet
   jobs:
   - job: NuGet
@@ -88,7 +88,7 @@ stages:
           targetPath: '$(Build.ArtifactStagingDirectory)'
           artifact: drop
 
-- stage: Build API
+- stage: API
   displayName: Build API
   jobs:
   - job: API
