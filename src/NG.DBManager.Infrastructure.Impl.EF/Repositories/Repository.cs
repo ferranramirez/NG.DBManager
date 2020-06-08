@@ -63,5 +63,10 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 
             DbSet.Remove(entity);
         }
+
+        public void RemoveRange(IEnumerable<TEntity> entities)
+        {
+            DbSet.RemoveRange(entities);
+        }
     }
 }

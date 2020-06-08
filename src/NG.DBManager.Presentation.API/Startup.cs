@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using NG.Common.Library.Extensions;
 using NG.Common.Library.Filters;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
 using NG.DBManager.Infrastructure.Impl.EF.IoCModule;
 using NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork;
+using NG.DBManager.Test.Utilities;
 using System.Reflection;
 
 namespace NG.DBManager.Presentation.API
@@ -24,7 +26,8 @@ namespace NG.DBManager.Presentation.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(
+              options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             services.AddSwaggerDocumentation(Configuration.GetSection("Documentation"), xmlFile);
@@ -37,6 +40,7 @@ namespace NG.DBManager.Presentation.API
             });
 
             services.AddScoped<IFullUnitOfWork, FullUnitOfWork>();
+            services.AddSingleton<DatabaseUtilities>();
 
             services.AddInfrastructureServices();
         }
@@ -44,6 +48,8 @@ namespace NG.DBManager.Presentation.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseErrorDisplayMiddleware();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -3,6 +3,8 @@ using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace NG.DBManager.Presentation.API.Controllers
 {
@@ -30,12 +32,25 @@ namespace NG.DBManager.Presentation.API.Controllers
         }
 
         /// <summary>
+        /// Get User
+        /// </summary>
+        [HttpGet("ByEmail/{UserEmail}")]
+        public IActionResult GetByEmail(string UserEmail)
+        {
+            var user = _uow.Repository<User>()
+                .Find(u => u.Email.Equals(UserEmail))
+                .SingleOrDefault();
+
+            return Ok(user);
+        }
+
+        /// <summary>
         /// Get All Users
         /// </summary>
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var user = _uow.Repository<User>().GetAll();
+            var user = await _uow.Repository<User>().GetAll();
             return Ok(user);
         }
 

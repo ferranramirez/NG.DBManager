@@ -4,6 +4,7 @@ using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
 using System;
+using System.Threading.Tasks;
 
 namespace NG.DBManager.Presentation.API.Controllers
 {
@@ -35,9 +36,9 @@ namespace NG.DBManager.Presentation.API.Controllers
         /// Get All Commerces
         /// </summary>
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var commerce = _uow.Repository<Commerce>().GetAll();
+            var commerce = await _uow.Repository<Commerce>().GetAll();
             return Ok(commerce);
         }
 

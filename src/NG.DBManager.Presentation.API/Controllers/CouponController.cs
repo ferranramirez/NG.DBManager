@@ -3,6 +3,7 @@ using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
 using System;
+using System.Threading.Tasks;
 
 namespace NG.DBManager.Presentation.API.Controllers
 {
@@ -34,9 +35,9 @@ namespace NG.DBManager.Presentation.API.Controllers
         /// Get All Coupons
         /// </summary>
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var coupon = _uow.Repository<Coupon>().GetAll();
+            var coupon = await _uow.Repository<Coupon>().GetAll();
             return Ok(coupon);
         }
 
@@ -67,6 +68,18 @@ namespace NG.DBManager.Presentation.API.Controllers
         public IActionResult Remove(Guid CouponId)
         {
             _uow.Repository<Coupon>().Remove(CouponId);
+            return Ok(_uow.Commit());
+        }
+
+        /// <summary>
+        /// Remove User's Coupons
+        /// </summary>
+        [HttpDelete("ByUser/{UserId}")]
+        public IActionResult RemoveUserCoupons(Guid UserId)
+        {
+            var coupons = _uow.Repository<Coupon>()
+                .Find(c => c.UserId == UserId);
+            _uow.Repository<Coupon>().RemoveRange(coupons);
             return Ok(_uow.Commit());
         }
 

@@ -28,7 +28,7 @@ namespace NG.DBManager.Test.UnitTest.InMemory
             using (var context = new NgContext(options))
             {
                 // ACT
-                _databaseUtilities.Seed(context);
+                _databaseUtilities.RandomSeed(context);
 
                 var audios = context.Audio.ToList();
                 var locations = context.Location.ToList();
@@ -68,7 +68,7 @@ namespace NG.DBManager.Test.UnitTest.InMemory
 
             using (var context = new NgContext(options))
             {
-                _databaseUtilities.Seed(context);
+                _databaseUtilities.RandomSeed(context);
 
                 // ACT
                 var firstTour = _databaseUtilities.Tours.First();

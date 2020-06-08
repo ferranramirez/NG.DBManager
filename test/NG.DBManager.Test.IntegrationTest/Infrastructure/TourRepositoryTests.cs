@@ -60,7 +60,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
         public void GetAllFeaturedTours()
         {
             //ARRANGE
-            _databaseUtilities.Seed(Context);
+            _databaseUtilities.RandomSeed(Context);
             var expected = _databaseUtilities.Tours
                             .Where(t => t.IsFeatured)
                             .OrderBy(t => t.Name)
@@ -77,7 +77,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
         public void GetLastOnesCreated()
         {
             //ARRANGE
-            _databaseUtilities.Seed(Context);
+            _databaseUtilities.RandomSeed(Context);
 
             //ACT
             var actual = UnitOfWork.Tour.GetLastOnesCreated(1).Result;
@@ -95,7 +95,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
         public void GetToursByFullTagAsync()
         {
             //ARRANGE
-            _databaseUtilities.Seed(Context);
+            _databaseUtilities.RandomSeed(Context);
 
             var expected = _databaseUtilities.Tours
                             .Where(t => t.TourTags
@@ -116,7 +116,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
         public void GetToursByTag()
         {
             //ARRANGE
-            _databaseUtilities.Seed(Context);
+            _databaseUtilities.RandomSeed(Context);
 
             var expected = _databaseUtilities.Tours
                             .Where(t => t.TourTags
@@ -138,7 +138,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
         public void GetByTagOrName()
         {
             //ARRANGE
-            _databaseUtilities.Seed(Context);
+            _databaseUtilities.RandomSeed(Context);
 
             var expected = _databaseUtilities.Tours
                             .Where(tour => tour.Name

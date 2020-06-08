@@ -32,7 +32,7 @@ namespace NG.DBManager.Test.UnitTest.SQLite
         public void AddCoupon()
         {
             //ARRANGE
-            _databaseUtilities.Seed(Context);
+            _databaseUtilities.RandomSeed(Context);
 
             Guid newCouponId = Guid.NewGuid();
             Guid userId = _databaseUtilities.Users.First().Id;
@@ -60,7 +60,7 @@ namespace NG.DBManager.Test.UnitTest.SQLite
         public async Task GetAllCoupons()
         {
             //ARRANGE
-            _databaseUtilities.Seed(Context);
+            _databaseUtilities.RandomSeed(Context);
             Guid couponId = _databaseUtilities.Coupons.First().Id;
 
             //ACT

@@ -16,6 +16,7 @@ namespace NG.DBManager.Presentation.API.Controllers
         private readonly ILogger<DatabaseController> _logger;
         private readonly IFullUnitOfWork _uow;
         private readonly NgContext _context;
+        private readonly DatabaseUtilities _dbUtilities;
 
         public DatabaseController(ILogger<DatabaseController> logger,
             IFullUnitOfWork uow, NgContext context)
@@ -37,12 +38,21 @@ namespace NG.DBManager.Presentation.API.Controllers
         }
 
         //[Authorize(Roles = "Admin")]
-        [HttpGet("Seed")]
+        [HttpGet("RandomSeed")]
         [ProducesResponseType(typeof(List<Tour>), 200)]
-        public IActionResult Seed()
+        public IActionResult RandomSeed()
         {
-            var dbUtilities = new DatabaseUtilities();
-            var rows = dbUtilities.Seed(_context);
+            var rows = _dbUtilities.RandomSeed(_context);
+
+            return Ok(rows);
+        }
+
+        //[Authorize(Roles = "Admin")]
+        [HttpGet("UsersSeed")]
+        [ProducesResponseType(typeof(List<Tour>), 200)]
+        public IActionResult UsersSeed()
+        {
+            var rows = _dbUtilities.RandomSeed(_context);
 
             return Ok(rows);
         }

@@ -41,7 +41,7 @@ namespace NG.DBManager.Test.Utilities
             context.Database.EnsureCreated();
         }
 
-        public int Seed(NgContext context)
+        public int RandomSeed(NgContext context)
         {
             context.Image.AddRange(Images);
             context.User.AddRange(Users);

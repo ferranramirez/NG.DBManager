@@ -31,7 +31,7 @@ namespace NG.DBManager.Test.UnitTest.InMemory
         public void AddCoupon()
         {
             //ARRANGE
-            _databaseUtilities.Seed(Context);
+            _databaseUtilities.RandomSeed(Context);
 
             Guid newCouponId = Guid.NewGuid();
             Guid userId = _databaseUtilities.Users.First().Id;
@@ -63,7 +63,7 @@ namespace NG.DBManager.Test.UnitTest.InMemory
         public void ValidateCoupon()
         {
             //ARRANGE
-            _databaseUtilities.Seed(Context);
+            _databaseUtilities.RandomSeed(Context);
 
             var firstCoupon = _databaseUtilities.Coupons.First(c => !c.IsValidated);
 

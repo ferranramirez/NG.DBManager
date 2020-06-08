@@ -59,7 +59,7 @@ namespace NG.DBManager.Test.UnitTest.SQLite
         public async Task GetAllFeaturedTours()
         {
             //ARRANGE
-            _databaseUtilities.Seed(Context);
+            _databaseUtilities.RandomSeed(Context);
             var expected = _databaseUtilities.Tours
                             .Where(t => t.IsFeatured)
                             .OrderBy(t => t.Name)
@@ -76,7 +76,7 @@ namespace NG.DBManager.Test.UnitTest.SQLite
         public async Task GetLastOnesCreated()
         {
             //ARRANGE
-            _databaseUtilities.Seed(Context);
+            _databaseUtilities.RandomSeed(Context);
 
             //ACT
             var actual = await UnitOfWork.Tour.GetLastOnesCreated(1);
@@ -96,7 +96,7 @@ namespace NG.DBManager.Test.UnitTest.SQLite
             //ARRANGE
             // _database.FullTagName = "Supercalifragilisticexpialidocious"
 
-            _databaseUtilities.Seed(Context);
+            _databaseUtilities.RandomSeed(Context);
 
             var expected = _databaseUtilities.Tours
                             .Where(t => t.TourTags
@@ -117,7 +117,7 @@ namespace NG.DBManager.Test.UnitTest.SQLite
         public async Task GetToursByTag()
         {
             //ARRANGE
-            _databaseUtilities.Seed(Context);
+            _databaseUtilities.RandomSeed(Context);
 
             var expected = _databaseUtilities.Tours
                             .Where(t => t.TourTags
@@ -140,7 +140,7 @@ namespace NG.DBManager.Test.UnitTest.SQLite
         {
             //ARRANGE
             // _database.TourExistingName = "Custom Tour, Random But Unique Name"
-            _databaseUtilities.Seed(Context);
+            _databaseUtilities.RandomSeed(Context);
 
             var expected = _databaseUtilities.Tours
                             .Where(tour => tour.Name

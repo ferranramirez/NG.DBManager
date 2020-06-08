@@ -18,5 +18,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Repositories
         void Update(TEntity entity);
 
         void Remove(object id);
+        void RemoveRange(IEnumerable<TEntity> entities);
     }
 }
