@@ -96,10 +96,10 @@ stages:
         Contents: '**'
         TargetFolder: '$(Build.StagingDirectory)'
     - task: PublishBuildArtifacts@1
-      displayName: 'Publish Artifact: drop'
+      displayName: 'Publish Artifact: api'
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: 'drop'
+        ArtifactName: 'api'
         publishLocation: 'Container'
     - task: DockerCompose@0
       displayName: 'Docker Build'
