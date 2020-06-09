@@ -63,6 +63,15 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                         .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Commerce");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("a4506bf8-9cca-4413-b0d4-4247c61b1231"),
+                            LocationId = new Guid("0013a98e-32f6-494d-b055-c9fb4dafc3e8"),
+                            Name = "Test Commerce",
+                            UserId = new Guid("73b7b257-41f7-4b22-9a10-93fb91238fd9")
+                        });
                 });
 
             modelBuilder.Entity("NG.DBManager.Infrastructure.Contracts.Models.Coupon", b =>
@@ -136,6 +145,15 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                         .IsUnique();
 
                     b.ToTable("Location");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("0013a98e-32f6-494d-b055-c9fb4dafc3e8"),
+                            Latitude = 33.842185m,
+                            Longitude = -40.707753m,
+                            Name = "Test Location"
+                        });
                 });
 
             modelBuilder.Entity("NG.DBManager.Infrastructure.Contracts.Models.Node", b =>
@@ -230,6 +248,9 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                     b.Property<int>("Duration")
                         .HasColumnType("int");
 
+                    b.Property<string>("GeoJson")
+                        .HasColumnType("text");
+
                     b.Property<Guid>("ImageId")
                         .HasColumnType("uniqueidentifier");
 
@@ -310,6 +331,52 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                         .HasFilter("[PhoneNumber] IS NOT NULL");
 
                     b.ToTable("User");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("b0f2451e-5820-4eca-a797-46a01693a3b2"),
+                            Birthdate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "basic@test.org",
+                            Name = "Basic",
+                            Password = "10000.+2PnZrnAWQRgqlMx+l8kyA==.ALiUC3pHYJJ7cr8Xqnn1y16XROosvjHNTDmf+Em+pMM=",
+                            PhoneNumber = "+222222222",
+                            Role = 2,
+                            Surname = "QA User"
+                        },
+                        new
+                        {
+                            Id = new Guid("0ac2c4c5-ebff-445e-85d4-1db76d65ce0a"),
+                            Birthdate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "admin@test.org",
+                            Name = "Admin",
+                            Password = "10000.r1m2AhgohtRKaAYihSdiFQ==.9jOF0O4zo3WoBYq+H1f3XTPG9An8LZfEJd1uwB66N0s=",
+                            PhoneNumber = "+000000000",
+                            Role = 0,
+                            Surname = "QA User"
+                        },
+                        new
+                        {
+                            Id = new Guid("440edb6b-342e-4d5f-a233-62aef964cbfa"),
+                            Birthdate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "commerce@test.org",
+                            Name = "Commerce",
+                            Password = "10000.NcEE328o58z2KLy1cIiKMA==.5+Mwrqw7XVP2dE+RtcMorXI/Ri6daF4nCRZB4+xJUAY=",
+                            PhoneNumber = "+111111111",
+                            Role = 1,
+                            Surname = "QA User"
+                        },
+                        new
+                        {
+                            Id = new Guid("73b7b257-41f7-4b22-9a10-93fb91238fd9"),
+                            Birthdate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "fullcommerce@test.org",
+                            Name = "FullCommerce",
+                            Password = "10000./LphyV3IUSMjgcllhGg/HA==.ZeBKs4MVq3+BKEQw9ejzr/HbAwI7/KOGr10FqkuGSmE=",
+                            PhoneNumber = "+0111111111",
+                            Role = 1,
+                            Surname = "QA User"
+                        });
                 });
 
             modelBuilder.Entity("NG.DBManager.Infrastructure.Contracts.Models.Audio", b =>

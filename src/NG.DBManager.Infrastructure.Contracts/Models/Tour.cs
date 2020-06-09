@@ -22,6 +22,9 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
 
         [Column(TypeName = "text")]
         public string Description { get; set; }
+
+        [Column(TypeName = "text")]
+        public string GeoJson { get; set; }
         public int Duration { get; set; }
         public bool IsPremium { get; set; }
         public bool IsFeatured { get; set; }

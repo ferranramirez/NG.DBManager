@@ -4,10 +4,12 @@ using System;
 
 namespace NG.DBManager.Infrastructure.Contracts.Contexts
 {
-    public class NgContext : Microsoft.EntityFrameworkCore.DbContext
+    public class NgContext : DbContext
     {
         public NgContext(DbContextOptions<NgContext> options)
-            : base(options) { }
+            : base(options)
+        {
+        }
 
         public DbSet<Audio> Audio { get; set; }
         //public DbSet<AudioImage> AudioImage { get; set; }
@@ -46,6 +48,10 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
                 entity.HasIndex(u => u.Email).IsUnique();
                 entity.HasIndex(u => u.PhoneNumber).IsUnique();
             });
+
+            modelBuilder.Entity<User>().HasData(DataUtils.UsersSeed());
+            modelBuilder.Entity<Location>().HasData(DataUtils.LocationsSeed());
+            modelBuilder.Entity<Commerce>().HasData(DataUtils.CommercesSeed());
         }
     }
 }

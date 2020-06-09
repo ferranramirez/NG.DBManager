@@ -40,6 +40,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
+                    GeoJson = table.Column<string>(type: "text", nullable: true),
                     Duration = table.Column<int>(nullable: false),
                     IsPremium = table.Column<bool>(nullable: false),
                     IsFeatured = table.Column<bool>(nullable: false),
@@ -150,11 +151,10 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                     Name = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     Surname = table.Column<string>(type: "nvarchar(70)", nullable: false),
                     Birthdate = table.Column<DateTime>(nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(254)", nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
                     Role = table.Column<int>(nullable: false),
-                    CommerceId = table.Column<Guid>(nullable: true),
                     ImageId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
@@ -264,6 +264,27 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Location",
+                columns: new[] { "Id", "Latitude", "Longitude", "Name" },
+                values: new object[] { new Guid("0013a98e-32f6-494d-b055-c9fb4dafc3e8"), 33.842185m, -40.707753m, "Test Location" });
+
+            migrationBuilder.InsertData(
+                table: "User",
+                columns: new[] { "Id", "Birthdate", "Email", "ImageId", "Name", "Password", "PhoneNumber", "Role", "Surname" },
+                values: new object[,]
+                {
+                    { new Guid("b0f2451e-5820-4eca-a797-46a01693a3b2"), new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "basic@test.org", null, "Basic", "10000.+2PnZrnAWQRgqlMx+l8kyA==.ALiUC3pHYJJ7cr8Xqnn1y16XROosvjHNTDmf+Em+pMM=", "+222222222", 2, "QA User" },
+                    { new Guid("0ac2c4c5-ebff-445e-85d4-1db76d65ce0a"), new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin@test.org", null, "Admin", "10000.r1m2AhgohtRKaAYihSdiFQ==.9jOF0O4zo3WoBYq+H1f3XTPG9An8LZfEJd1uwB66N0s=", "+000000000", 0, "QA User" },
+                    { new Guid("440edb6b-342e-4d5f-a233-62aef964cbfa"), new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "commerce@test.org", null, "Commerce", "10000.NcEE328o58z2KLy1cIiKMA==.5+Mwrqw7XVP2dE+RtcMorXI/Ri6daF4nCRZB4+xJUAY=", "+111111111", 1, "QA User" },
+                    { new Guid("73b7b257-41f7-4b22-9a10-93fb91238fd9"), new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "fullcommerce@test.org", null, "FullCommerce", "10000./LphyV3IUSMjgcllhGg/HA==.ZeBKs4MVq3+BKEQw9ejzr/HbAwI7/KOGr10FqkuGSmE=", "+0111111111", 1, "QA User" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Commerce",
+                columns: new[] { "Id", "LocationId", "Name", "UserId" },
+                values: new object[] { new Guid("a4506bf8-9cca-4413-b0d4-4247c61b1231"), new Guid("0013a98e-32f6-494d-b055-c9fb4dafc3e8"), "Test Commerce", new Guid("73b7b257-41f7-4b22-9a10-93fb91238fd9") });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Audio_NodeId",
                 table: "Audio",
@@ -337,7 +358,8 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 name: "IX_User_PhoneNumber",
                 table: "User",
                 column: "PhoneNumber",
-                unique: true);
+                unique: true,
+                filter: "[PhoneNumber] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

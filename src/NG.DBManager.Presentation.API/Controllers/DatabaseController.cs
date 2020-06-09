@@ -19,11 +19,14 @@ namespace NG.DBManager.Presentation.API.Controllers
         private readonly DatabaseUtilities _dbUtilities;
 
         public DatabaseController(ILogger<DatabaseController> logger,
-            IFullUnitOfWork uow, NgContext context)
+            IFullUnitOfWork uow,
+            NgContext context,
+            DatabaseUtilities dbUtilities)
         {
             _logger = logger;
             _uow = uow;
             _context = context;
+            _dbUtilities = dbUtilities;
         }
 
         /// <summary>
