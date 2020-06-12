@@ -8,7 +8,7 @@ services:
   dbmanager:
     image: registry.gitlab.com/notguiri/dbmanager:master
     deploy:
-      replicas: 2
+      # replicas: 2
       restart_policy:
         condition: on-failure
         max_attempts: 3
