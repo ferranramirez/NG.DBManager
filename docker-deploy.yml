@@ -1,0 +1,24 @@
+networks:
+  backend:
+    external: true
+
+version: '3.7'
+
+services:
+  dbmanager:
+    image: registry.gitlab.com/notguiri/dbmanager:latest
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+    ports: 
+      - "8081:80"
+    networks:
+      - backend
+
+networks:
+  backend:
+    external: true
