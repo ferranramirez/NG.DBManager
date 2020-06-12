@@ -1,10 +1,6 @@
 trigger:
 - master
 
-variables:
-- name: ASPNETCORE_ENVIRONMENT
-  value: Production 
-
 stages:
 - stage: NuGet
   displayName: Build NuGet
