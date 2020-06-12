@@ -80,7 +80,7 @@ stages:
       displayName: 'Publish Pipeline Artifact'
       inputs:
         targetPath: '$(Build.ArtifactStagingDirectory)'
-        artifact: nuget
+        artifact: publish
 
 - stage: API
   displayName: Build API
