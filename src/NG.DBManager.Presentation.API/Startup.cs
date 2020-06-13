@@ -25,17 +25,19 @@ namespace NG.DBManager.Presentation.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(ApiExceptionFilter));
+            });
+
+            services.AddHealthCheckMiddleware(Configuration);
+
             services.AddControllers();
 
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             services.AddSwaggerDocumentation(Configuration.GetSection("Documentation"), xmlFile);
 
             services.AddJwtAuthentication(Configuration.GetSection("Secrets"));
-
-            services.AddMvc(options =>
-            {
-                options.Filters.Add(typeof(ApiExceptionFilter));
-            });
 
             services.AddScoped<IFullUnitOfWork, FullUnitOfWork>();
             services.AddSingleton<DatabaseUtilities>();
@@ -46,12 +48,14 @@ namespace NG.DBManager.Presentation.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseErrorDisplayMiddleware();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseErrorDisplayMiddleware();
+
+            app.UseHealthCheckMiddleware();
 
             app.UseHttpsRedirection();
 

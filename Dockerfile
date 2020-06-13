@@ -14,11 +14,11 @@ ENV VSS_NUGET_EXTERNAL_FEED_ENDPOINTS "{\"endpointCredentials\": [{\"endpoint\":
 ENV DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER 0
 
 COPY . .
-RUN dotnet restore -s "https://pkgs.dev.azure.com/ntguiri/_packaging/ntguiri/nuget/v3/index.json" -s "https://api.nuget.org/v3/index.json"  "NG.DBManager.sln"
+RUN dotnet restore -s "https://pkgs.dev.azure.com/ntguiri/_packaging/ntguiri/nuget/v3/index.json" -s "https://api.nuget.org/v3/index.json" "NG.DBManager.sln"
 
 # dotnet build and publish
 RUN dotnet build -c Release --no-restore
-RUN dotnet test --filter FullyQualifiedName~UnitTest.InMemory -c Release --no-build --no-restore
+RUN dotnet test /api/tst/NG.DBManager.Test.UnitTest/NG.DBManager.Test.UnitTest.csproj -c Release --logger "trx;LogFileName=result.trx" --no-build --no-restore -r /publish/test
 RUN dotnet publish -c Release --no-build -o /publish
 
 # Runtime image
