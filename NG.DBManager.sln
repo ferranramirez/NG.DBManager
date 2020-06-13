@@ -9,19 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NG.DBManager.Infrastructure
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NG.DBManager.Infrastructure.Contracts", "src\NG.DBManager.Infrastructure.Contracts\NG.DBManager.Infrastructure.Contracts.csproj", "{57D386D3-9426-4723-B44D-B2C338D6CE68}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{3263E5D4-4975-439C-8075-D4EE55B0EF64}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tst", "tst", "{3263E5D4-4975-439C-8075-D4EE55B0EF64}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NG.DBManager.Presentation.API", "src\NG.DBManager.Presentation.API\NG.DBManager.Presentation.API.csproj", "{4C941653-F515-48ED-BE85-54822066062E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{B811D450-0AAE-4F81-8376-F9EAA934623C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{5B63ED05-E347-417D-9F2C-74817F5C78DD}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NG.DBManager.Test.UnitTest", "test\NG.DBManager.Test.UnitTest\NG.DBManager.Test.UnitTest.csproj", "{840B9C9E-C1F3-405F-BE31-E1832731CD80}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NG.DBManager.Test.IntegrationTest", "test\NG.DBManager.Test.IntegrationTest\NG.DBManager.Test.IntegrationTest.csproj", "{7C83F622-74E0-451B-A8A2-6E9866C0B813}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NG.DBManager.Test.Utilities", "test\NG.DBManager.Test.Utilities\NG.DBManager.Test.Utilities.csproj", "{54DA278C-1670-4BE9-974C-126A7751D14C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A5E26F74-84D4-49D5-8CE0-B5C220350FB2}"
 	ProjectSection(SolutionItems) = preProject
@@ -31,6 +25,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		docker-deploy.yml = docker-deploy.yml
 		Dockerfile = Dockerfile
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NG.DBManager.Test.IntegrationTest", "tst\NG.DBManager.Test.IntegrationTest\NG.DBManager.Test.IntegrationTest.csproj", "{8E2D5AE4-8BC2-4398-B80B-246E42321952}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NG.DBManager.Test.UnitTest", "tst\NG.DBManager.Test.UnitTest\NG.DBManager.Test.UnitTest.csproj", "{9C6149D3-7B71-4F99-A64F-EB3FAEF5ECA4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NG.DBManager.Test.Utilities", "tst\NG.DBManager.Test.Utilities\NG.DBManager.Test.Utilities.csproj", "{E18B5AAD-BFBF-4DFD-A94B-8FA3C710F251}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,18 +50,18 @@ Global
 		{4C941653-F515-48ED-BE85-54822066062E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C941653-F515-48ED-BE85-54822066062E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C941653-F515-48ED-BE85-54822066062E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{840B9C9E-C1F3-405F-BE31-E1832731CD80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{840B9C9E-C1F3-405F-BE31-E1832731CD80}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{840B9C9E-C1F3-405F-BE31-E1832731CD80}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{840B9C9E-C1F3-405F-BE31-E1832731CD80}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7C83F622-74E0-451B-A8A2-6E9866C0B813}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C83F622-74E0-451B-A8A2-6E9866C0B813}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C83F622-74E0-451B-A8A2-6E9866C0B813}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7C83F622-74E0-451B-A8A2-6E9866C0B813}.Release|Any CPU.Build.0 = Release|Any CPU
-		{54DA278C-1670-4BE9-974C-126A7751D14C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{54DA278C-1670-4BE9-974C-126A7751D14C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{54DA278C-1670-4BE9-974C-126A7751D14C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{54DA278C-1670-4BE9-974C-126A7751D14C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E2D5AE4-8BC2-4398-B80B-246E42321952}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E2D5AE4-8BC2-4398-B80B-246E42321952}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E2D5AE4-8BC2-4398-B80B-246E42321952}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E2D5AE4-8BC2-4398-B80B-246E42321952}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C6149D3-7B71-4F99-A64F-EB3FAEF5ECA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C6149D3-7B71-4F99-A64F-EB3FAEF5ECA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C6149D3-7B71-4F99-A64F-EB3FAEF5ECA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C6149D3-7B71-4F99-A64F-EB3FAEF5ECA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E18B5AAD-BFBF-4DFD-A94B-8FA3C710F251}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E18B5AAD-BFBF-4DFD-A94B-8FA3C710F251}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E18B5AAD-BFBF-4DFD-A94B-8FA3C710F251}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E18B5AAD-BFBF-4DFD-A94B-8FA3C710F251}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,9 +72,9 @@ Global
 		{4C941653-F515-48ED-BE85-54822066062E} = {B811D450-0AAE-4F81-8376-F9EAA934623C}
 		{B811D450-0AAE-4F81-8376-F9EAA934623C} = {947F7375-A7A6-45F7-9C20-428E40915C31}
 		{5B63ED05-E347-417D-9F2C-74817F5C78DD} = {947F7375-A7A6-45F7-9C20-428E40915C31}
-		{840B9C9E-C1F3-405F-BE31-E1832731CD80} = {3263E5D4-4975-439C-8075-D4EE55B0EF64}
-		{7C83F622-74E0-451B-A8A2-6E9866C0B813} = {3263E5D4-4975-439C-8075-D4EE55B0EF64}
-		{54DA278C-1670-4BE9-974C-126A7751D14C} = {3263E5D4-4975-439C-8075-D4EE55B0EF64}
+		{8E2D5AE4-8BC2-4398-B80B-246E42321952} = {3263E5D4-4975-439C-8075-D4EE55B0EF64}
+		{9C6149D3-7B71-4F99-A64F-EB3FAEF5ECA4} = {3263E5D4-4975-439C-8075-D4EE55B0EF64}
+		{E18B5AAD-BFBF-4DFD-A94B-8FA3C710F251} = {3263E5D4-4975-439C-8075-D4EE55B0EF64}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF467D9C-47F0-497E-9336-5BE275B29A53}

@@ -121,16 +121,16 @@ stages:
     - task: Bash@3
         displayName: 'Copy TestResults out of Docker'
         inputs:
-        targetType: 'inline'
-        script: |
-            docker create -ti --name testcontainer registry.gitlab.com/notguiri/$(projectName):$(Build.SourceBranchName)
-            docker cp testcontainer:/publish/test $(Build.ArtifactStagingDirectory)/TestResults
-            docker rm -fv testcontainer
+            targetType: 'inline'
+            script: |
+                docker create -ti --name testcontainer registry.gitlab.com/notguiri/$(projectName):$(Build.SourceBranchName)
+                docker cp testcontainer:/publish/test $(Build.ArtifactStagingDirectory)/TestResults
+                docker rm -fv testcontainer
     - task: PublishTestResults@2
         inputs:
-        testResultsFormat: 'VSTest'
-        testResultsFiles: 'result.trx'
-        searchFolder: '$(Build.ArtifactStagingDirectory)/TestResults'
+            testResultsFormat: 'VSTest'
+            testResultsFiles: 'result.trx'
+            searchFolder: '$(Build.ArtifactStagingDirectory)/TestResults'
     - task: Docker@2
       displayName: 'Docker Push'
       inputs:
