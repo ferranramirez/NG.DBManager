@@ -90,7 +90,7 @@ stages:
       vmImage: 'ubuntu-18.04'
     steps:
     - task: replacetokens@3
-      displayName: 'Replace tokens'
+      displayName: 'Replace tokens appsettings'
       inputs:
         rootDirectory: '$(System.DefaultWorkingDirectory)'
         targetFiles: '**/appsettings.*.json'
@@ -98,9 +98,17 @@ stages:
         writeBOM: true
         actionOnMissing: 'warn'
         keepToken: false
-        tokenPrefix: '#{'
-        tokenSuffix: '}#'
-        useLegacyPattern: false
+        enableTelemetry: false
+
+    - task: replacetokens@3
+      displayName: 'Replace tokens docker-deploy.yml'
+      inputs:
+        rootDirectory: '$(System.DefaultWorkingDirectory)'
+        targetFiles: '**/docker-deploy.yml'
+        encoding: 'auto'
+        writeBOM: true
+        actionOnMissing: 'warn'
+        keepToken: false
         enableTelemetry: false
     - task: PublishBuildArtifacts@1
       displayName: 'Publish docker-deploy.yml'
@@ -118,6 +126,7 @@ stages:
         tags: '$(Build.SourceBranchName)'
         arguments: '--build-arg PAT=$(PAT)'
         addPipelineData: false
+
     - task: Bash@3
       displayName: 'Copy TestResults out of Docker'
       inputs:
@@ -126,6 +135,7 @@ stages:
           docker create -ti --name testcontainer registry.gitlab.com/notguiri/$(projectName):$(Build.SourceBranchName)
           docker cp testcontainer:/publish/test $(Build.ArtifactStagingDirectory)/TestResults
           docker rm -fv testcontainer
+
     - task: PublishTestResults@2
       displayName: 'Publish TestResults'
       inputs:
