@@ -6,7 +6,7 @@ version: '3.7'
 
 services:
   dbmanager:
-    image: registry.gitlab.com/notguiri/dbmanager:master
+    image: registry.gitlab.com/notguiri/dbmanager:#{IMG_TAG}#
     deploy:
       # replicas: 2
       restart_policy:
