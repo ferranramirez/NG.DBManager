@@ -18,7 +18,7 @@ RUN dotnet restore -s "https://pkgs.dev.azure.com/ntguiri/_packaging/ntguiri/nug
 
 # dotnet build and publish
 RUN dotnet build -c Release --no-restore
-RUN dotnet test /api/tst/NG.DBManager.Test.UnitTest/NG.DBManager.Test.UnitTest.csproj -c Release --logger "trx;LogFileName=result.trx" --no-build --no-restore -r /publish/test
+RUN dotnet test /api/tst/NG.DBManager.Test.UnitTest/NG.DBManager.Test.UnitTest.csproj --filter FullyQualifiedName~InMemory -c Release --logger "trx;LogFileName=result.trx" --no-build -r /publish/test
 RUN dotnet publish -c Release --no-build -o /publish
 
 # Runtime image
