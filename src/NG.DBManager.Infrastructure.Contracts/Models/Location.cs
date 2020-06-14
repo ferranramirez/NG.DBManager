@@ -15,15 +15,12 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
         public Guid Id { get; set; }
 
         [Required]
-        [Column(TypeName = "nvarchar(20)")]
         public string Name { get; set; }
 
         [Required]
-        [Column(TypeName = "decimal(9, 6)")]
         public decimal Latitude { get; set; }
 
         [Required]
-        [Column(TypeName = "decimal(9, 6)")]
         public decimal Longitude { get; set; }
 
         public IEnumerable<Node> Nodes { get; set; }

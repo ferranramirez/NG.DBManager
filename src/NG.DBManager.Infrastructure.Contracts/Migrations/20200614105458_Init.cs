@@ -12,9 +12,9 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(20)", nullable: false),
-                    Latitude = table.Column<decimal>(type: "decimal(9, 6)", nullable: false),
-                    Longitude = table.Column<decimal>(type: "decimal(9, 6)", nullable: false)
+                    Name = table.Column<string>(nullable: false),
+                    Latitude = table.Column<decimal>(nullable: false),
+                    Longitude = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -26,7 +26,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(40)", nullable: false)
+                    Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -38,9 +38,9 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    GeoJson = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    GeoJson = table.Column<string>(nullable: true),
                     Duration = table.Column<int>(nullable: false),
                     IsPremium = table.Column<bool>(nullable: false),
                     IsFeatured = table.Column<bool>(nullable: false),
@@ -57,8 +57,8 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(50)", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
                     Order = table.Column<int>(nullable: false),
                     CoordinatesId = table.Column<Guid>(nullable: false),
                     TourId = table.Column<Guid>(nullable: false),
@@ -110,7 +110,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(20)", nullable: true),
+                    Name = table.Column<string>(nullable: true),
                     NodeId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
@@ -148,12 +148,12 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(50)", nullable: false),
-                    Surname = table.Column<string>(type: "nvarchar(70)", nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Surname = table.Column<string>(nullable: false),
                     Birthdate = table.Column<DateTime>(nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(50)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(254)", nullable: false),
-                    Password = table.Column<string>(type: "text", nullable: false),
+                    PhoneNumber = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: false),
+                    Password = table.Column<string>(nullable: false),
                     Role = table.Column<int>(nullable: false),
                     ImageId = table.Column<Guid>(nullable: true)
                 },
@@ -173,7 +173,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(80)", nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     LocationId = table.Column<Guid>(nullable: false),
                     UserId = table.Column<Guid>(nullable: true)
                 },
@@ -224,7 +224,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Content = table.Column<string>(type: "text", nullable: true),
+                    Content = table.Column<string>(nullable: true),
                     ValidationDate = table.Column<DateTime>(nullable: false),
                     GenerationDate = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false),
@@ -299,8 +299,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 name: "IX_Commerce_UserId",
                 table: "Commerce",
                 column: "UserId",
-                unique: true,
-                filter: "[UserId] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Coupon_CommerceId",
@@ -358,8 +357,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 name: "IX_User_PhoneNumber",
                 table: "User",
                 column: "PhoneNumber",
-                unique: true,
-                filter: "[PhoneNumber] IS NOT NULL");
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -9,7 +9,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
         public Guid Id { get; set; }
 
         [Required]
-        [Column(TypeName = "nvarchar(40)")]
         public string Name { get; set; }
     }
 }

@@ -18,7 +18,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.IoCModule
 
             services.AddDbContext<NgContext>((provider, builder) =>
             {
-                builder.UseSqlServer(provider.GetService<IConfiguration>().GetConnectionString("NotGuiriDb"));
+                builder.UseNpgsql(provider.GetService<IConfiguration>().GetConnectionString("NotGuiriDb"));
             });
 
             return services;

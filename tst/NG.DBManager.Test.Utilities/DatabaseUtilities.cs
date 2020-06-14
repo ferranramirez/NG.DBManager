@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.Models.Enums;
-using NG.DBManager.Test.Utilities.Resources;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -67,7 +66,7 @@ namespace NG.DBManager.Test.Utilities
         public NgContext GenerateSqlServerContext()
         {
             var builder = new DbContextOptionsBuilder<NgContext>();
-            builder.UseSqlServer(DbTestResources.CONNECTIONSTRING);
+            // builder.UseSqlServer(DbTestResources.CONNECTIONSTRING);
 
 
             return new NgContext(builder.Options);
