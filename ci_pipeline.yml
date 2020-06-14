@@ -11,7 +11,7 @@ stages:
     steps:
     - task: PublishBuildArtifacts@1
       inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        PathtoPublish: '$(System.DefaultWorkingDirectory)'
         ArtifactName: 'publish'
         publishLocation: 'Container'
     - task: DotNetCoreCLI@2
