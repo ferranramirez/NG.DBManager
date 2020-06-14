@@ -9,11 +9,11 @@ stages:
     pool:
       vmImage: 'vs2017-win2016'
     steps:
-    - task: PublishBuildArtifacts@1
+    - task: CopyFiles@2
       inputs:
-        PathtoPublish: '$(System.DefaultWorkingDirectory)'
-        ArtifactName: 'publish'
-        publishLocation: 'Container'
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: '**'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
     - task: DotNetCoreCLI@2
       displayName: 'Restore'
       inputs:
