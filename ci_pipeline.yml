@@ -9,11 +9,6 @@ stages:
     pool:
       vmImage: 'vs2017-win2016'
     steps:
-    - task: CopyFiles@2
-      inputs:
-        SourceFolder: '$(System.DefaultWorkingDirectory)'
-        Contents: '**'
-        TargetFolder: '$(Build.ArtifactStagingDirectory)'
     - task: DotNetCoreCLI@2
       displayName: 'Restore'
       inputs:
@@ -29,13 +24,17 @@ stages:
         projects: '**/*.csproj'
         configuration: $(BuildConfiguration)
         arguments: '--no-restore'
-    - task: DotNetCoreCLI@2
-      displayName: 'Build'
+    - task: Bash@3
       inputs:
-        command: 'build'
-        projects: '**/*.csproj'
-        configuration: $(BuildConfiguration)
-        arguments: '--no-restore'
+        targetType: 'inline'
+        script: |
+          echo 'dir'
+          dir
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: '**'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
     - task: Bash@3
       inputs:
         targetType: 'inline'
