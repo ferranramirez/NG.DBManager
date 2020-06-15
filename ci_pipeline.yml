@@ -29,14 +29,27 @@ stages:
         projects: '**/*.csproj'
         configuration: $(BuildConfiguration)
         arguments: '--no-restore'
-    - task: efcore-migration-script-generator-task@0
-      displayName: 'Generate Migration Scripts'
+    - task: DotNetCoreCLI@2
+      displayName: 'Build'
       inputs:
-        projectpath: src/NG.DBManager.Infrastructure.Contracts
-        databasecontexts: NgContext
-        startupprojectpath: src/NG.DBManager.Presentation.API
-        targetfolder: '$(build.artifactstagingdirectory)/migrations'
-        installdependencies: true
+        command: 'build'
+        projects: '**/*.csproj'
+        configuration: $(BuildConfiguration)
+        arguments: '--no-restore'
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: |
+          echo 'dir'
+          dir
+    # - task: efcore-migration-script-generator-task@0
+    #   displayName: 'Generate Migration Scripts'
+    #   inputs:
+    #     projectpath: src/NG.DBManager.Infrastructure.Contracts
+    #     databasecontexts: NgContext
+    #     startupprojectpath: src/NG.DBManager.Presentation.API
+    #     targetfolder: '$(build.artifactstagingdirectory)/migrations'
+    #     installdependencies: true
     - powershell: |
         $branch = "$(Build.SourceBranchName)"
         if($branch -ne "master")
