@@ -60,9 +60,9 @@ stages:
     #       dir
     - task: CopyFiles@2
       inputs:
-        SourceFolder: '$(System.DefaultWorkingDirectory)/src/NG.DBManager.Presentation.API/bin/'
+        SourceFolder: '$(System.DefaultWorkingDirectory)/src'
         Contents: '**'
-        TargetFolder: '$(Build.ArtifactStagingDirectory)/bin'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/src'
     # - task: deployefcoremigrations@1
     #   displayName: 'Deploy EF Core migrations'
     #   inputs:
