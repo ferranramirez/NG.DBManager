@@ -14,25 +14,6 @@ stages:
     pool:
       vmImage: 'vs2017-win2016'
     steps:
-    # - task: UseDotNet@2 
-    #   displayName: "Install .NET Core 3.1.x"
-    #   inputs:
-    #     version: '3.1.x'
-    #     packageType: sdk
-        
-    # - task: DotNetCoreCLI@2
-    #   displayName: Install dotnet-ef
-    #   inputs:
-    #     command: 'custom'
-    #     custom: 'tool'
-    #     arguments: 'install --global dotnet-ef --version 3.1.1 --ignore-failed-sources'
-    # - task: UseDotNet@2
-    #   displayName: 'Use .NET Core sdk'
-    #   inputs:
-    #     packageType: sdk
-    #     version: 2.2.x
-    #     installationPath: $(Agent.ToolsDirectory)/dotnet
-    # a regular variable
     - task: replacetokens@3
       displayName: 'Replace tokens appsettings'
       inputs:
@@ -58,45 +39,20 @@ stages:
         projects: '**/*.csproj'
         configuration: $(BuildConfiguration)
         arguments: '--no-restore'
-    # - task: Bash@3
-    #   inputs:
-    #     targetType: 'inline'
-    #     script: |
-    #       echo 'dir'
-    #       dir
-    - task: CopyFiles@2
-      inputs:
-        SourceFolder: '$(System.DefaultWorkingDirectory)/src'
-        Contents: '**'
-        TargetFolder: '$(Build.ArtifactStagingDirectory)/src'
-    # - task: deployefcoremigrations@1
-    #   displayName: 'Deploy EF Core migrations'
-    #   inputs:
-    #     migrationsDll: '$(Build.ArtifactStagingDirectory)/bin/Debug/netcoreapp3.1/NG.DBManager.Infrastructure.Contracts.dll'
-    #     migrationsNamespace: NG.DBManager.Infrastructure.Contracts.Migrations
-    #     startupDll: '$(Build.ArtifactStagingDirectory)/bin/Debug/netcoreapp3.1/NG.DBManager.Presentation.API.dll'
-    #     depsJsonFile: '$(Build.ArtifactStagingDirectory)/bin/Debug/netcoreapp3.1/NG.DBManager.Presentation.API.deps.json'
-    #     runtimeConfigFile: '$(Build.ArtifactStagingDirectory)/bin/Debug/netcoreapp3.1/NG.DBManager.Presentation.API.runtimeconfig.json'
-    #     dbContextClassName: NgContext
     # - task: CopyFiles@2
     #   inputs:
-    #     SourceFolder: '$(System.DefaultWorkingDirectory)/src/NG.DBManager.Infrastructure.Contracts/bin'
-    #     Contents: '**'
+    #     SourceFolder: '$(System.DefaultWorkingDirectory)/src/NG.DBManager.Presentation.API/bin/Debug/netcoreapp3.1'
+    #     Contents: 'NG.DBManager.Presentation.API.runtimeconfig.json'
     #     TargetFolder: '$(Build.ArtifactStagingDirectory)/bin'
-    # - task: Bash@3
-    #   inputs:
-    #     targetType: 'inline'
-    #     script: |
-    #       echo 'dir'
-    #       dir
-    # - task: efcore-migration-script-generator-task@0
-    #   displayName: 'Generate Migration Scripts'
-    #   inputs:
-    #     projectpath: src/NG.DBManager.Infrastructure.Contracts
-    #     databasecontexts: NgContext
-    #     startupprojectpath: src/NG.DBManager.Presentation.API
-    #     targetfolder: '$(build.artifactstagingdirectory)/migrations'
-    #     installdependencies: true
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)/src/NG.DBManager.Presentation.API/bin/Debug/netcoreapp3.1'
+        Contents: |
+          *.dll
+          *.deps.json
+          *.runtimeconfig.json
+          appsettings.Production.json
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/bin'
     - powershell: |
         $branch = "$(Build.SourceBranchName)"
         if($branch -ne "master")
