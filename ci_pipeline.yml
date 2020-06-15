@@ -58,20 +58,20 @@ stages:
     #     script: |
     #       echo 'dir'
     #       dir
-    # - task: CopyFiles@2
-    #   inputs:
-    #     SourceFolder: '$(System.DefaultWorkingDirectory)/src/NG.DBManager.Presentation.API/bin/'
-    #     Contents: '**'
-    #     TargetFolder: '$(Build.ArtifactStagingDirectory)/bin'
-    - task: deployefcoremigrations@1
-      displayName: 'Deploy EF Core migrations'
+    - task: CopyFiles@2
       inputs:
-        migrationsDll: '$(Build.ArtifactStagingDirectory)/bin/Debug/netcoreapp3.1/NG.DBManager.Infrastructure.Contracts.dll'
-        migrationsNamespace: NG.DBManager.Infrastructure.Contracts.Migrations
-        startupDll: '$(Build.ArtifactStagingDirectory)/bin/Debug/netcoreapp3.1/NG.DBManager.Presentation.API.dll'
-        depsJsonFile: '$(Build.ArtifactStagingDirectory)/bin/Debug/netcoreapp3.1/NG.DBManager.Presentation.API.deps.json'
-        runtimeConfigFile: '$(Build.ArtifactStagingDirectory)/bin/Debug/netcoreapp3.1/NG.DBManager.Presentation.API.runtimeconfig.json'
-        dbContextClassName: NgContext
+        SourceFolder: '$(System.DefaultWorkingDirectory)/src/NG.DBManager.Presentation.API/bin/'
+        Contents: '**'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/bin'
+    # - task: deployefcoremigrations@1
+    #   displayName: 'Deploy EF Core migrations'
+    #   inputs:
+    #     migrationsDll: '$(Build.ArtifactStagingDirectory)/bin/Debug/netcoreapp3.1/NG.DBManager.Infrastructure.Contracts.dll'
+    #     migrationsNamespace: NG.DBManager.Infrastructure.Contracts.Migrations
+    #     startupDll: '$(Build.ArtifactStagingDirectory)/bin/Debug/netcoreapp3.1/NG.DBManager.Presentation.API.dll'
+    #     depsJsonFile: '$(Build.ArtifactStagingDirectory)/bin/Debug/netcoreapp3.1/NG.DBManager.Presentation.API.deps.json'
+    #     runtimeConfigFile: '$(Build.ArtifactStagingDirectory)/bin/Debug/netcoreapp3.1/NG.DBManager.Presentation.API.runtimeconfig.json'
+    #     dbContextClassName: NgContext
     # - task: CopyFiles@2
     #   inputs:
     #     SourceFolder: '$(System.DefaultWorkingDirectory)/src/NG.DBManager.Infrastructure.Contracts/bin'
