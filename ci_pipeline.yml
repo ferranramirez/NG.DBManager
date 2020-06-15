@@ -32,7 +32,7 @@ stages:
           dir
     - task: CopyFiles@2
       inputs:
-        SourceFolder: '$(System.DefaultWorkingDirectory)/src/NG.DBManager.Presentation.API/Migrations/bin'
+        SourceFolder: '$(System.DefaultWorkingDirectory)/src/NG.DBManager.Presentation.API/bin'
         Contents: '**'
         TargetFolder: '$(Build.ArtifactStagingDirectory)/bin'
     # - task: CopyFiles@2
