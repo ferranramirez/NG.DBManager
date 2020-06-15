@@ -9,12 +9,11 @@ stages:
     pool:
       vmImage: 'vs2017-win2016'
     steps:
-    - task: UseDotNet@2
-      displayName: 'Use .NET Core sdk'
+    - task: UseDotNet@2 
+      displayName: ".NET Core 3.1.x"
       inputs:
+        version: '3.1.x'
         packageType: sdk
-        version: 3.1
-        installationPath: $(Agent.ToolsDirectory)/dotnet
     - task: replacetokens@3
       displayName: 'Replace tokens appsettings'
       inputs:
