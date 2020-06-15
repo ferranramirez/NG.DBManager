@@ -4,6 +4,11 @@ trigger:
 stages:
 - stage: NuGet
   displayName: Build NuGet
+  variables:
+  - name: $(DB_HOST)
+    value: 92.222.88.143
+  - name: $(DB_PORT)
+    value: 5432
   jobs:
   - job: NuGet
     pool:
@@ -27,6 +32,7 @@ stages:
     #     packageType: sdk
     #     version: 2.2.x
     #     installationPath: $(Agent.ToolsDirectory)/dotnet
+    # a regular variable
     - task: replacetokens@3
       displayName: 'Replace tokens appsettings'
       inputs:
