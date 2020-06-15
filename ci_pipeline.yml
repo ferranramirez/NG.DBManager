@@ -5,9 +5,9 @@ stages:
 - stage: NuGet
   displayName: Build NuGet
   variables:
-  - name: $(DB_HOST)
+  - name: DB_HOST
     value: 92.222.88.143
-  - name: $(DB_PORT)
+  - name: DB_PORT
     value: 5432
   jobs:
   - job: NuGet
