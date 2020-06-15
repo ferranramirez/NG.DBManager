@@ -9,6 +9,16 @@ stages:
     pool:
       vmImage: 'vs2017-win2016'
     steps:
+    - task: replacetokens@3
+      displayName: 'Replace tokens appsettings'
+      inputs:
+        rootDirectory: '$(System.DefaultWorkingDirectory)'
+        targetFiles: '**/appsettings.*.json'
+        encoding: 'auto'
+        writeBOM: true
+        actionOnMissing: 'warn'
+        keepToken: false
+        enableTelemetry: false
     - task: DotNetCoreCLI@2
       displayName: 'Restore'
       inputs:
@@ -32,7 +42,7 @@ stages:
           dir
     - task: CopyFiles@2
       inputs:
-        SourceFolder: '$(System.DefaultWorkingDirectory)/src/NG.DBManager.Presentation.API/bin'
+        SourceFolder: '$(System.DefaultWorkingDirectory)/src/NG.DBManager.Presentation.API/bin/**/NG.DBManager.*'
         Contents: '**'
         TargetFolder: '$(Build.ArtifactStagingDirectory)/bin'
     # - task: CopyFiles@2
