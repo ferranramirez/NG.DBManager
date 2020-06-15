@@ -4,26 +4,26 @@ trigger:
 stages:
 - stage: NuGet
   displayName: Build NuGet
-  variables:
-  - name: DB_HOST
-    value: 92.222.88.143
-  - name: DB_PORT
-    value: 5432
+  # variables:
+  # - name: DB_HOST
+  #   value: 92.222.88.143
+  # - name: DB_PORT
+  #   value: 5432
   jobs:
   - job: NuGet
     pool:
       vmImage: 'vs2017-win2016'
     steps:
-    - task: replacetokens@3
-      displayName: 'Replace tokens appsettings'
-      inputs:
-        rootDirectory: '$(System.DefaultWorkingDirectory)'
-        targetFiles: '**/appsettings.*.json'
-        encoding: 'auto'
-        writeBOM: true
-        actionOnMissing: 'warn'
-        keepToken: false
-        enableTelemetry: false
+    # - task: replacetokens@3
+    #   displayName: 'Replace tokens appsettings'
+    #   inputs:
+    #     rootDirectory: '$(System.DefaultWorkingDirectory)'
+    #     targetFiles: '**/appsettings.*.json'
+    #     encoding: 'auto'
+    #     writeBOM: true
+    #     actionOnMissing: 'warn'
+    #     keepToken: false
+    #     enableTelemetry: false
     - task: DotNetCoreCLI@2
       displayName: 'Restore'
       inputs:
@@ -47,11 +47,7 @@ stages:
     - task: CopyFiles@2
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)/src/NG.DBManager.Presentation.API/bin/Debug/netcoreapp3.1'
-        Contents: |
-          *.dll
-          *.deps.json
-          *.runtimeconfig.json
-          appsettings.Production.json
+        Contents: '**'
         TargetFolder: '$(Build.ArtifactStagingDirectory)/bin'
     - powershell: |
         $branch = "$(Build.SourceBranchName)"
