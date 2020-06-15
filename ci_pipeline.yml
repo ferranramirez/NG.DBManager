@@ -7,8 +7,14 @@ stages:
   jobs:
   - job: NuGet
     pool:
-      vmImage: 'windows-2019'
+      vmImage: 'vs2017-win2016'
     steps:
+    - task: UseDotNet@2
+      displayName: 'Use .NET Core sdk'
+      inputs:
+        packageType: sdk
+        version: 3.1
+        installationPath: $(Agent.ToolsDirectory)/dotnet
     - task: replacetokens@3
       displayName: 'Replace tokens appsettings'
       inputs:
