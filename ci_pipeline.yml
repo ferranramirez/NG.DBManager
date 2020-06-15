@@ -21,6 +21,12 @@ stages:
         command: 'custom'
         custom: 'tool'
         arguments: 'install --global dotnet-ef --version 3.1.1 --ignore-failed-sources'
+    - task: UseDotNet@2
+      displayName: 'Use .NET Core sdk'
+      inputs:
+        packageType: sdk
+        version: 2.1.x
+        installationPath: $(Agent.ToolsDirectory)/dotnet
     - task: replacetokens@3
       displayName: 'Replace tokens appsettings'
       inputs:
