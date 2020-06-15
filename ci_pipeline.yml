@@ -10,10 +10,17 @@ stages:
       vmImage: 'vs2017-win2016'
     steps:
     - task: UseDotNet@2 
-      displayName: ".NET Core 3.1.x"
+      displayName: "Install .NET Core 3.1.x"
       inputs:
         version: '3.1.x'
         packageType: sdk
+        
+    - task: DotNetCoreCLI@2
+      displayName: Install dotnet-ef
+      inputs:
+        command: 'custom'
+        custom: 'tool'
+        arguments: 'install --global dotnet-ef --version 3.1.1 --ignore-failed-sources'
     - task: replacetokens@3
       displayName: 'Replace tokens appsettings'
       inputs:
