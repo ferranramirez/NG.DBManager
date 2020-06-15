@@ -32,9 +32,14 @@ stages:
           dir
     - task: CopyFiles@2
       inputs:
-        SourceFolder: '$(System.DefaultWorkingDirectory)/src/NG.DBManager.Infrastructure.Contracts/Migrations;$(System.DefaultWorkingDirectory)/src/NG.DBManager.Infrastructure.Contracts/bin;'
+        SourceFolder: '$(System.DefaultWorkingDirectory)/src/NG.DBManager.Infrastructure.Contracts/Migrations'
         Contents: '**'
-        TargetFolder: '$(Build.ArtifactStagingDirectory)/migrate'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/migrations'
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)/src/NG.DBManager.Infrastructure.Contracts/bin'
+        Contents: '**'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/bin'
     - task: Bash@3
       inputs:
         targetType: 'inline'
