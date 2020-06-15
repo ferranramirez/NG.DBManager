@@ -7,26 +7,26 @@ stages:
   jobs:
   - job: NuGet
     pool:
-      vmImage: 'windows-2019'
+      vmImage: 'vs2017-win2016'
     steps:
-    - task: UseDotNet@2 
-      displayName: "Install .NET Core 3.1.x"
-      inputs:
-        version: '3.1.x'
-        packageType: sdk
+    # - task: UseDotNet@2 
+    #   displayName: "Install .NET Core 3.1.x"
+    #   inputs:
+    #     version: '3.1.x'
+    #     packageType: sdk
         
-    - task: DotNetCoreCLI@2
-      displayName: Install dotnet-ef
-      inputs:
-        command: 'custom'
-        custom: 'tool'
-        arguments: 'install --global dotnet-ef --version 3.1.1 --ignore-failed-sources'
-    - task: UseDotNet@2
-      displayName: 'Use .NET Core sdk'
-      inputs:
-        packageType: sdk
-        version: 2.2.x
-        installationPath: $(Agent.ToolsDirectory)/dotnet
+    # - task: DotNetCoreCLI@2
+    #   displayName: Install dotnet-ef
+    #   inputs:
+    #     command: 'custom'
+    #     custom: 'tool'
+    #     arguments: 'install --global dotnet-ef --version 3.1.1 --ignore-failed-sources'
+    # - task: UseDotNet@2
+    #   displayName: 'Use .NET Core sdk'
+    #   inputs:
+    #     packageType: sdk
+    #     version: 2.2.x
+    #     installationPath: $(Agent.ToolsDirectory)/dotnet
     - task: replacetokens@3
       displayName: 'Replace tokens appsettings'
       inputs:
@@ -52,17 +52,17 @@ stages:
         projects: '**/*.csproj'
         configuration: $(BuildConfiguration)
         arguments: '--no-restore'
-    - task: Bash@3
-      inputs:
-        targetType: 'inline'
-        script: |
-          echo 'dir'
-          dir
-    - task: CopyFiles@2
-      inputs:
-        SourceFolder: '$(System.DefaultWorkingDirectory)/src/NG.DBManager.Presentation.API/bin/'
-        Contents: '**'
-        TargetFolder: '$(Build.ArtifactStagingDirectory)/bin'
+    # - task: Bash@3
+    #   inputs:
+    #     targetType: 'inline'
+    #     script: |
+    #       echo 'dir'
+    #       dir
+    # - task: CopyFiles@2
+    #   inputs:
+    #     SourceFolder: '$(System.DefaultWorkingDirectory)/src/NG.DBManager.Presentation.API/bin/'
+    #     Contents: '**'
+    #     TargetFolder: '$(Build.ArtifactStagingDirectory)/bin'
     - task: deployefcoremigrations@1
       displayName: 'Deploy EF Core migrations'
       inputs:
@@ -77,12 +77,12 @@ stages:
     #     SourceFolder: '$(System.DefaultWorkingDirectory)/src/NG.DBManager.Infrastructure.Contracts/bin'
     #     Contents: '**'
     #     TargetFolder: '$(Build.ArtifactStagingDirectory)/bin'
-    - task: Bash@3
-      inputs:
-        targetType: 'inline'
-        script: |
-          echo 'dir'
-          dir
+    # - task: Bash@3
+    #   inputs:
+    #     targetType: 'inline'
+    #     script: |
+    #       echo 'dir'
+    #       dir
     # - task: efcore-migration-script-generator-task@0
     #   displayName: 'Generate Migration Scripts'
     #   inputs:
