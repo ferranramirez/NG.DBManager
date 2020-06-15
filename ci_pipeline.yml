@@ -25,7 +25,7 @@ stages:
       displayName: 'Use .NET Core sdk'
       inputs:
         packageType: sdk
-        version: 2.1.x
+        version: 2.2.x
         installationPath: $(Agent.ToolsDirectory)/dotnet
     - task: replacetokens@3
       displayName: 'Replace tokens appsettings'
