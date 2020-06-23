@@ -10,10 +10,10 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
         public DateTime GenerationDate { get; set; }
 
         public User User { get; set; }
-        public Commerce Commerce { get; set; }
+        public Node Node { get; set; }
 
         public Guid UserId { get; set; }
-        public Guid CommerceId { get; set; }
+        public Guid NodeId { get; set; }
 
         public bool IsValidated => ValidationDate != default;
 

@@ -186,8 +186,8 @@ namespace NG.DBManager.Test.Utilities
                         .With(c => c.Id = Guid.NewGuid())
                         .With(c => c.User = Pick<User>.RandomItemFrom(Users))
                         .With(c => c.UserId = c.User.Id)
-                        .With(c => c.Commerce = Pick<Commerce>.RandomItemFrom(Commerces))
-                        .With(c => c.CommerceId = c.Commerce.Id)
+                        .With(c => c.Node = Pick<Node>.RandomItemFrom(Nodes))
+                        .With(c => c.NodeId = c.Node.Id)
                         .With(c => c.ValidationDate = default)
                         .With(c => c.Content = Faker.Lorem.Sentence(10))
                     .Random(25)
@@ -240,7 +240,7 @@ namespace NG.DBManager.Test.Utilities
             return tour;
         }
 
-        private IEnumerable<Image> GenerateImages(int numOfElements)
+        private IList<Image> GenerateImages(int numOfElements)
         {
             var generatedImages = Builder<Image>
                 .CreateListOfSize(numOfElements)
@@ -293,7 +293,7 @@ namespace NG.DBManager.Test.Utilities
             return generatedUser;
         }
 
-        private IEnumerable<TourTag> AttachToTag(Tour tour)
+        private IList<TourTag> AttachToTag(Tour tour)
         {
             return Builder<TourTag>
                 .CreateListOfSize(1) // Number of Tags for each Tour
@@ -304,7 +304,7 @@ namespace NG.DBManager.Test.Utilities
                 .ToList();
         }
 
-        private IEnumerable<TourTag> AttachToGeneratedTag(Tour tour)
+        private IList<TourTag> AttachToGeneratedTag(Tour tour)
         {
             return Builder<TourTag>
                 .CreateListOfSize(1) // Number of Tags for each Tour
@@ -327,7 +327,7 @@ namespace NG.DBManager.Test.Utilities
             return generatedTag;
         }
 
-        private IEnumerable<Node> AttachSomeNodes(Tour tour)
+        private IList<Node> AttachSomeNodes(Tour tour)
         {
             var generatedNodes = Builder<Node>
                 .CreateListOfSize(10) // Number of Nodes for each Tour
@@ -350,7 +350,7 @@ namespace NG.DBManager.Test.Utilities
             return generatedNodes;
         }
 
-        private IEnumerable<Audio> GenerateNodeAudios(Node node)
+        private IList<Audio> GenerateNodeAudios(Node node)
         {
             return Builder<Audio>
                 .CreateListOfSize(4) // Number of Audios for each Node

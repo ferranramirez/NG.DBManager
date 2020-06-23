@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NG.DBManager.Infrastructure.Contracts.Models
 {
@@ -9,7 +8,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
     {
         public Location()
         {
-            Nodes = new HashSet<Node>();
+            Nodes = new List<Node>();
         }
 
         public Guid Id { get; set; }
@@ -23,7 +22,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
         [Required]
         public decimal Longitude { get; set; }
 
-        public IEnumerable<Node> Nodes { get; set; }
+        public IList<Node> Nodes { get; set; }
 
     }
 }

@@ -1,7 +1,6 @@
 ﻿using NG.DBManager.Infrastructure.Contracts.Models.Enums;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NG.DBManager.Infrastructure.Contracts.Models
 {
@@ -29,8 +28,8 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
         [Required]
         public Role Role { get; set; }
 
-        public virtual Commerce Commerce { get; set; }
-        public virtual Image Image { get; set; }
+        public Commerce Commerce { get; set; }
+        public Image Image { get; set; }
 
 
         public override bool Equals(object obj)

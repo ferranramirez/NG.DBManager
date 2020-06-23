@@ -39,9 +39,8 @@ namespace NG.DBManager.Presentation.API
 
             services.AddJwtAuthentication(Configuration.GetSection("Secrets"));
 
-            services.AddScoped<IFullUnitOfWork, FullUnitOfWork>();
             services.AddSingleton<DatabaseUtilities>();
-
+            services.AddScoped<IFullUnitOfWork, FullUnitOfWork>();
             services.AddInfrastructureServices();
         }
 

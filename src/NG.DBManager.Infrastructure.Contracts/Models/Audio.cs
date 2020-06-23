@@ -6,13 +6,14 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
     {
         public Audio()
         {
-            //AudioImages = new HashSet<AudioImage>();
+            //AudioImages = new List<AudioImage>();
         }
 
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public int Order { get; set; }
 
         public Guid NodeId { get; set; }
-        // public IEnumerable<AudioImage> AudioImages { get; set; }
+        // public IList<AudioImage> AudioImages { get; set; }
     }
 }

@@ -22,11 +22,15 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 
         public virtual void Add(TEntity entity)
         {
+            if (entity == null) { return; }
+
             DbSet.Add(entity);
         }
 
         public void AddRange(IEnumerable<TEntity> entities)
         {
+            if (!entities.Any()) { return; }
+
             DbSet.AddRange(entities);
         }
 

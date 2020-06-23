@@ -35,6 +35,8 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
             //    .HasForeignKey<User>(c => c.CommerceId)
             //    .OnDelete(DeleteBehavior.ClientSetNull);
 
+            modelBuilder.Entity<CommerceDeal>().HasKey(cd => new { cd.CommerceId, cd.DealId });
+
             modelBuilder.Entity<Location>().HasIndex(l => new { l.Latitude, l.Longitude }).IsUnique();
 
             modelBuilder.Entity<Review>().HasKey(r => new { r.UserId, r.TourId });

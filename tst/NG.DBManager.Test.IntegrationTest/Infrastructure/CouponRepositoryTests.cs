@@ -34,14 +34,14 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
 
             Guid newCouponId = Guid.NewGuid();
             Guid userId = _databaseUtilities.Users.First().Id;
-            Guid commerceId = _databaseUtilities.Commerces.First().Id;
+            Guid nodeId = _databaseUtilities.Nodes.First().Id;
 
             Coupon newCoupon = new Coupon
             {
                 Id = newCouponId,
                 UserId = userId,
                 Content = "{Coupon content test}",
-                CommerceId = commerceId,
+                NodeId = nodeId,
             };
 
             //ACT

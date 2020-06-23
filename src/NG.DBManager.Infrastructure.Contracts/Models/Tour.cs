@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace NG.DBManager.Infrastructure.Contracts.Models
 {
@@ -9,8 +9,8 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
     {
         public Tour()
         {
-            Nodes = new HashSet<Node>();
-            TourTags = new HashSet<TourTag>();
+            Nodes = new List<Node>();
+            TourTags = new List<TourTag>();
         }
 
         public Guid Id { get; set; }
@@ -27,8 +27,10 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
 
         public Guid ImageId { get; set; }
 
-        public IEnumerable<Node> Nodes { get; set; }
-        public IEnumerable<TourTag> TourTags { get; set; }
+        [JsonIgnore]
+        public Image Image { get; set; }
+        public IList<Node> Nodes { get; set; }
+        public IList<TourTag> TourTags { get; set; }
 
         public override bool Equals(object obj)
         {
