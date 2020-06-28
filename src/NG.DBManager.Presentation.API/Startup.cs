@@ -6,7 +6,7 @@ using Microsoft.Extensions.Hosting;
 using NG.Common.Library.Extensions;
 using NG.Common.Library.Filters;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
-using NG.DBManager.Infrastructure.Impl.EF.IoCModule;
+using NG.DBManager.Infrastructure.Impl.EF.Extensions;
 using NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork;
 using NG.DBManager.Test.Utilities;
 using System.Reflection;
