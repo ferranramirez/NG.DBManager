@@ -6,7 +6,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
 {
     public static class DataUtils
     {
-        public static User[] UsersSeed()
+        public static User[] UserSeed()
         {
             return new User[]
             {
@@ -57,7 +57,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
             };
         }
 
-        public static Location[] LocationsSeed()
+        public static Location[] LocationSeed()
         {
             return new Location[]
             {
@@ -70,7 +70,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
                 }
             };
         }
-        public static Commerce[] CommercesSeed()
+        public static Commerce[] CommerceSeed()
         {
             return new Commerce[]
             {
@@ -80,6 +80,30 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
                     Name = "Test Commerce",
                     LocationId = Guid.Parse("0013a98e-32f6-494d-b055-c9fb4dafc3e8"),
                     UserId = Guid.Parse("73b7b257-41f7-4b22-9a10-93fb91238fd9"),
+                }
+            };
+        }
+
+        public static Deal[] DealSeed()
+        {
+            return new Deal[]
+            {
+                new Deal()
+                {
+                    Id = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                    Name = "No Deal",
+                }
+            };
+        }
+
+        public static Image[] ImageSeed()
+        {
+            return new Image[]
+            {
+                new Image()
+                {
+                    Id = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                    Name = "No Image",
                 }
             };
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,6 +19,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
 
         [ForeignKey(nameof(UserId))]
         public User User { get; set; }
-        public CommerceDeal Deal { get; set; }
+        public IList<CommerceDeal> CommerceDeals { get; set; }
     }
 }

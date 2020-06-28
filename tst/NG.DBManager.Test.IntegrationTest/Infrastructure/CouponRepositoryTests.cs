@@ -22,7 +22,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
         {
             _databaseUtilities = databaseUtilities;
 
-            Context = databaseUtilities.GenerateSqlServerContext();
+            Context = databaseUtilities.GeneratePostgreSqlContext();
             UnitOfWork = new APIUnitOfWork(Context);
         }
 
@@ -50,7 +50,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
             UnitOfWork.CommitAsync();
 
             //ASSERT
-            using (var assertContext = _databaseUtilities.GenerateSqlServerContext())
+            using (var assertContext = _databaseUtilities.GeneratePostgreSqlContext())
             {
                 var assertUOW = new APIUnitOfWork(assertContext);
                 var couponFromDb = assertUOW.Repository<Coupon>().Get(newCouponId);

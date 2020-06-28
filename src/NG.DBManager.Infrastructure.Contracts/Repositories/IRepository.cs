@@ -9,7 +9,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Repositories
     {
 
         TEntity Get(object id);
-        Task<IEnumerable<TEntity>> GetAll();
+        Task<IEnumerable<TEntity>> GetAll(params Expression<Func<TEntity, object>>[] include);
         IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
 
         void Add(TEntity entity);

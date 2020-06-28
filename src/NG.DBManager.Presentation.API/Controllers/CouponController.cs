@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
 using System;
@@ -13,12 +12,10 @@ namespace NG.DBManager.Presentation.API.Controllers
     public class CouponController : ControllerBase
     {
         private readonly IFullUnitOfWork _uow;
-        private readonly NgContext _context;
 
-        public CouponController(IFullUnitOfWork uow, NgContext context)
+        public CouponController(IFullUnitOfWork uow)
         {
             _uow = uow;
-            _context = context;
         }
 
         /// <summary>

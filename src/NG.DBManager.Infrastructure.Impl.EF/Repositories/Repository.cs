@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NG.DBManager.Infrastructure.Contracts.Repositories;
+using NG.DBManager.Infrastructure.Impl.EF.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,9 +45,15 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return DbSet.Find(id);
         }
 
-        public async Task<IEnumerable<TEntity>> GetAll()
+        public async Task<IEnumerable<TEntity>> GetAll(Expression<Func<TEntity, object>>[] includes)
         {
-            return await DbSet.ToListAsync();
+            if (includes == null)
+                return await DbSet
+                            .ToListAsync();
+
+            return await DbSet
+                        .IncludeMultiple(includes)
+                        .ToListAsync();
         }
 
         public void Update(TEntity entity)

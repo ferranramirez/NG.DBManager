@@ -14,7 +14,9 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
         public DbSet<Audio> Audio { get; set; }
         //public DbSet<AudioImage> AudioImage { get; set; }
         public DbSet<Commerce> Commerce { get; set; }
+        public DbSet<CommerceDeal> CommerceDeal { get; set; }
         public DbSet<Coupon> Coupon { get; set; }
+        public DbSet<Deal> Deal { get; set; }
         public DbSet<Image> Image { get; set; }
         public DbSet<Location> Location { get; set; }
         public DbSet<Node> Node { get; set; }
@@ -28,12 +30,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.Entity<AudioImage>().HasKey(ai => new { ai.AudioId, ai.ImageId });
-
-            //modelBuilder.Entity<Commerce>()
-            //    .HasOne(c => c.User)
-            //    .WithOne(u => u.Commerce)
-            //    .HasForeignKey<User>(c => c.CommerceId)
-            //    .OnDelete(DeleteBehavior.ClientSetNull);
 
             modelBuilder.Entity<CommerceDeal>().HasKey(cd => new { cd.CommerceId, cd.DealId });
 
@@ -51,9 +47,11 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
                 entity.HasIndex(u => u.PhoneNumber).IsUnique();
             });
 
-            modelBuilder.Entity<User>().HasData(DataUtils.UsersSeed());
-            modelBuilder.Entity<Location>().HasData(DataUtils.LocationsSeed());
-            modelBuilder.Entity<Commerce>().HasData(DataUtils.CommercesSeed());
+            modelBuilder.Entity<User>().HasData(DataUtils.UserSeed());
+            modelBuilder.Entity<Location>().HasData(DataUtils.LocationSeed());
+            modelBuilder.Entity<Commerce>().HasData(DataUtils.CommerceSeed());
+            modelBuilder.Entity<Deal>().HasData(DataUtils.DealSeed());
+            modelBuilder.Entity<Image>().HasData(DataUtils.ImageSeed());
         }
     }
 }

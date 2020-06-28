@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 namespace NG.DBManager.Presentation.API.Controllers
 {
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [Route("[controller]")]
     public class CommerceController : ControllerBase
     {

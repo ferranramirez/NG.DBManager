@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NG.DBManager.Infrastructure.Contracts.Contexts;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -9,9 +10,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NG.DBManager.Infrastructure.Contracts.Migrations
 {
     [DbContext(typeof(NgContext))]
-    partial class NgContextModelSnapshot : ModelSnapshot
+    [Migration("20200627101824_Deal_In_TableNode_Optional2")]
+    partial class Deal_In_TableNode_Optional2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -134,13 +136,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Deal");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("00000000-0000-0000-0000-000000000001"),
-                            Name = "No Deal"
-                        });
                 });
 
             modelBuilder.Entity("NG.DBManager.Infrastructure.Contracts.Models.Image", b =>
@@ -160,13 +155,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                     b.HasIndex("NodeId");
 
                     b.ToTable("Image");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("00000000-0000-0000-0000-000000000001"),
-                            Name = "No Image"
-                        });
                 });
 
             modelBuilder.Entity("NG.DBManager.Infrastructure.Contracts.Models.Location", b =>

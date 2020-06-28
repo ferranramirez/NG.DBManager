@@ -3,6 +3,6 @@
     public static class DbTestResources
     {
         public const string CONNECTIONSTRING =
-            "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=NotGuiriDb_Test;Integrated Security=True;";
+            "User ID=postgres;Password=admin;Host=localhost;Port=5432;Database=NotGuiriDb_Test;";
     }
 }

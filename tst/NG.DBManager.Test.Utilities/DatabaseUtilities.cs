@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.Models.Enums;
+using NG.DBManager.Test.Utilities.Resources;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace NG.DBManager.Test.Utilities
     {
         public List<Image> Images;
         public List<Tag> Tags;
+        public List<Deal> Deals;
         public List<Tour> Tours;
         public List<Location> Locations;
         public List<Commerce> Commerces;
@@ -51,6 +53,7 @@ namespace NG.DBManager.Test.Utilities
             context.Coupon.AddRange(Coupons);
             context.Review.AddRange(Reviews);
 
+
             return context.SaveChanges();
         }
 
@@ -63,11 +66,10 @@ namespace NG.DBManager.Test.Utilities
             return new NgContext(builder.Options);
         }
 
-        public NgContext GenerateSqlServerContext()
+        public NgContext GeneratePostgreSqlContext()
         {
             var builder = new DbContextOptionsBuilder<NgContext>();
-            // builder.UseSqlServer(DbTestResources.CONNECTIONSTRING);
-
+            builder.UseNpgsql(DbTestResources.CONNECTIONSTRING);
 
             return new NgContext(builder.Options);
         }
@@ -115,12 +117,20 @@ namespace NG.DBManager.Test.Utilities
                 .ToList();
 
             Locations = Builder<Location>
-                .CreateListOfSize(300)
+                .CreateListOfSize(200)
                 .All()
                     .With(l => l.Id = Guid.NewGuid())
                     // .With(l => l.Name = Faker.Address.StreetName())
-                    .With(l => l.Latitude = decimal.Parse(Faker.RandomNumber.Next(-999, 999).ToString()))
-                    .With(l => l.Longitude = decimal.Parse(Faker.RandomNumber.Next(-999, 999).ToString()))
+                    .With(l => l.Latitude = decimal.Parse(Faker.RandomNumber.Next(-9999, 9999).ToString()))
+                    .With(l => l.Longitude = decimal.Parse(Faker.RandomNumber.Next(-9999, 9999).ToString()))
+                .Build()
+                .ToList();
+
+            Deals = Builder<Deal>
+                .CreateListOfSize(20)
+                .All()
+                    .With(d => d.Id = Guid.NewGuid())
+                    .With(d => d.Name = Faker.Lorem.Sentence(1))
                 .Build()
                 .ToList();
 
@@ -169,7 +179,7 @@ namespace NG.DBManager.Test.Utilities
                         .With(tour => tour.IsPremium = Faker.Boolean.Random())
                         .With(tour => tour.IsFeatured = false)
                         .With(tour => tour.TourTags = AttachToGeneratedTag(tour))
-                        .With(tour => tour.Nodes = AttachSomeNodes(tour))
+                        .With(tour => tour.Nodes = GenerateNodes(tour))
                         .With(tour => tour.ImageId = GenerateImages(1).First().Id)
                     .Random(10)
                         .With(tour => tour.IsFeatured = true)
@@ -265,11 +275,23 @@ namespace NG.DBManager.Test.Utilities
                 .With(c => c.LocationId = c.Location.Id)
                 .With(c => c.User = GenerateCommerceUser(c))
                 .With(c => c.UserId = c.User.Id)
+                .With(c => c.CommerceDeals = AttatchToSomeDeals(c))
                 .Build();
 
             Commerces.Add(generatedCommerce);
 
             return generatedCommerce;
+        }
+
+        private List<CommerceDeal> AttatchToSomeDeals(Commerce commerce)
+        {
+            return Builder<CommerceDeal>
+                .CreateListOfSize(1) // Number of Deals for each Commerce
+                .All()
+                    .With(comDeal => comDeal.Deal = Pick<Deal>.RandomItemFrom(Deals))
+                    .With(comDeal => comDeal.Commerce = commerce)
+                .Build()
+                .ToList();
         }
 
         private User GenerateCommerceUser(Commerce commerce)
@@ -327,7 +349,7 @@ namespace NG.DBManager.Test.Utilities
             return generatedTag;
         }
 
-        private IList<Node> AttachSomeNodes(Tour tour)
+        private IList<Node> GenerateNodes(Tour tour)
         {
             var generatedNodes = Builder<Node>
                 .CreateListOfSize(10) // Number of Nodes for each Tour
@@ -342,12 +364,33 @@ namespace NG.DBManager.Test.Utilities
                     .With(node => node.Audios = GenerateNodeAudios(node))
                     .With(node => node.TourId = tour.Id)
                     .With(node => node.Images = GenerateImages(3))
+                    .With(node => node.DealId = Guid.Parse("00000000-0000-0000-0000-000000000001"))
+                .Random(1)
+                    .With(node => node.Location = SelectCommerceLocation())
+                    .With(node => node.Deal = SelectDeal(node))
+                    .With(node => node.DealId = node.Deal.Id)
                 .Build()
                 .ToList();
 
             Nodes.AddRange(generatedNodes);
 
             return generatedNodes;
+        }
+
+        private Location SelectCommerceLocation()
+        {
+            return Pick<Commerce>.RandomItemFrom(Commerces).Location;
+        }
+
+        private Deal SelectDeal(Node node)
+        {
+            var commerce = Commerces
+                .First(c => c.Location == node.Location);
+
+            var deal = commerce.CommerceDeals
+                .Select(cd => cd.Deal).First();
+
+            return deal;
         }
 
         private IList<Audio> GenerateNodeAudios(Node node)

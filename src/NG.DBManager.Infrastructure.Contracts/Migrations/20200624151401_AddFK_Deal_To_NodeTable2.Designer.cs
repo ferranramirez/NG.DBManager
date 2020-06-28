@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NG.DBManager.Infrastructure.Contracts.Contexts;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -9,9 +10,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NG.DBManager.Infrastructure.Contracts.Migrations
 {
     [DbContext(typeof(NgContext))]
-    partial class NgContextModelSnapshot : ModelSnapshot
+    [Migration("20200624151401_AddFK_Deal_To_NodeTable2")]
+    partial class AddFK_Deal_To_NodeTable2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -134,13 +136,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Deal");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("00000000-0000-0000-0000-000000000001"),
-                            Name = "No Deal"
-                        });
                 });
 
             modelBuilder.Entity("NG.DBManager.Infrastructure.Contracts.Models.Image", b =>
@@ -160,13 +155,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                     b.HasIndex("NodeId");
 
                     b.ToTable("Image");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("00000000-0000-0000-0000-000000000001"),
-                            Name = "No Image"
-                        });
                 });
 
             modelBuilder.Entity("NG.DBManager.Infrastructure.Contracts.Models.Location", b =>
@@ -208,13 +196,16 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("CoordinatesId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("DealId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("LocationId")
+                    b.Property<Guid?>("LocationId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -496,9 +487,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
 
                     b.HasOne("NG.DBManager.Infrastructure.Contracts.Models.Location", "Location")
                         .WithMany("Nodes")
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LocationId");
 
                     b.HasOne("NG.DBManager.Infrastructure.Contracts.Models.Tour", null)
                         .WithMany("Nodes")

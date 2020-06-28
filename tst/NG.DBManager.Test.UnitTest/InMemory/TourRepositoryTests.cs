@@ -30,7 +30,7 @@ namespace NG.DBManager.Test.UnitTest.InMemory
 
 
         [Fact]
-        public void AddTour()
+        public async Task AddTour()
         {
             //ARRANGE
             Guid newTourId = Guid.NewGuid();
@@ -39,11 +39,12 @@ namespace NG.DBManager.Test.UnitTest.InMemory
                 Id = newTourId,
                 Name = "My add test Tour",
                 Description = "A nice description for such an interesting Tour",
+                ImageId = Guid.Parse("00000000-0000-0000-0000-000000000001")
             };
 
             //ACT
             UnitOfWork.Tour.Add(newTour);
-            UnitOfWork.CommitAsync();
+            await UnitOfWork.CommitAsync();
 
             //ASSERT
             using (var assertContext = _databaseUtilities.GenerateInMemoryContext())

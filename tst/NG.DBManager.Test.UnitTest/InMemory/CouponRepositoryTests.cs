@@ -5,6 +5,7 @@ using NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork;
 using NG.DBManager.Test.Utilities;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace NG.DBManager.Test.UnitTest.InMemory
@@ -28,7 +29,7 @@ namespace NG.DBManager.Test.UnitTest.InMemory
         }
 
         [Fact]
-        public void AddCoupon()
+        public async Task AddCoupon()
         {
             //ARRANGE
             _databaseUtilities.RandomSeed(Context);
@@ -47,7 +48,7 @@ namespace NG.DBManager.Test.UnitTest.InMemory
 
             //ACT
             UnitOfWork.Repository<Coupon>().Add(newCoupon);
-            UnitOfWork.CommitAsync();
+            await UnitOfWork.CommitAsync();
 
             //ASSERT
             using (var assertContext = _databaseUtilities.GenerateInMemoryContext())
@@ -60,7 +61,7 @@ namespace NG.DBManager.Test.UnitTest.InMemory
         }
 
         [Fact]
-        public void ValidateCoupon()
+        public async Task ValidateCoupon()
         {
             //ARRANGE
             _databaseUtilities.RandomSeed(Context);
@@ -72,7 +73,7 @@ namespace NG.DBManager.Test.UnitTest.InMemory
 
             //ACT
             UnitOfWork.Repository<Coupon>().Update(firstCoupon);
-            UnitOfWork.CommitAsync();
+            await UnitOfWork.CommitAsync();
 
             //ASSERT
             using (var assertContext = _databaseUtilities.GenerateInMemoryContext())

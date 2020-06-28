@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NG.DBManager.Infrastructure.Contracts.Contexts;
 using System;
 
-namespace NG.DBManager.Infrastructure.Impl.EF.IoCModule
+namespace NG.DBManager.Infrastructure.Impl.EF.Extensions
 {
     public static class DbContextModuleExtension
     {

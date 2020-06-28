@@ -5,6 +5,7 @@ using NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork;
 using NG.DBManager.Test.Utilities;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace NG.DBManager.Test.IntegrationTest.Infrastructure
@@ -21,29 +22,32 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
         {
             _databaseUtilities = databaseUtilities;
 
-            Context = databaseUtilities.GenerateSqlServerContext();
+            Context = databaseUtilities.GeneratePostgreSqlContext();
             Context.Database.EnsureCreated();
             UnitOfWork = new APIUnitOfWork(Context);
         }
 
         [Fact]
-        public void AddTour()
+        public async Task AddTour()
         {
             //ARRANGE
+            _databaseUtilities.RandomSeed(Context);
+
             Guid newTourId = Guid.NewGuid();
             Tour newTour = new Tour
             {
                 Id = newTourId,
                 Name = "My add test Tour",
                 Description = "A nice description for such an interesting Tour",
+                ImageId = Guid.Parse("00000000-0000-0000-0000-000000000001")
             };
 
             //ACT
             UnitOfWork.Tour.Add(newTour);
-            UnitOfWork.CommitAsync();
+            await UnitOfWork.CommitAsync();
 
             //ASSERT
-            using (var assertContext = _databaseUtilities.GenerateSqlServerContext())
+            using (var assertContext = _databaseUtilities.GeneratePostgreSqlContext())
             {
                 var assertUOW = new APIUnitOfWork(assertContext);
                 var tourFromDb = assertUOW.Tour.Get(newTourId);

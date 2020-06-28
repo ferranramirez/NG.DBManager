@@ -29,7 +29,7 @@ namespace NG.DBManager.Test.UnitTest.SQLite
         }
 
         [Fact]
-        public void AddCoupon()
+        public async Task AddCoupon()
         {
             //ARRANGE
             _databaseUtilities.RandomSeed(Context);
@@ -48,7 +48,7 @@ namespace NG.DBManager.Test.UnitTest.SQLite
 
             //ACT
             UnitOfWork.Repository<Coupon>().Add(newCoupon);
-            UnitOfWork.CommitAsync();
+            await UnitOfWork.CommitAsync();
 
             //ASSERT
             var couponFromDb = UnitOfWork.Repository<Coupon>().Get(newCouponId);
