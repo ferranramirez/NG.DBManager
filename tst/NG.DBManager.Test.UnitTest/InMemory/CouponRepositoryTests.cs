@@ -17,6 +17,7 @@ namespace NG.DBManager.Test.UnitTest.InMemory
 
         private readonly NgContext Context;
         private readonly IAPIUnitOfWork UnitOfWork;
+        private readonly IB2BUnitOfWork B2BUnitOfWork;
 
 
         public CouponRepositoryTests(DatabaseUtilities databaseUtilities)
@@ -26,6 +27,7 @@ namespace NG.DBManager.Test.UnitTest.InMemory
             Context = databaseUtilities.GenerateInMemoryContext();
             Context.Database.EnsureCreated();
             UnitOfWork = new APIUnitOfWork(Context);
+            B2BUnitOfWork = new B2BUnitOfWork(Context);
         }
 
         [Fact]
@@ -83,6 +85,26 @@ namespace NG.DBManager.Test.UnitTest.InMemory
                 Assert.NotNull(couponFromDb);
                 Assert.Equal(couponFromDb, firstCoupon);
             }
+        }
+
+        [Fact]
+        public async Task GetCommerceUserFromCoupon()
+        {
+            //ARRANGE
+            _databaseUtilities.RandomSeed(Context);
+
+            var firstCoupon = _databaseUtilities.Coupons.First(c => !c.IsValidated);
+            var firstCouponCommerceUser = firstCoupon.Node.Location.Commerce.User;
+
+            //var couponDb = UnitOfWork.Repository<Coupon>().Get(firstCoupon.Id);
+            firstCoupon.ValidationDate = DateTime.Now;
+
+            //ACT
+            var commerceUser = B2BUnitOfWork.Coupon.GetCommerceUser(firstCoupon.NodeId);
+
+            //ASSERT
+            Assert.NotNull(commerceUser);
+            Assert.Equal(firstCouponCommerceUser, commerceUser);
         }
 
         // Dispose pattern 
