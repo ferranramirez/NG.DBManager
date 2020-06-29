@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NG.DBManager.Infrastructure.Contracts.Migrations
 {
     [DbContext(typeof(NgContext))]
-    [Migration("20200623125702_AddTable_Deal_AdaptTable_Coupons")]
-    partial class AddTable_Deal_AdaptTable_Coupons
+    [Migration("20200629104955_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -61,8 +61,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LocationId");
-
                     b.HasIndex("UserId")
                         .IsUnique();
 
@@ -87,9 +85,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("CommerceId", "DealId");
-
-                    b.HasIndex("CommerceId")
-                        .IsUnique();
 
                     b.HasIndex("DealId");
 
@@ -139,6 +134,13 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Deal");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000001"),
+                            Name = "No Deal"
+                        });
                 });
 
             modelBuilder.Entity("NG.DBManager.Infrastructure.Contracts.Models.Image", b =>
@@ -158,12 +160,22 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                     b.HasIndex("NodeId");
 
                     b.ToTable("Image");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000001"),
+                            Name = "No Image"
+                        });
                 });
 
             modelBuilder.Entity("NG.DBManager.Infrastructure.Contracts.Models.Location", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CommerceId")
                         .HasColumnType("uuid");
 
                     b.Property<decimal>("Latitude")
@@ -178,6 +190,9 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CommerceId")
+                        .IsUnique();
+
                     b.HasIndex("Latitude", "Longitude")
                         .IsUnique();
 
@@ -187,6 +202,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                         new
                         {
                             Id = new Guid("0013a98e-32f6-494d-b055-c9fb4dafc3e8"),
+                            CommerceId = new Guid("a4506bf8-9cca-4413-b0d4-4247c61b1231"),
                             Latitude = 33.842185m,
                             Longitude = -40.707753m,
                             Name = "Test Location"
@@ -199,13 +215,13 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CoordinatesId")
+                    b.Property<Guid>("DealId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("LocationId")
+                    b.Property<Guid>("LocationId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -219,6 +235,8 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DealId");
 
                     b.HasIndex("LocationId");
 
@@ -427,12 +445,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
 
             modelBuilder.Entity("NG.DBManager.Infrastructure.Contracts.Models.Commerce", b =>
                 {
-                    b.HasOne("NG.DBManager.Infrastructure.Contracts.Models.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("NG.DBManager.Infrastructure.Contracts.Models.User", "User")
                         .WithOne("Commerce")
                         .HasForeignKey("NG.DBManager.Infrastructure.Contracts.Models.Commerce", "UserId");
@@ -441,8 +453,8 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
             modelBuilder.Entity("NG.DBManager.Infrastructure.Contracts.Models.CommerceDeal", b =>
                 {
                     b.HasOne("NG.DBManager.Infrastructure.Contracts.Models.Commerce", "Commerce")
-                        .WithOne("Deal")
-                        .HasForeignKey("NG.DBManager.Infrastructure.Contracts.Models.CommerceDeal", "CommerceId")
+                        .WithMany("CommerceDeals")
+                        .HasForeignKey("CommerceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -475,11 +487,28 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                         .HasForeignKey("NodeId");
                 });
 
+            modelBuilder.Entity("NG.DBManager.Infrastructure.Contracts.Models.Location", b =>
+                {
+                    b.HasOne("NG.DBManager.Infrastructure.Contracts.Models.Commerce", "Commerce")
+                        .WithOne("Location")
+                        .HasForeignKey("NG.DBManager.Infrastructure.Contracts.Models.Location", "CommerceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("NG.DBManager.Infrastructure.Contracts.Models.Node", b =>
                 {
+                    b.HasOne("NG.DBManager.Infrastructure.Contracts.Models.Deal", "Deal")
+                        .WithMany()
+                        .HasForeignKey("DealId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("NG.DBManager.Infrastructure.Contracts.Models.Location", "Location")
                         .WithMany("Nodes")
-                        .HasForeignKey("LocationId");
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("NG.DBManager.Infrastructure.Contracts.Models.Tour", null)
                         .WithMany("Nodes")

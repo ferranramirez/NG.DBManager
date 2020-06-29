@@ -67,6 +67,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
                     Name = "Test Location",
                     Latitude = 33.842185M,
                     Longitude = -40.707753M,
+                    CommerceId = Guid.Parse("a4506bf8-9cca-4413-b0d4-4247c61b1231"),
                 }
             };
         }

@@ -200,7 +200,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                         new
                         {
                             Id = new Guid("0013a98e-32f6-494d-b055-c9fb4dafc3e8"),
-                            CommerceId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            CommerceId = new Guid("a4506bf8-9cca-4413-b0d4-4247c61b1231"),
                             Latitude = 33.842185m,
                             Longitude = -40.707753m,
                             Name = "Test Location"

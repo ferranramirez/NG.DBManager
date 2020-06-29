@@ -8,17 +8,15 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Location",
+                name: "Deal",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Latitude = table.Column<decimal>(nullable: false),
-                    Longitude = table.Column<decimal>(nullable: false)
+                    Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Location", x => x.Id);
+                    table.PrimaryKey("PK_Deal", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -34,22 +32,47 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tour",
+                name: "CommerceDeal",
+                columns: table => new
+                {
+                    CommerceId = table.Column<Guid>(nullable: false),
+                    DealId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CommerceDeal", x => new { x.CommerceId, x.DealId });
+                    table.ForeignKey(
+                        name: "FK_CommerceDeal_Deal_DealId",
+                        column: x => x.DealId,
+                        principalTable: "Deal",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Location",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true),
-                    GeoJson = table.Column<string>(nullable: true),
-                    Duration = table.Column<int>(nullable: false),
-                    IsPremium = table.Column<bool>(nullable: false),
-                    IsFeatured = table.Column<bool>(nullable: false),
-                    ImageId = table.Column<Guid>(nullable: false),
-                    Created = table.Column<DateTime>(nullable: false)
+                    Latitude = table.Column<decimal>(nullable: false),
+                    Longitude = table.Column<decimal>(nullable: false),
+                    CommerceId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tour", x => x.Id);
+                    table.PrimaryKey("PK_Location", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Restaurant",
+                columns: table => new
+                {
+                    CommerceId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Restaurant", x => x.CommerceId);
                 });
 
             migrationBuilder.CreateTable(
@@ -60,47 +83,23 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                     Name = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     Order = table.Column<int>(nullable: false),
-                    CoordinatesId = table.Column<Guid>(nullable: false),
                     TourId = table.Column<Guid>(nullable: false),
-                    LocationId = table.Column<Guid>(nullable: true)
+                    LocationId = table.Column<Guid>(nullable: false),
+                    DealId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Node", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Node_Deal_DealId",
+                        column: x => x.DealId,
+                        principalTable: "Deal",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Node_Location_LocationId",
                         column: x => x.LocationId,
                         principalTable: "Location",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Node_Tour_TourId",
-                        column: x => x.TourId,
-                        principalTable: "Tour",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TourTag",
-                columns: table => new
-                {
-                    TourId = table.Column<Guid>(nullable: false),
-                    TagId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TourTag", x => new { x.TourId, x.TagId });
-                    table.ForeignKey(
-                        name: "FK_TourTag_Tag_TagId",
-                        column: x => x.TagId,
-                        principalTable: "Tag",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TourTag_Tour_TourId",
-                        column: x => x.TourId,
-                        principalTable: "Tour",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -111,6 +110,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: true),
+                    Order = table.Column<int>(nullable: false),
                     NodeId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
@@ -144,6 +144,31 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Tour",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    GeoJson = table.Column<string>(nullable: true),
+                    Duration = table.Column<int>(nullable: false),
+                    IsPremium = table.Column<bool>(nullable: false),
+                    IsFeatured = table.Column<bool>(nullable: false),
+                    ImageId = table.Column<Guid>(nullable: false),
+                    Created = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tour", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tour_Image_ImageId",
+                        column: x => x.ImageId,
+                        principalTable: "Image",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
@@ -169,6 +194,30 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TourTag",
+                columns: table => new
+                {
+                    TourId = table.Column<Guid>(nullable: false),
+                    TagId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TourTag", x => new { x.TourId, x.TagId });
+                    table.ForeignKey(
+                        name: "FK_TourTag_Tag_TagId",
+                        column: x => x.TagId,
+                        principalTable: "Tag",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TourTag_Tour_TourId",
+                        column: x => x.TourId,
+                        principalTable: "Tour",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Commerce",
                 columns: table => new
                 {
@@ -181,17 +230,39 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 {
                     table.PrimaryKey("PK_Commerce", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Commerce_Location_LocationId",
-                        column: x => x.LocationId,
-                        principalTable: "Location",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Commerce_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Coupon",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Content = table.Column<string>(nullable: true),
+                    ValidationDate = table.Column<DateTime>(nullable: false),
+                    GenerationDate = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false),
+                    NodeId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Coupon", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Coupon_Node_NodeId",
+                        column: x => x.NodeId,
+                        principalTable: "Node",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Coupon_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -219,55 +290,15 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Coupon",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Content = table.Column<string>(nullable: true),
-                    ValidationDate = table.Column<DateTime>(nullable: false),
-                    GenerationDate = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: false),
-                    CommerceId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Coupon", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Coupon_Commerce_CommerceId",
-                        column: x => x.CommerceId,
-                        principalTable: "Commerce",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Coupon_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Restaurant",
-                columns: table => new
-                {
-                    CommerceId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Restaurant", x => x.CommerceId);
-                    table.ForeignKey(
-                        name: "FK_Restaurant_Commerce_CommerceId",
-                        column: x => x.CommerceId,
-                        principalTable: "Commerce",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+            migrationBuilder.InsertData(
+                table: "Deal",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { new Guid("00000000-0000-0000-0000-000000000001"), "No Deal" });
 
             migrationBuilder.InsertData(
-                table: "Location",
-                columns: new[] { "Id", "Latitude", "Longitude", "Name" },
-                values: new object[] { new Guid("0013a98e-32f6-494d-b055-c9fb4dafc3e8"), 33.842185m, -40.707753m, "Test Location" });
+                table: "Image",
+                columns: new[] { "Id", "Name", "NodeId" },
+                values: new object[] { new Guid("00000000-0000-0000-0000-000000000001"), "No Image", null });
 
             migrationBuilder.InsertData(
                 table: "User",
@@ -285,15 +316,15 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 columns: new[] { "Id", "LocationId", "Name", "UserId" },
                 values: new object[] { new Guid("a4506bf8-9cca-4413-b0d4-4247c61b1231"), new Guid("0013a98e-32f6-494d-b055-c9fb4dafc3e8"), "Test Commerce", new Guid("73b7b257-41f7-4b22-9a10-93fb91238fd9") });
 
+            migrationBuilder.InsertData(
+                table: "Location",
+                columns: new[] { "Id", "CommerceId", "Latitude", "Longitude", "Name" },
+                values: new object[] { new Guid("0013a98e-32f6-494d-b055-c9fb4dafc3e8"), new Guid("a4506bf8-9cca-4413-b0d4-4247c61b1231"), 33.842185m, -40.707753m, "Test Location" });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Audio_NodeId",
                 table: "Audio",
                 column: "NodeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Commerce_LocationId",
-                table: "Commerce",
-                column: "LocationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Commerce_UserId",
@@ -302,9 +333,14 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Coupon_CommerceId",
+                name: "IX_CommerceDeal_DealId",
+                table: "CommerceDeal",
+                column: "DealId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Coupon_NodeId",
                 table: "Coupon",
-                column: "CommerceId");
+                column: "NodeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Coupon_UserId",
@@ -317,10 +353,21 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 column: "NodeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Location_CommerceId",
+                table: "Location",
+                column: "CommerceId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Location_Latitude_Longitude",
                 table: "Location",
                 columns: new[] { "Latitude", "Longitude" },
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Node_DealId",
+                table: "Node",
+                column: "DealId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Node_LocationId",
@@ -336,6 +383,11 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 name: "IX_Review_TourId",
                 table: "Review",
                 column: "TourId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tour_ImageId",
+                table: "Tour",
+                column: "ImageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TourTag_TagId",
@@ -358,12 +410,51 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 table: "User",
                 column: "PhoneNumber",
                 unique: true);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_CommerceDeal_Commerce_CommerceId",
+                table: "CommerceDeal",
+                column: "CommerceId",
+                principalTable: "Commerce",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Location_Commerce_CommerceId",
+                table: "Location",
+                column: "CommerceId",
+                principalTable: "Commerce",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Restaurant_Commerce_CommerceId",
+                table: "Restaurant",
+                column: "CommerceId",
+                principalTable: "Commerce",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Node_Tour_TourId",
+                table: "Node",
+                column: "TourId",
+                principalTable: "Tour",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Image_Node_NodeId",
+                table: "Image");
+
             migrationBuilder.DropTable(
                 name: "Audio");
+
+            migrationBuilder.DropTable(
+                name: "CommerceDeal");
 
             migrationBuilder.DropTable(
                 name: "Coupon");
@@ -378,25 +469,28 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 name: "TourTag");
 
             migrationBuilder.DropTable(
-                name: "Commerce");
-
-            migrationBuilder.DropTable(
                 name: "Tag");
 
             migrationBuilder.DropTable(
-                name: "User");
-
-            migrationBuilder.DropTable(
-                name: "Image");
-
-            migrationBuilder.DropTable(
                 name: "Node");
+
+            migrationBuilder.DropTable(
+                name: "Deal");
 
             migrationBuilder.DropTable(
                 name: "Location");
 
             migrationBuilder.DropTable(
                 name: "Tour");
+
+            migrationBuilder.DropTable(
+                name: "Commerce");
+
+            migrationBuilder.DropTable(
+                name: "User");
+
+            migrationBuilder.DropTable(
+                name: "Image");
         }
     }
 }
