@@ -20,6 +20,20 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Location",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Latitude = table.Column<decimal>(nullable: false),
+                    Longitude = table.Column<decimal>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Location", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tag",
                 columns: table => new
                 {
@@ -50,21 +64,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Location",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Latitude = table.Column<decimal>(nullable: false),
-                    Longitude = table.Column<decimal>(nullable: false),
-                    CommerceId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Location", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Restaurant",
                 columns: table => new
                 {
@@ -85,7 +84,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                     Order = table.Column<int>(nullable: false),
                     TourId = table.Column<Guid>(nullable: false),
                     LocationId = table.Column<Guid>(nullable: false),
-                    DealId = table.Column<Guid>(nullable: false)
+                    DealId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -95,7 +94,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                         column: x => x.DealId,
                         principalTable: "Deal",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Node_Location_LocationId",
                         column: x => x.LocationId,
@@ -154,7 +153,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                     Duration = table.Column<int>(nullable: false),
                     IsPremium = table.Column<bool>(nullable: false),
                     IsFeatured = table.Column<bool>(nullable: false),
-                    ImageId = table.Column<Guid>(nullable: false),
+                    ImageId = table.Column<Guid>(nullable: true),
                     Created = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -165,7 +164,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                         column: x => x.ImageId,
                         principalTable: "Image",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -230,6 +229,12 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 {
                     table.PrimaryKey("PK_Commerce", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Commerce_Location_LocationId",
+                        column: x => x.LocationId,
+                        principalTable: "Location",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Commerce_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
@@ -291,14 +296,9 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Deal",
-                columns: new[] { "Id", "Name" },
-                values: new object[] { new Guid("00000000-0000-0000-0000-000000000001"), "No Deal" });
-
-            migrationBuilder.InsertData(
-                table: "Image",
-                columns: new[] { "Id", "Name", "NodeId" },
-                values: new object[] { new Guid("00000000-0000-0000-0000-000000000001"), "No Image", null });
+                table: "Location",
+                columns: new[] { "Id", "Latitude", "Longitude", "Name" },
+                values: new object[] { new Guid("0013a98e-32f6-494d-b055-c9fb4dafc3e8"), 33.842185m, -40.707753m, "Test Location" });
 
             migrationBuilder.InsertData(
                 table: "User",
@@ -316,15 +316,15 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 columns: new[] { "Id", "LocationId", "Name", "UserId" },
                 values: new object[] { new Guid("a4506bf8-9cca-4413-b0d4-4247c61b1231"), new Guid("0013a98e-32f6-494d-b055-c9fb4dafc3e8"), "Test Commerce", new Guid("73b7b257-41f7-4b22-9a10-93fb91238fd9") });
 
-            migrationBuilder.InsertData(
-                table: "Location",
-                columns: new[] { "Id", "CommerceId", "Latitude", "Longitude", "Name" },
-                values: new object[] { new Guid("0013a98e-32f6-494d-b055-c9fb4dafc3e8"), new Guid("a4506bf8-9cca-4413-b0d4-4247c61b1231"), 33.842185m, -40.707753m, "Test Location" });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Audio_NodeId",
                 table: "Audio",
                 column: "NodeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Commerce_LocationId",
+                table: "Commerce",
+                column: "LocationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Commerce_UserId",
@@ -351,12 +351,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 name: "IX_Image_NodeId",
                 table: "Image",
                 column: "NodeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Location_CommerceId",
-                table: "Location",
-                column: "CommerceId",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Location_Latitude_Longitude",
@@ -420,14 +414,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Location_Commerce_CommerceId",
-                table: "Location",
-                column: "CommerceId",
-                principalTable: "Commerce",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
                 name: "FK_Restaurant_Commerce_CommerceId",
                 table: "Restaurant",
                 column: "CommerceId",
@@ -469,7 +455,13 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 name: "TourTag");
 
             migrationBuilder.DropTable(
+                name: "Commerce");
+
+            migrationBuilder.DropTable(
                 name: "Tag");
+
+            migrationBuilder.DropTable(
+                name: "User");
 
             migrationBuilder.DropTable(
                 name: "Node");
@@ -482,12 +474,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
 
             migrationBuilder.DropTable(
                 name: "Tour");
-
-            migrationBuilder.DropTable(
-                name: "Commerce");
-
-            migrationBuilder.DropTable(
-                name: "User");
 
             migrationBuilder.DropTable(
                 name: "Image");

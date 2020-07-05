@@ -50,8 +50,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
             modelBuilder.Entity<User>().HasData(DataUtils.UserSeed());
             modelBuilder.Entity<Commerce>().HasData(DataUtils.CommerceSeed());
             modelBuilder.Entity<Location>().HasData(DataUtils.LocationSeed());
-            modelBuilder.Entity<Deal>().HasData(DataUtils.DealSeed());
-            modelBuilder.Entity<Image>().HasData(DataUtils.ImageSeed());
         }
     }
 }

@@ -39,7 +39,6 @@ namespace NG.DBManager.Test.UnitTest.SQLite
                 Id = newTourId,
                 Name = "My add test Tour",
                 Description = "A nice description for such an interesting Tour",
-                ImageId = Guid.Parse("00000000-0000-0000-0000-000000000001")
             };
 
             //ACT

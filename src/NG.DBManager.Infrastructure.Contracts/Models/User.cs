@@ -28,6 +28,8 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
         [Required]
         public Role Role { get; set; }
 
+        public Guid? ImageId { get; set; }
+
         public Commerce Commerce { get; set; }
         public Image Image { get; set; }
 

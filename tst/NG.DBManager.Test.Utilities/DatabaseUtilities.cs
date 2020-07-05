@@ -26,6 +26,8 @@ namespace NG.DBManager.Test.Utilities
         public List<User> Users;
         public List<Coupon> Coupons;
 
+        private IList<Location> CommerceLocations;
+        private List<Location> UsedCommerceLocation;
         private Tag TagWithManyTours;
         private string FullTagName = "Supercalifragilisticexpialidocious";
         private const string TourExistingName = "Custom Tour, Random But Unique Name";
@@ -52,7 +54,6 @@ namespace NG.DBManager.Test.Utilities
             context.Tour.AddRange(Tours);
             context.Coupon.AddRange(Coupons);
             context.Review.AddRange(Reviews);
-
 
             return context.SaveChanges();
         }
@@ -117,10 +118,20 @@ namespace NG.DBManager.Test.Utilities
                 .ToList();
 
             Locations = Builder<Location>
-                .CreateListOfSize(200)
+                .CreateListOfSize(45)
                 .All()
                     .With(l => l.Id = Guid.NewGuid())
-                    // .With(l => l.Name = Faker.Address.StreetName())
+                    .With(l => l.Name = Faker.Address.StreetName())
+                    .With(l => l.Latitude = decimal.Parse(Faker.RandomNumber.Next(-9999, 9999).ToString()))
+                    .With(l => l.Longitude = decimal.Parse(Faker.RandomNumber.Next(-9999, 9999).ToString()))
+                .Build()
+                .ToList();
+
+            CommerceLocations = Builder<Location>
+                .CreateListOfSize(45)
+                .All()
+                    .With(l => l.Id = Guid.NewGuid())
+                    .With(l => l.Name = Faker.Address.StreetName())
                     .With(l => l.Latitude = decimal.Parse(Faker.RandomNumber.Next(-9999, 9999).ToString()))
                     .With(l => l.Longitude = decimal.Parse(Faker.RandomNumber.Next(-9999, 9999).ToString()))
                 .Build()
@@ -134,16 +145,6 @@ namespace NG.DBManager.Test.Utilities
                 .Build()
                 .ToList();
 
-            // Commerces will never be directly added by the context since their hierarchy types will do it for them
-            Commerces = new List<Commerce>();
-
-            Restaurants = Builder<Restaurant>
-                .CreateListOfSize(50)
-                .All()
-                    .With(r => r.Commerce = GenerateACommerce())
-                    .With(r => r.CommerceId = r.Commerce.Id)
-                .Build()
-                .ToList();
 
             Nodes = new List<Node>();
 
@@ -169,8 +170,23 @@ namespace NG.DBManager.Test.Utilities
             // There are many (30) Tours that contain this tag
             Tags.Add(TagWithManyTours);
 
+            // Commerces will never be directly added by the context since their hierarchy types will do it for them
+            Commerces = new List<Commerce>();
+
+            Restaurants = Builder<Restaurant>
+                .CreateListOfSize(45)
+                .All()
+                    .With(r => r.Commerce = GenerateACommerce())
+                    .With(r => r.CommerceId = r.Commerce.Id)
+                .Build()
+                .ToList();
+
+            UsedCommerceLocation = new List<Location>();
+
+            //CommerceLocations = Commerces.Select(com => com.Location).ToList();
+
             Tours = Builder<Tour>
-                .CreateListOfSize(200)
+                .CreateListOfSize(45)
                     .All()
                         .With(tour => tour.Id = Guid.NewGuid())
                         .With(tour => tour.Name = LimitMaxLength(Faker.Company.CatchPhrase(), 50))
@@ -183,7 +199,7 @@ namespace NG.DBManager.Test.Utilities
                         .With(tour => tour.ImageId = GenerateImages(1).First().Id)
                     .Random(10)
                         .With(tour => tour.IsFeatured = true)
-                    .Random(30)
+                    .Random(20)
                         .With(tour => tour.TourTags = AttachToTag(tour))
                     .Random(1)
                         .With(tour => tour.Name = TourExistingName)
@@ -196,7 +212,7 @@ namespace NG.DBManager.Test.Utilities
                         .With(c => c.Id = Guid.NewGuid())
                         .With(c => c.User = Pick<User>.RandomItemFrom(Users))
                         .With(c => c.UserId = c.User.Id)
-                        .With(c => c.Node = Pick<Node>.RandomItemFrom(Nodes))
+                        .With(c => c.Node = SelectCommerceNode())
                         .With(c => c.NodeId = c.Node.Id)
                         .With(c => c.ValidationDate = default)
                         .With(c => c.Content = Faker.Lorem.Sentence(10))
@@ -210,23 +226,30 @@ namespace NG.DBManager.Test.Utilities
             ReviewUserCheck = new Hashtable();
 
             Reviews = Builder<Review>
-                .CreateListOfSize(150)
+                .CreateListOfSize(10)
                     .All()
                         .With(r => r.User = Pick<User>.RandomItemFrom(Users))
                         .With(r => r.UserId = r.User.Id)
                         .With(r => r.Tour = AddTourNotReviewedByUser(r))
                         .With(r => r.TourId = r.Tour.Id)
                         .With(r => r.Score = 5)
-                    .Random(20)
+                    .Random(2)
                         .With(r => r.Score = 4)
-                    .Random(20)
+                    .Random(1)
                         .With(r => r.Score = 3)
-                    .Random(20)
+                    .Random(1)
                         .With(r => r.Score = 2)
-                    .Random(20)
+                    .Random(1)
                         .With(r => r.Score = 1)
                     .Build()
                     .ToList();
+        }
+
+        private Node SelectCommerceNode()
+        {
+            var location = Pick<Location>.RandomItemFrom(CommerceLocations);
+            var commerceLocationId = location.Id;
+            return Nodes.First(n => n.LocationId == commerceLocationId);
         }
 
         private static string LimitMaxLength(string str, int maxLength)
@@ -267,11 +290,13 @@ namespace NG.DBManager.Test.Utilities
 
         private Commerce GenerateACommerce()
         {
+            List<Location> nonRepeatedLocations = CommerceLocations.Except(Commerces.Select(c => c.Location)).ToList();
+
             var generatedCommerce = Builder<Commerce>
                 .CreateNew()
                 .With(c => c.Id = Guid.NewGuid())
                 .With(c => c.Name = LimitMaxLength(Faker.Finance.Isin(), 80))
-                .With(c => c.Location = Pick<Location>.RandomItemFrom(Locations))
+                .With(c => c.Location = Pick<Location>.RandomItemFrom(nonRepeatedLocations))
                 .With(c => c.LocationId = c.Location.Id)
                 .With(c => c.User = GenerateCommerceUser(c))
                 .With(c => c.UserId = c.User.Id)
@@ -352,7 +377,7 @@ namespace NG.DBManager.Test.Utilities
         private IList<Node> GenerateNodes(Tour tour)
         {
             var generatedNodes = Builder<Node>
-                .CreateListOfSize(10) // Number of Nodes for each Tour
+                .CreateListOfSize(5) // Number of Nodes for each Tour
                 .All()
                     .With(node => node.Id = Guid.NewGuid())
                     .With(node => node.Name = LimitMaxLength(Faker.Company.BS(), 50))
@@ -360,13 +385,15 @@ namespace NG.DBManager.Test.Utilities
                     .With(node => node.Description = Faker.Lorem.Paragraph())
                     .With(node => node.Images = Pick<Image>.UniqueRandomList(
                         With.Between(5).And(10).Elements).From(Images))
-                    .With(node => node.Location = Pick<Location>.RandomItemFrom(Locations))
+                    .With(node => node.Location = Pick<Location>.RandomItemFrom(Locations.Except(CommerceLocations).ToList()))
+                    .With(node => node.LocationId = node.Location.Id)
                     .With(node => node.Audios = GenerateNodeAudios(node))
                     .With(node => node.TourId = tour.Id)
                     .With(node => node.Images = GenerateImages(3))
-                    .With(node => node.DealId = Guid.Parse("00000000-0000-0000-0000-000000000001"))
+                    .With(node => node.DealId = null)
                 .Random(1)
                     .With(node => node.Location = SelectCommerceLocation())
+                    .With(node => node.LocationId = node.Location.Id)
                     .With(node => node.Deal = SelectDeal(node))
                     .With(node => node.DealId = node.Deal.Id)
                 .Build()
@@ -379,13 +406,15 @@ namespace NG.DBManager.Test.Utilities
 
         private Location SelectCommerceLocation()
         {
-            return Pick<Commerce>.RandomItemFrom(Commerces).Location;
+            var commerceLocation = Pick<Location>.RandomItemFrom(CommerceLocations.Except(UsedCommerceLocation).ToList());
+            UsedCommerceLocation.Add(commerceLocation);
+            return commerceLocation;
         }
 
         private Deal SelectDeal(Node node)
         {
             var commerce = Commerces
-                .First(c => c.Location == node.Location);
+                .First(c => c.LocationId == node.LocationId);
 
             var deal = commerce.CommerceDeals
                 .Select(cd => cd.Deal).First();

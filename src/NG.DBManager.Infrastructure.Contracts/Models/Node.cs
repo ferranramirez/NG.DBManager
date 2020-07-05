@@ -29,7 +29,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
         public Guid LocationId { get; set; }
         public Location Location { get; set; }
 
-        public Guid DealId { get; set; }
+        public Guid? DealId { get; set; }
         public Deal Deal { get; set; }
 
         public IList<Audio> Audios { get; set; }

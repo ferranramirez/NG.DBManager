@@ -25,10 +25,10 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
         public bool IsPremium { get; set; }
         public bool IsFeatured { get; set; }
 
-        public Guid ImageId { get; set; }
+        public Guid? ImageId { get; set; }
 
         [JsonIgnore]
-        public Image Image { get; set; }
+        public virtual Image Image { get; set; }
         public IList<Node> Nodes { get; set; }
         public IList<TourTag> TourTags { get; set; }
 

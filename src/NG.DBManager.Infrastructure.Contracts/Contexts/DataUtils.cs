@@ -67,7 +67,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
                     Name = "Test Location",
                     Latitude = 33.842185M,
                     Longitude = -40.707753M,
-                    CommerceId = Guid.Parse("a4506bf8-9cca-4413-b0d4-4247c61b1231"),
                 }
             };
         }
@@ -81,30 +80,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
                     Name = "Test Commerce",
                     LocationId = Guid.Parse("0013a98e-32f6-494d-b055-c9fb4dafc3e8"),
                     UserId = Guid.Parse("73b7b257-41f7-4b22-9a10-93fb91238fd9"),
-                }
-            };
-        }
-
-        public static Deal[] DealSeed()
-        {
-            return new Deal[]
-            {
-                new Deal()
-                {
-                    Id = Guid.Parse("00000000-0000-0000-0000-000000000001"),
-                    Name = "No Deal",
-                }
-            };
-        }
-
-        public static Image[] ImageSeed()
-        {
-            return new Image[]
-            {
-                new Image()
-                {
-                    Id = Guid.Parse("00000000-0000-0000-0000-000000000001"),
-                    Name = "No Image",
                 }
             };
         }
