@@ -32,6 +32,19 @@ namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
             }
         }
 
+        public INodeRepository Node
+        {
+            get
+            {
+                if (_repositories[typeof(Node)] == null)
+                {
+                    _repositories[typeof(Node)] =
+                        (INodeRepository)Activator.CreateInstance(typeof(NodeRepository), _context);
+                }
+                return (INodeRepository)_repositories[typeof(Node)];
+            }
+        }
+
         public IUserRepository User
         {
             get
