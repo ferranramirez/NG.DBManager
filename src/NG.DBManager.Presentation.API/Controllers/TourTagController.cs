@@ -10,64 +10,64 @@ namespace NG.DBManager.Presentation.API.Controllers
     [ApiController]
     //[Authorize(Roles = "Admin")]
     [Route("[controller]")]
-    public class NodeController : ControllerBase
+    public class TourTagController : ControllerBase
     {
         private readonly IFullUnitOfWork _uow;
         private readonly NgContext _context;
 
-        public NodeController(IFullUnitOfWork uow, NgContext context)
+        public TourTagController(IFullUnitOfWork uow, NgContext context)
         {
             _uow = uow;
             _context = context;
         }
 
         /// <summary>
-        /// Get Node
+        /// Get TourTag
         /// </summary>
-        [HttpGet("{NodeId}")]
-        public IActionResult Get(Guid NodeId)
+        [HttpGet("{TourTagId}")]
+        public IActionResult Get(Guid TourId, Guid TagId)
         {
-            var Node = _uow.Repository<Node>().Get(NodeId);
-            return Ok(Node);
+            var TourTag = _uow.Repository<TourTag>().Find(tt => tt.TourId == TourId && tt.TagId == TagId);
+            return Ok(TourTag);
         }
 
         /// <summary>
-        /// Get All Nodes
+        /// Get All TourTags
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await _uow.Repository<Node>()
-                        .GetAll(n => n.Deal));
+            return Ok(await _uow.Repository<TourTag>().GetAll());
         }
 
         /// <summary>
-        /// Add Node
+        /// Add TourTag
         /// </summary>
         [HttpPost()]
-        public IActionResult Add(Node Node)
+        public IActionResult Add(TourTag TourTag)
         {
-            _uow.Repository<Node>().Add(Node);
+            _uow.Repository<TourTag>().Add(TourTag);
             return Ok(_uow.Commit());
         }
 
         /// <summary>
-        /// Update Node
+        /// Update TourTag
         /// </summary>
         [HttpPut]
-        public IActionResult Update(Node Node)
+        public IActionResult Update(TourTag TourTag)
         {
-            _uow.Repository<Node>().Update(Node);
+            _uow.Repository<TourTag>().Update(TourTag);
             return Ok(_uow.Commit());
         }
 
         /// <summary>
-        /// Remove Node
+        /// Remove TourTag
         /// </summary>
-        [HttpDelete("{NodeId}")]
-        public IActionResult Remove(Guid NodeId)
+        [HttpDelete("{TourTagId}")]
+        public IActionResult Remove(Guid TourId, Guid TagId)
         {
-            _uow.Repository<Node>().Remove(NodeId);
+            var TourTag = _uow.Repository<TourTag>().Find(tt => tt.TourId == TourId && tt.TagId == TagId);
+            _uow.Repository<TourTag>().Remove(TourTag);
             return Ok(_uow.Commit());
         }
     }

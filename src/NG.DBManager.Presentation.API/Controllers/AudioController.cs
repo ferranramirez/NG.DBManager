@@ -10,64 +10,63 @@ namespace NG.DBManager.Presentation.API.Controllers
     [ApiController]
     //[Authorize(Roles = "Admin")]
     [Route("[controller]")]
-    public class NodeController : ControllerBase
+    public class AudioController : ControllerBase
     {
         private readonly IFullUnitOfWork _uow;
         private readonly NgContext _context;
 
-        public NodeController(IFullUnitOfWork uow, NgContext context)
+        public AudioController(IFullUnitOfWork uow, NgContext context)
         {
             _uow = uow;
             _context = context;
         }
 
         /// <summary>
-        /// Get Node
+        /// Get Audio
         /// </summary>
-        [HttpGet("{NodeId}")]
-        public IActionResult Get(Guid NodeId)
+        [HttpGet("{AudioId}")]
+        public IActionResult Get(Guid AudioId)
         {
-            var Node = _uow.Repository<Node>().Get(NodeId);
+            var Node = _uow.Repository<Audio>().Get(AudioId);
             return Ok(Node);
         }
 
         /// <summary>
-        /// Get All Nodes
+        /// Get All Audios
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await _uow.Repository<Node>()
-                        .GetAll(n => n.Deal));
+            return Ok(await _uow.Repository<Audio>().GetAll());
         }
 
         /// <summary>
-        /// Add Node
+        /// Add Audio
         /// </summary>
         [HttpPost()]
-        public IActionResult Add(Node Node)
+        public IActionResult Add(Audio Audio)
         {
-            _uow.Repository<Node>().Add(Node);
+            _uow.Repository<Audio>().Add(Audio);
             return Ok(_uow.Commit());
         }
 
         /// <summary>
-        /// Update Node
+        /// Update Audio
         /// </summary>
         [HttpPut]
-        public IActionResult Update(Node Node)
+        public IActionResult Update(Audio Audio)
         {
-            _uow.Repository<Node>().Update(Node);
+            _uow.Repository<Audio>().Update(Audio);
             return Ok(_uow.Commit());
         }
 
         /// <summary>
-        /// Remove Node
+        /// Remove Audio
         /// </summary>
-        [HttpDelete("{NodeId}")]
-        public IActionResult Remove(Guid NodeId)
+        [HttpDelete("{AudioId}")]
+        public IActionResult Remove(Guid AudioId)
         {
-            _uow.Repository<Node>().Remove(NodeId);
+            _uow.Repository<Audio>().Remove(AudioId);
             return Ok(_uow.Commit());
         }
     }

@@ -2,7 +2,7 @@
 
 namespace NG.DBManager.Infrastructure.Contracts.Models
 {
-    public class AudioImage
+    public class CommerceDeal
     {
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }

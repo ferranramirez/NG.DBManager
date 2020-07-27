@@ -10,64 +10,64 @@ namespace NG.DBManager.Presentation.API.Controllers
     [ApiController]
     //[Authorize(Roles = "Admin")]
     [Route("[controller]")]
-    public class NodeController : ControllerBase
+    public class TourController : ControllerBase
     {
         private readonly IFullUnitOfWork _uow;
         private readonly NgContext _context;
 
-        public NodeController(IFullUnitOfWork uow, NgContext context)
+        public TourController(IFullUnitOfWork uow, NgContext context)
         {
             _uow = uow;
             _context = context;
         }
 
         /// <summary>
-        /// Get Node
+        /// Get Tour
         /// </summary>
-        [HttpGet("{NodeId}")]
-        public IActionResult Get(Guid NodeId)
+        [HttpGet("{TourId}")]
+        public IActionResult Get(Guid TourId)
         {
-            var Node = _uow.Repository<Node>().Get(NodeId);
-            return Ok(Node);
+            var Tour = _uow.Repository<Tour>().Get(TourId);
+            return Ok(Tour);
+            return Ok(Tour);
         }
 
         /// <summary>
-        /// Get All Nodes
+        /// Get All Tours
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await _uow.Repository<Node>()
-                        .GetAll(n => n.Deal));
+            return Ok(await _uow.Repository<Tour>().GetAll());
         }
 
         /// <summary>
-        /// Add Node
+        /// Add Tour
         /// </summary>
         [HttpPost()]
-        public IActionResult Add(Node Node)
+        public IActionResult Add(Tour Tour)
         {
-            _uow.Repository<Node>().Add(Node);
+            _uow.Repository<Tour>().Add(Tour);
             return Ok(_uow.Commit());
         }
 
         /// <summary>
-        /// Update Node
+        /// Update Tour
         /// </summary>
         [HttpPut]
-        public IActionResult Update(Node Node)
+        public IActionResult Update(Tour Tour)
         {
-            _uow.Repository<Node>().Update(Node);
+            _uow.Repository<Tour>().Update(Tour);
             return Ok(_uow.Commit());
         }
 
         /// <summary>
-        /// Remove Node
+        /// Remove Tour
         /// </summary>
-        [HttpDelete("{NodeId}")]
-        public IActionResult Remove(Guid NodeId)
+        [HttpDelete("{TourId}")]
+        public IActionResult Remove(Guid TourId)
         {
-            _uow.Repository<Node>().Remove(NodeId);
+            _uow.Repository<Tour>().Remove(TourId);
             return Ok(_uow.Commit());
         }
     }

@@ -13,8 +13,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
                 new User()
                 {
                     Id = Guid.Parse("b0f2451e-5820-4eca-a797-46a01693a3b2"),
-                    Name = "Basic",
-                    Surname = "QA User",
+                    Name = "Basic QA User",
                     Birthdate = DateTime.Parse("01/01/2000"),
                     PhoneNumber = "+222222222",
                     Email = "basic@test.org",
@@ -24,8 +23,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
                 new User()
                 {
                     Id = Guid.Parse("0ac2c4c5-ebff-445e-85d4-1db76d65ce0a"),
-                    Name = "Admin",
-                    Surname = "QA User",
+                    Name = "Admin QA User",
                     Birthdate = DateTime.Parse("01/01/2000"),
                     PhoneNumber = "+000000000",
                     Email = "admin@test.org",
@@ -35,8 +33,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
                 new User()
                 {
                     Id = Guid.Parse("440edb6b-342e-4d5f-a233-62aef964cbfa"),
-                    Name = "Commerce",
-                    Surname = "QA User",
+                    Name = "Commerce QA User",
                     Birthdate = DateTime.Parse("01/01/2000"),
                     PhoneNumber = "+111111111",
                     Email = "commerce@test.org",
@@ -46,8 +43,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
                 new User()
                 {
                     Id = Guid.Parse("73b7b257-41f7-4b22-9a10-93fb91238fd9"),
-                    Name = "FullCommerce",
-                    Surname = "QA User",
+                    Name = "FullCommerce QA User",
                     Birthdate = DateTime.Parse("01/01/2000"),
                     PhoneNumber = "+0111111111",
                     Email = "fullcommerce@test.org",

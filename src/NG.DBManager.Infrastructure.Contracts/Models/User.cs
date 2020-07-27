@@ -12,9 +12,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
         public string Name { get; set; }
 
         [Required]
-        public string Surname { get; set; }
-
-        [Required]
         public DateTime Birthdate { get; set; }
 
         public string PhoneNumber { get; set; }

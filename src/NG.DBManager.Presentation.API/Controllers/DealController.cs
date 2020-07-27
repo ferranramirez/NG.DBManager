@@ -10,64 +10,63 @@ namespace NG.DBManager.Presentation.API.Controllers
     [ApiController]
     //[Authorize(Roles = "Admin")]
     [Route("[controller]")]
-    public class NodeController : ControllerBase
+    public class DealController : ControllerBase
     {
         private readonly IFullUnitOfWork _uow;
         private readonly NgContext _context;
 
-        public NodeController(IFullUnitOfWork uow, NgContext context)
+        public DealController(IFullUnitOfWork uow, NgContext context)
         {
             _uow = uow;
             _context = context;
         }
 
         /// <summary>
-        /// Get Node
+        /// Get Deal
         /// </summary>
-        [HttpGet("{NodeId}")]
-        public IActionResult Get(Guid NodeId)
+        [HttpGet("{DealId}")]
+        public IActionResult Get(Guid DealId)
         {
-            var Node = _uow.Repository<Node>().Get(NodeId);
-            return Ok(Node);
+            var Deal = _uow.Repository<Deal>().Get(DealId);
+            return Ok(Deal);
         }
 
         /// <summary>
-        /// Get All Nodes
+        /// Get All Deals
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await _uow.Repository<Node>()
-                        .GetAll(n => n.Deal));
+            return Ok(await _uow.Repository<Deal>().GetAll());
         }
 
         /// <summary>
-        /// Add Node
+        /// Add Deal
         /// </summary>
         [HttpPost()]
-        public IActionResult Add(Node Node)
+        public IActionResult Add(Deal Deal)
         {
-            _uow.Repository<Node>().Add(Node);
+            _uow.Repository<Deal>().Add(Deal);
             return Ok(_uow.Commit());
         }
 
         /// <summary>
-        /// Update Node
+        /// Update Deal
         /// </summary>
         [HttpPut]
-        public IActionResult Update(Node Node)
+        public IActionResult Update(Deal Deal)
         {
-            _uow.Repository<Node>().Update(Node);
+            _uow.Repository<Deal>().Update(Deal);
             return Ok(_uow.Commit());
         }
 
         /// <summary>
-        /// Remove Node
+        /// Remove Deal
         /// </summary>
-        [HttpDelete("{NodeId}")]
-        public IActionResult Remove(Guid NodeId)
+        [HttpDelete("{DealId}")]
+        public IActionResult Remove(Guid DealId)
         {
-            _uow.Repository<Node>().Remove(NodeId);
+            _uow.Repository<Deal>().Remove(DealId);
             return Ok(_uow.Commit());
         }
     }
