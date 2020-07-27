@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NG.DBManager.Infrastructure.Contracts.Models;
-using System;
 
 namespace NG.DBManager.Infrastructure.Contracts.Contexts
 {
@@ -37,7 +36,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
 
             modelBuilder.Entity<Review>().HasKey(r => new { r.UserId, r.TourId });
 
-            modelBuilder.Entity<Tour>().Property<DateTime>("Created");
+            //modelBuilder.Entity<Tour>().Property<DateTime>("Created");
 
             modelBuilder.Entity<TourTag>().HasKey(tt => new { tt.TourId, tt.TagId });
 
@@ -48,8 +47,10 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
             });
 
             modelBuilder.Entity<User>().HasData(DataUtils.UserSeed());
-            modelBuilder.Entity<Commerce>().HasData(DataUtils.CommerceSeed());
             modelBuilder.Entity<Location>().HasData(DataUtils.LocationSeed());
+            modelBuilder.Entity<Commerce>().HasData(DataUtils.CommerceSeed());
+            modelBuilder.Entity<Tour>().HasData(DataUtils.TourSeed());
+            modelBuilder.Entity<Node>().HasData(DataUtils.NodeSeed());
         }
     }
 }

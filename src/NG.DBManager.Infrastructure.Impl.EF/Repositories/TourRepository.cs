@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.EF;
 
 namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 {
@@ -15,8 +14,9 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 
         public override void Add(Tour entity)
         {
+            entity.Created = DateTime.UtcNow;
             DbSet.Add(entity);
-            Context.Entry(entity).Property("Created").CurrentValue = DateTime.UtcNow;
+            // Context.Entry(entity).Property("Created").CurrentValue = DateTime.UtcNow; // Add shadow property value
         }
 
         public async Task<IEnumerable<Tour>> GetFeatured()
@@ -32,7 +32,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
         {
             return await DbSet
                 .AsNoTracking()
-                .OrderBy(t => Property<DateTime>(t, "Created"))
+                .OrderBy(t => t.Created)
                 .Take(numOfTours)
                 .ToListAsync();
         }

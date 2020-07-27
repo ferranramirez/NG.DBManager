@@ -29,6 +29,10 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
 
         [JsonIgnore]
         public virtual Image Image { get; set; }
+
+        [JsonIgnore]
+        public DateTime Created { get; set; }
+
         public IList<Node> Nodes { get; set; }
         public IList<TourTag> TourTags { get; set; }
 

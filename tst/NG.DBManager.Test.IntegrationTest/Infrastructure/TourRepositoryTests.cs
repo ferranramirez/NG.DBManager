@@ -54,7 +54,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
                 Assert.NotNull(tourFromDb);
                 Assert.Equal(tourFromDb, newTour);
 
-                var createdProperty = Context.Entry(tourFromDb).Property("Created").CurrentValue;
+                var createdProperty = tourFromDb.Created; //Context.Entry(tourFromDb).Property("Created").CurrentValue;
                 Assert.NotNull(createdProperty);
             }
         }

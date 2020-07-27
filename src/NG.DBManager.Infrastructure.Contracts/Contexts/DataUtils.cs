@@ -83,5 +83,32 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
                 }
             };
         }
+
+        public static Tour[] TourSeed()
+        {
+            return new Tour[]
+            {
+                new Tour()
+                {
+                    Id = Guid.Parse("e6cfc804-a418-4683-81be-ca9c753b698a"),
+                    Name = "Test Tour",
+                }
+            };
+        }
+
+        public static Node[] NodeSeed()
+        {
+            return new Node[]
+            {
+                new Node()
+                {
+                    Id = Guid.Parse("080942cb-aad4-4e94-9385-f53e6c72113c"),
+                    Name = "Test Node",
+                    Order = 1,
+                    TourId = Guid.Parse("e6cfc804-a418-4683-81be-ca9c753b698a"),
+                    LocationId = Guid.Parse("0013a98e-32f6-494d-b055-c9fb4dafc3e8")
+                }
+            };
+        }
     }
 }
