@@ -24,7 +24,6 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             if (updatedUser == null) { return null; }
 
             if (entity.Name != null) updatedUser.Name = entity.Name;
-            if (entity.Surname != null) updatedUser.Surname = entity.Surname;
             if (entity.Birthdate != default) updatedUser.Birthdate = entity.Birthdate;
             if (entity.PhoneNumber != null) updatedUser.PhoneNumber = entity.PhoneNumber;
             if (entity.Email != null) updatedUser.Email = entity.Email;

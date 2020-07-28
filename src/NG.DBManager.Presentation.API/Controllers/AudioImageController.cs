@@ -27,7 +27,7 @@ namespace NG.DBManager.Presentation.API.Controllers
         [HttpGet("{AudioImageId}")]
         public IActionResult Get(Guid AudioId, Guid ImageId)
         {
-            var AudioImage = _uow.Repository<CommerceDeal>().Find(ai => ai.AudioId == AudioId && ai.ImageId == ImageId);
+            var AudioImage = _uow.Repository<AudioImage>().Find(ai => ai.AudioId == AudioId && ai.ImageId == ImageId);
             return Ok(AudioImage);
         }
 
@@ -37,16 +37,16 @@ namespace NG.DBManager.Presentation.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await _uow.Repository<CommerceDeal>().GetAll());
+            return Ok(await _uow.Repository<AudioImage>().GetAll());
         }
 
         /// <summary>
         /// Add AudioImage
         /// </summary>
         [HttpPost()]
-        public IActionResult Add(CommerceDeal AudioImage)
+        public IActionResult Add(AudioImage AudioImage)
         {
-            _uow.Repository<CommerceDeal>().Add(AudioImage);
+            _uow.Repository<AudioImage>().Add(AudioImage);
             return Ok(_uow.Commit());
         }
 
@@ -54,9 +54,9 @@ namespace NG.DBManager.Presentation.API.Controllers
         /// Update AudioImage
         /// </summary>
         [HttpPut]
-        public IActionResult Update(CommerceDeal AudioImage)
+        public IActionResult Update(AudioImage AudioImage)
         {
-            _uow.Repository<CommerceDeal>().Update(AudioImage);
+            _uow.Repository<AudioImage>().Update(AudioImage);
             return Ok(_uow.Commit());
         }
 
@@ -66,8 +66,8 @@ namespace NG.DBManager.Presentation.API.Controllers
         [HttpDelete("{AudioImageId}")]
         public IActionResult Remove(Guid AudioId, Guid ImageId)
         {
-            var AudioImage = _uow.Repository<CommerceDeal>().Find(ai => ai.AudioId == AudioId && ai.ImageId == ImageId);
-            _uow.Repository<CommerceDeal>().Remove(AudioImage);
+            var AudioImage = _uow.Repository<AudioImage>().Find(ai => ai.AudioId == AudioId && ai.ImageId == ImageId);
+            _uow.Repository<AudioImage>().Remove(AudioImage);
             return Ok(_uow.Commit());
         }
     }

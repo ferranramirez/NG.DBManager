@@ -54,7 +54,6 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
 
             firstUser.Email = "updated@mail.com";
             firstUser.Name = "updated";
-            firstUser.Surname = "updated";
             firstUser.PhoneNumber = "+0000000000";
             firstUser.Password = "updated";
 
