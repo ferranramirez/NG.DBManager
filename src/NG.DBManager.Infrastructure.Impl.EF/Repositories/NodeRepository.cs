@@ -15,6 +15,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return DbSet
                 .Where(n => n.Id == (Guid)id)
                 .Include(n => n.Location)
+                .Include(n => n.Deal)
                 .SingleOrDefault();
         }
     }
