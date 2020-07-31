@@ -22,6 +22,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
         public async Task<IEnumerable<Tour>> GetFeatured()
         {
             return await DbSet
+                .Where(t => t.IsActive)
                 .AsNoTracking()
                 .Where(t => t.IsFeatured)
                 .OrderBy(t => t.Name)
@@ -31,6 +32,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
         public async Task<IEnumerable<Tour>> GetLastOnesCreated(int numOfTours)
         {
             return await DbSet
+                .Where(t => t.IsActive)
                 .AsNoTracking()
                 .OrderBy(t => t.Created)
                 .Take(numOfTours)
@@ -42,6 +44,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             var LowCaseFilter = fullTag.ToLower();
 
             return await DbSet
+                .Where(t => t.IsActive)
                 .AsNoTracking()
                 .Where(tour => tour.TourTags
                     .Any(tourTag => tourTag.Tag.Name.ToLower()
@@ -55,6 +58,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             var LowCaseFilter = filter.ToLower();
 
             return await DbSet
+                .Where(t => t.IsActive)
                 .AsNoTracking()
                 .Where(tour => tour.TourTags
                     .Any(tourTag => tourTag.Tag.Name.ToLower()
@@ -68,6 +72,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             var LowCaseFilter = filter.ToLower();
 
             return await DbSet
+                .Where(t => t.IsActive)
                 .AsNoTracking()
                 .Where(tour => tour.Name.ToLower().Contains(LowCaseFilter)
                     || tour.TourTags

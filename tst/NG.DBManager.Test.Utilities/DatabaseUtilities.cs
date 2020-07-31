@@ -193,6 +193,7 @@ namespace NG.DBManager.Test.Utilities
                         .With(tour => tour.Duration = Faker.RandomNumber.Next())
                         .With(tour => tour.IsPremium = Faker.Boolean.Random())
                         .With(tour => tour.IsFeatured = false)
+                        .With(tour => tour.IsActive = true)
                         .With(tour => tour.TourTags = AttachToGeneratedTag(tour))
                         .With(tour => tour.Nodes = GenerateNodes(tour))
                         .With(tour => tour.ImageId = GenerateImages(1).First().Id)
