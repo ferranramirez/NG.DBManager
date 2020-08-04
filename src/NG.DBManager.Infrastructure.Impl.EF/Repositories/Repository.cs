@@ -63,7 +63,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             if (Context.Entry(entity).State != EntityState.Detached) { return; }
 
             Context.Entry(entity).State = EntityState.Modified;
-            //DbSet.Update(entity);
+            // DbSet.Update(entity);
         }
 
         public void Remove(object id)
