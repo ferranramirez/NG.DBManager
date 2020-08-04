@@ -11,7 +11,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
     {
         private readonly NgContext _context;
 
-        private IRepository<Coupon> _couponRepository;
+        private ICouponRepository _couponRepository;
         private IRepository<Commerce> _commerceRepository;
         private IRepository<Node> _nodeRepository;
 
@@ -20,14 +20,14 @@ namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
             _context = context;
         }
 
-        public IRepository<Coupon> Coupon
+        public ICouponRepository Coupon
         {
             get
             {
                 if (_couponRepository == null)
                 {
                     return (_couponRepository =
-                        (IRepository<Coupon>)Activator.CreateInstance(typeof(Repository<Coupon>), _context));
+                        (ICouponRepository)Activator.CreateInstance(typeof(CouponRepository), _context));
                 }
                 return _couponRepository;
             }

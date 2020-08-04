@@ -5,7 +5,7 @@ namespace NG.DBManager.Infrastructure.Contracts.UnitsOfWork
 {
     public interface IB2BUnitOfWork : IUnitOfWork
     {
-        IRepository<Coupon> Coupon { get; }
+        ICouponRepository Coupon { get; }
         IRepository<Commerce> Commerce { get; }
         IRepository<Node> Node { get; }
     }

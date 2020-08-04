@@ -8,7 +8,12 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 {
     public class CouponRepository : Repository<Coupon>, ICouponRepository
     {
-        public CouponRepository(DbContext context) : base(context) { }
+        private readonly DbContext _context;
+
+        public CouponRepository(DbContext context) : base(context)
+        {
+            _context = context;
+        }
 
         public override Coupon Get(object id)
         {
@@ -17,6 +22,21 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                 .Include(c => c.User)
                 .Include(c => c.Node)
                 .SingleOrDefault();
+        }
+
+        public Commerce GetCommerce(Guid couponId)
+        {
+            var commerceSet = _context.Set<Commerce>();
+            var couponLocationId = DbSet
+                        .Where(c => c.Id == couponId)
+                        // .Include(c => c.Node)
+                        .Select(x => x.Node.LocationId)
+                        .SingleOrDefault();
+
+            var commerce = commerceSet
+                            .Where(com => com.LocationId == couponLocationId)
+                            .SingleOrDefault();
+            return commerce;
         }
     }
 }
