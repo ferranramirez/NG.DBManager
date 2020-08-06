@@ -25,6 +25,8 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
         [Required]
         public Role Role { get; set; }
 
+        public bool EmailConfirmed { get; set; }
+
         public Guid? ImageId { get; set; }
 
         public Commerce Commerce { get; set; }
