@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.Repositories;
+using System;
 using System.Linq;
 
 namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
@@ -32,6 +33,19 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             DbSet.Update(updatedUser);
 
             return DbSet.Find(entity.Id);
+        }
+
+        public User ConfirmEmail(Guid UserId)
+        {
+            var user = DbSet.Find(UserId);
+
+            if (user == null)
+                return null;
+
+            user.EmailConfirmed = true;
+            DbSet.Update(user);
+
+            return DbSet.Find(UserId);
         }
     }
 }

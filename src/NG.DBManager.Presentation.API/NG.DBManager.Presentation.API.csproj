@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup Label="NotGuiri Nuget">
-    <PackageReference Include="NG.Common.Library" Version="1.0.7" />    
+    <PackageReference Include="NG.Common.Library" Version="1.0.8" />    
   </ItemGroup>
   
   <ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using NG.DBManager.Infrastructure.Contracts.Models;
+using System;
 
 namespace NG.DBManager.Infrastructure.Contracts.Repositories
 {
@@ -6,5 +7,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Repositories
     {
         User GetByEmail(string emailAddress);
         User Edit(User user);
+        User ConfirmEmail(Guid UserId);
     }
 }
