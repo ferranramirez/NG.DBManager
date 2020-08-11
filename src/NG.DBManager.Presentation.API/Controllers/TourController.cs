@@ -29,7 +29,6 @@ namespace NG.DBManager.Presentation.API.Controllers
         {
             var Tour = _uow.Repository<Tour>().Get(TourId);
             return Ok(Tour);
-            return Ok(Tour);
         }
 
         /// <summary>

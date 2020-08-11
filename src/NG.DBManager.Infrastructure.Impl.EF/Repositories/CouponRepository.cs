@@ -38,5 +38,15 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                             .SingleOrDefault();
             return commerce;
         }
+        public int InvalidatePastCoupons(Guid userId, Guid nodeId)
+        {
+            var pastCoupons = DbSet.Where(c => c.UserId == userId && c.NodeId == nodeId && !c.IsValidated).ToList();
+
+            pastCoupons.ForEach(pc => pc.ValidationDate = pc.GenerationDate);
+
+            DbSet.UpdateRange(pastCoupons);
+
+            return pastCoupons.Count;
+        }
     }
 }
