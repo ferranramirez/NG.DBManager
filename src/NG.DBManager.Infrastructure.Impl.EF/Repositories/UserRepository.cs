@@ -13,7 +13,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
         public User GetByEmail(string emailAddress)
         {
             return DbSet
-                .SingleOrDefault(u => u.Email == emailAddress);
+                .SingleOrDefault(u => u.Email.ToLower() == emailAddress.ToLower());
         }
 
         public User Edit(User entity)
@@ -27,7 +27,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             if (entity.Name != null) updatedUser.Name = entity.Name;
             if (entity.Birthdate != default) updatedUser.Birthdate = entity.Birthdate;
             if (entity.PhoneNumber != null) updatedUser.PhoneNumber = entity.PhoneNumber;
-            if (entity.Email != null) updatedUser.Email = entity.Email;
+            if (entity.Email != null) updatedUser.Email = entity.Email.ToLower();
             if (entity.Password != null) updatedUser.Password = entity.Password;
 
             DbSet.Update(updatedUser);
