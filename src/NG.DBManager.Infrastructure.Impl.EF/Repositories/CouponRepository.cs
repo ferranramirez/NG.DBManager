@@ -40,7 +40,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
         }
         public int InvalidatePastCoupons(Guid userId, Guid nodeId)
         {
-            var pastCoupons = DbSet.Where(c => c.UserId == userId && c.NodeId == nodeId && !c.IsValidated).ToList();
+            var pastCoupons = DbSet.Where(c => c.UserId == userId && c.NodeId == nodeId && c.ValidationDate == default).ToList();
 
             pastCoupons.ForEach(pc => pc.ValidationDate = pc.GenerationDate);
 
