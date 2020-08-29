@@ -10,7 +10,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
 
         [JsonIgnore]
         public Tour Tour { get; set; }
-        [JsonIgnore]
         public Tag Tag { get; set; }
     }
 }

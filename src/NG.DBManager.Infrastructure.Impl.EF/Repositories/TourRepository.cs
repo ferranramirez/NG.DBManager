@@ -16,6 +16,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return DbSet
                 .Where(t => t.Id == (Guid)id)
                 .Include(t => t.TourTags)
+                    .ThenInclude(tt => tt.Tag)
                 .Include(t => t.Nodes)
                 .SingleOrDefault();
         }
