@@ -57,7 +57,7 @@ namespace NG.DBManager.Presentation.API.Controllers
         /// <summary>
         /// Add User
         /// </summary>
-        [HttpPost()]
+        [HttpPost]
         public IActionResult Add(User user)
         {
             _uow.Repository<User>().Add(user);

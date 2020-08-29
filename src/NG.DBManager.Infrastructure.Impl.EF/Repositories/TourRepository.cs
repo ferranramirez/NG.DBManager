@@ -11,6 +11,14 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
     public class TourRepository : Repository<Tour>, ITourRepository
     {
         public TourRepository(DbContext context) : base(context) { }
+        public override Tour Get(object id)
+        {
+            return DbSet
+                .Where(t => t.Id == (Guid)id)
+                .Include(t => t.TourTags)
+                .Include(t => t.Nodes)
+                .SingleOrDefault();
+        }
 
         public override void Add(Tour entity)
         {

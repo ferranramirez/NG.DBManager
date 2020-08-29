@@ -12,10 +12,10 @@ namespace NG.DBManager.Presentation.API.Controllers
     [Route("[controller]")]
     public class TourController : ControllerBase
     {
-        private readonly IFullUnitOfWork _uow;
+        private readonly IAPIUnitOfWork _uow;
         private readonly NgContext _context;
 
-        public TourController(IFullUnitOfWork uow, NgContext context)
+        public TourController(IAPIUnitOfWork uow, NgContext context)
         {
             _uow = uow;
             _context = context;
@@ -27,7 +27,7 @@ namespace NG.DBManager.Presentation.API.Controllers
         [HttpGet("{TourId}")]
         public IActionResult Get(Guid TourId)
         {
-            var Tour = _uow.Repository<Tour>().Get(TourId);
+            var Tour = _uow.Tour.Get(TourId);
             return Ok(Tour);
         }
 

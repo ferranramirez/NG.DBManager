@@ -41,6 +41,7 @@ namespace NG.DBManager.Presentation.API
 
             services.AddSingleton<DatabaseUtilities>();
             services.AddScoped<IFullUnitOfWork, FullUnitOfWork>();
+            services.AddScoped<IAPIUnitOfWork, APIUnitOfWork>();
             services.AddInfrastructureServices();
         }
 
