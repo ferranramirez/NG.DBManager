@@ -95,7 +95,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
         }
 
         [Fact]
-        public void GetToursByFullTagAsync()
+        public void GetToursByFullTag()
         {
             //ARRANGE
             _databaseUtilities.RandomSeed(Context);
@@ -156,6 +156,27 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
             //ASSERT
             Assert.Equal(expected, actual);
         }
+
+        [Fact]
+        public void GetByCommerceName()
+        {
+            //ARRANGE
+            _databaseUtilities.RandomSeed(Context);
+
+            var firstCommerce = _databaseUtilities.Commerces.FirstOrDefault();
+
+            var expected = _databaseUtilities.Tours
+                            .Where(tour => tour.Nodes.Any(n => n.LocationId == firstCommerce.LocationId))
+                            .OrderBy(t => t.Name)
+                            .ToList();
+
+            //ACT
+            var actual = UnitOfWork.Tour.GetByCommerceName(firstCommerce.Name).Result;
+
+            //ASSERT
+            Assert.Equal(expected, actual);
+        }
+
 
 
         // Dispose pattern 
