@@ -89,5 +89,22 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                 .OrderBy(t => t.Name)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<Tour>> GetByCommerceName(string filter)
+        {
+            var LowCaseFilter = filter.ToLower();
+
+            var commercesLocationIds = Context.Set<Commerce>()
+                .Where(com => com.Name.ToLower().Contains(LowCaseFilter))
+                .Select(c => c.LocationId);
+
+            return await DbSet
+                .Where(t => t.IsActive)
+                .AsNoTracking()
+                .Where(tour => tour.Nodes.Any(node =>
+                    commercesLocationIds.Contains(node.LocationId)))
+                .OrderBy(t => t.Name)
+                .ToListAsync();
+        }
     }
 }
