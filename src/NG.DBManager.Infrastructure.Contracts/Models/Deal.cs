@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NG.DBManager.Infrastructure.Contracts.Models
 {
@@ -10,5 +9,9 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
 
         [Required]
         public string Name { get; set; }
+
+        public DealType DealType { get; set; }
+
+        public Guid DealTypeId { get; set; }
     }
 }

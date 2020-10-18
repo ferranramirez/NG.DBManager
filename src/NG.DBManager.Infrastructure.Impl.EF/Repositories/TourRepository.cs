@@ -11,6 +11,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
     public class TourRepository : Repository<Tour>, ITourRepository
     {
         public TourRepository(DbContext context) : base(context) { }
+
         public override Tour Get(object id)
         {
             return DbSet
@@ -19,6 +20,36 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                     .ThenInclude(tt => tt.Tag)
                 .Include(t => t.Nodes)
                 .SingleOrDefault();
+        }
+
+        public (Tour, IEnumerable<DealType>) GetWithDealTypes(Guid id)
+        {
+            var tour = Get(id);
+
+            var dealType = tour.Nodes
+                .Where(n => n.Deal?.DealType != null)
+                .Select(n => n.Deal.DealType);
+
+            return (tour, dealType);
+        }
+
+        public async Task<IEnumerable<(Tour, IEnumerable<DealType>)>> GetAllWithDealTypes()
+        {
+            var tours = await DbSet.ToListAsync();
+
+            List<(Tour, IEnumerable<DealType>)> result = new List<(Tour, IEnumerable<DealType>)>();
+
+            foreach (var tour in tours)
+            {
+                var dealTypes = tour.Nodes
+                    .Where(n => n.Deal?.DealType != null)
+                    .Distinct()
+                    .Select(n => n.Deal.DealType);
+
+                result.Add((tour, dealTypes));
+            }
+
+            return result;
         }
 
         public override void Add(Tour entity)
