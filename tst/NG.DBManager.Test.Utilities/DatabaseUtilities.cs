@@ -17,6 +17,7 @@ namespace NG.DBManager.Test.Utilities
         public List<Image> Images;
         public List<Tag> Tags;
         public List<Deal> Deals;
+        public List<DealType> DealTypes;
         public List<Tour> Tours;
         public List<Location> Locations;
         public List<Commerce> Commerces;
@@ -136,11 +137,25 @@ namespace NG.DBManager.Test.Utilities
                 .Build()
                 .ToList();
 
+
+            DealTypes = Builder<DealType>
+                .CreateListOfSize(2)
+                .All()
+                    .With(dt => dt.Id = Guid.NewGuid())
+                    .With(dt => dt.Name = Faker.Internet.UserName())
+                .Build()
+                .ToList();
+
             Deals = Builder<Deal>
                 .CreateListOfSize(20)
                 .All()
                     .With(d => d.Id = Guid.NewGuid())
                     .With(d => d.Name = Faker.Lorem.Sentence(1))
+                    .With(d => d.DealType = DealTypes.FirstOrDefault())
+                    .With(d => d.DealTypeId = d.DealType.Id)
+                .Random(2)
+                    .With(d => d.DealType = DealTypes.LastOrDefault())
+                    .With(d => d.DealTypeId = d.DealType.Id)
                 .Build()
                 .ToList();
 
