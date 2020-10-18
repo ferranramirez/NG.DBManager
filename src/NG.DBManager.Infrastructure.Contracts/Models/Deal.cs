@@ -12,6 +12,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
 
         public DealType DealType { get; set; }
 
-        public Guid DealTypeId { get; set; }
+        public Guid? DealTypeId { get; set; }
     }
 }
