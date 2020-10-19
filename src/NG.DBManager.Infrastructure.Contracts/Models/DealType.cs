@@ -9,5 +9,16 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
 
         [Required]
         public string Name { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return obj is DealType dealType
+                && Id.Equals(dealType.Id);
+        }
+
+        public override int GetHashCode()
+        {
+            return new { Id }.GetHashCode();
+        }
     }
 }

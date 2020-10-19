@@ -4,6 +4,7 @@ using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
 using NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork;
 using NG.DBManager.Test.Utilities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -57,6 +58,54 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
                 var createdProperty = tourFromDb.Created; //Context.Entry(tourFromDb).Property("Created").CurrentValue;
                 Assert.NotNull(createdProperty);
             }
+        }
+
+        [Fact]
+        public void GetWithDealTypes()
+        {
+            //ARRANGE
+            _databaseUtilities.RandomSeed(Context);
+
+            var firstTour = _databaseUtilities.Tours
+                 .FirstOrDefault(t => t.Nodes.Any(n => n.Deal?.DealType != null));
+
+            var firstTourDealTypes = firstTour.Nodes.Where(n => n.Deal?.DealType != null).Select(n => n.Deal.DealType);
+
+            (Tour, IEnumerable<DealType>) expected = (firstTour, firstTourDealTypes);
+
+            //ACT
+            var actual = UnitOfWork.Tour.GetWithDealTypes(firstTour.Id);
+
+            //ASSERT
+            Assert.Equal(expected.Item1, actual.Item1);
+            Assert.Equal(expected.Item2, actual.Item2);
+        }
+
+        [Fact]
+        public async void GetAllWithDealTypes()
+        {
+            //ARRANGE
+            _databaseUtilities.RandomSeed(Context);
+
+            var tours = await UnitOfWork.Tour.GetAll();
+
+            List<(Tour, IEnumerable<DealType>)> expected = new List<(Tour, IEnumerable<DealType>)>();
+
+            foreach (var tour in tours)
+            {
+                var dealTypes = tour.Nodes
+                    .Where(n => n.Deal?.DealType != null)
+                    .Distinct()
+                    .Select(n => n.Deal.DealType);
+
+                expected.Add((tour, dealTypes));
+            }
+
+            //ACT
+            var actual = await UnitOfWork.Tour.GetAllWithDealTypes();
+
+            //ASSERT
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
