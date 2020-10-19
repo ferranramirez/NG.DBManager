@@ -19,6 +19,8 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                 .Include(t => t.TourTags)
                     .ThenInclude(tt => tt.Tag)
                 .Include(t => t.Nodes)
+                    .ThenInclude(n => n.Deal)
+                        .ThenInclude(d => d.DealType)
                 .SingleOrDefault();
         }
 
@@ -26,8 +28,10 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
         {
             var tour = Get(id);
 
-            var dealType = tour.Nodes
+            var dealType = tour
+                .Nodes
                 .Where(n => n.Deal?.DealType != null)
+
                 .Select(n => n.Deal.DealType);
 
             return (tour, dealType);
@@ -35,7 +39,11 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 
         public async Task<IEnumerable<(Tour, IEnumerable<DealType>)>> GetAllWithDealTypes()
         {
-            var tours = await DbSet.ToListAsync();
+            var tours = await DbSet
+                .Include(t => t.Nodes)
+                    .ThenInclude(n => n.Deal)
+                        .ThenInclude(d => d.DealType)
+                .ToListAsync();
 
             List<(Tour, IEnumerable<DealType>)> result = new List<(Tour, IEnumerable<DealType>)>();
 
@@ -66,6 +74,9 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                 .AsNoTracking()
                 .Where(t => t.IsFeatured)
                 .OrderBy(t => t.Name)
+                .Include(t => t.Nodes)
+                    .ThenInclude(n => n.Deal)
+                        .ThenInclude(d => d.DealType)
                 .ToListAsync();
 
             return GetToursWithDealTypes(tours);
@@ -78,6 +89,9 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                 .AsNoTracking()
                 .OrderBy(t => t.Created)
                 .Take(numOfTours)
+                .Include(t => t.Nodes)
+                    .ThenInclude(n => n.Deal)
+                        .ThenInclude(d => d.DealType)
                 .ToListAsync();
 
             List<(Tour, IEnumerable<DealType>)> result = new List<(Tour, IEnumerable<DealType>)>();
@@ -106,6 +120,9 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                     .Any(tourTag => tourTag.Tag.Name.ToLower()
                         .Equals(LowCaseFilter)))
                 .OrderBy(t => t.Name)
+                .Include(t => t.Nodes)
+                    .ThenInclude(n => n.Deal)
+                        .ThenInclude(d => d.DealType)
                 .ToListAsync();
 
             return GetToursWithDealTypes(tours);
@@ -122,6 +139,9 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                     .Any(tourTag => tourTag.Tag.Name.ToLower()
                         .Contains(LowCaseFilter)))
                 .OrderBy(t => t.Name)
+                .Include(t => t.Nodes)
+                    .ThenInclude(n => n.Deal)
+                        .ThenInclude(d => d.DealType)
                 .ToListAsync();
 
             return GetToursWithDealTypes(tours);
@@ -138,6 +158,9 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                     || tour.TourTags
                     .Any(tourTag => tourTag.Tag.Name.ToLower().Contains(LowCaseFilter)))
                 .OrderBy(t => t.Name)
+                .Include(t => t.Nodes)
+                    .ThenInclude(n => n.Deal)
+                        .ThenInclude(d => d.DealType)
                 .ToListAsync();
 
             return GetToursWithDealTypes(tours);
@@ -157,6 +180,9 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                 .Where(tour => tour.Nodes.Any(node =>
                     commercesLocationIds.Contains(node.LocationId)))
                 .OrderBy(t => t.Name)
+                .Include(t => t.Nodes)
+                    .ThenInclude(n => n.Deal)
+                        .ThenInclude(d => d.DealType)
                 .ToListAsync();
 
             return GetToursWithDealTypes(tours);

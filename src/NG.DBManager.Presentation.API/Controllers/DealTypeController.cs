@@ -10,64 +10,63 @@ namespace NG.DBManager.Presentation.API.Controllers
     [ApiController]
     //[Authorize(Roles = "Admin")]
     [Route("[controller]")]
-    public class TourController : ControllerBase
+    public class DealTypeController : ControllerBase
     {
-        private readonly IAPIUnitOfWork _uow;
+        private readonly IFullUnitOfWork _uow;
         private readonly NgContext _context;
 
-        public TourController(IAPIUnitOfWork uow, NgContext context)
+        public DealTypeController(IFullUnitOfWork uow, NgContext context)
         {
             _uow = uow;
             _context = context;
         }
 
         /// <summary>
-        /// Get Tour
+        /// Get DealType
         /// </summary>
-        [HttpGet("{TourId}")]
-        public IActionResult Get(Guid TourId)
+        [HttpGet("{DealTypeId}")]
+        public IActionResult Get(Guid DealTypeId)
         {
-            var Tour = _uow.Tour.Get(TourId);
-
-            return Ok(Tour);
+            var Deal = _uow.Repository<DealType>().Get(DealTypeId);
+            return Ok(Deal);
         }
 
         /// <summary>
-        /// Get All Tours
+        /// Get All DealTypes
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await _uow.Repository<Tour>().GetAll());
+            return Ok(await _uow.Repository<DealType>().GetAll());
         }
 
         /// <summary>
-        /// Add Tour
+        /// Add DealType
         /// </summary>
         [HttpPost()]
-        public IActionResult Add(Tour Tour)
+        public IActionResult Add(DealType DealType)
         {
-            _uow.Repository<Tour>().Add(Tour);
+            _uow.Repository<DealType>().Add(DealType);
             return Ok(_uow.Commit());
         }
 
         /// <summary>
-        /// Update Tour
+        /// Update DealType
         /// </summary>
         [HttpPut]
-        public IActionResult Update(Tour Tour)
+        public IActionResult Update(DealType DealType)
         {
-            _uow.Repository<Tour>().Update(Tour);
+            _uow.Repository<DealType>().Update(DealType);
             return Ok(_uow.Commit());
         }
 
         /// <summary>
-        /// Remove Tour
+        /// Remove DealType
         /// </summary>
-        [HttpDelete("{TourId}")]
-        public IActionResult Remove(Guid TourId)
+        [HttpDelete("{DealTypeId}")]
+        public IActionResult Remove(Guid DealTypeId)
         {
-            _uow.Repository<Tour>().Remove(TourId);
+            _uow.Repository<DealType>().Remove(DealTypeId);
             return Ok(_uow.Commit());
         }
     }
