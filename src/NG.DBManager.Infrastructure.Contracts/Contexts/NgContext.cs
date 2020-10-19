@@ -16,6 +16,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
         public DbSet<CommerceDeal> CommerceDeal { get; set; }
         public DbSet<Coupon> Coupon { get; set; }
         public DbSet<Deal> Deal { get; set; }
+        public DbSet<DealType> DealType { get; set; }
         public DbSet<Image> Image { get; set; }
         public DbSet<Location> Location { get; set; }
         public DbSet<Node> Node { get; set; }
