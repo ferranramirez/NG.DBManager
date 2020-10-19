@@ -69,7 +69,7 @@ namespace NG.DBManager.Test.UnitTest.SQLite
             var actual = await UnitOfWork.Tour.GetFeatured();
 
             //ASSERT
-            Assert.Equal(expected, actual);
+            Assert.Equal(expected, actual.Select(x => x.Item1).ToList());
         }
 
         [Fact]
@@ -83,7 +83,7 @@ namespace NG.DBManager.Test.UnitTest.SQLite
 
 
             //ASSERT
-            var lastTourCreated = actual.Single();
+            var lastTourCreated = actual.Select(x => x.Item1).ToList().Single();
             Assert.NotNull(lastTourCreated);
 
             var createdProperty = Context.Entry(lastTourCreated).Property("Created").CurrentValue;
@@ -110,7 +110,7 @@ namespace NG.DBManager.Test.UnitTest.SQLite
             var actual = await UnitOfWork.Tour.GetByFullTag("Supercalifragilisticexpialidocious");
 
             //ASSERT
-            Assert.Equal(expected, actual);
+            Assert.Equal(expected, actual.Select(x => x.Item1).ToList());
         }
 
         [Fact]
@@ -131,7 +131,7 @@ namespace NG.DBManager.Test.UnitTest.SQLite
             var actual = await UnitOfWork.Tour.GetByTag("CaliFRAGIListIcexpIaLidoc");
 
             //ASSERT
-            Assert.Equal(expected, actual);
+            Assert.Equal(expected, actual.Select(x => x.Item1).ToList());
         }
 
 
@@ -153,7 +153,7 @@ namespace NG.DBManager.Test.UnitTest.SQLite
             var actual = await UnitOfWork.Tour.GetByTagOrName("Tour, Random But Unique");
 
             //ASSERT
-            Assert.Equal(expected, actual);
+            Assert.Equal(expected, actual.Select(x => x.Item1).ToList());
         }
 
         // Dispose pattern 

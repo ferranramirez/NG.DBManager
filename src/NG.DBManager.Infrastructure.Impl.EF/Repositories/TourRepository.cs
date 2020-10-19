@@ -59,31 +59,47 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             // Context.Entry(entity).Property("Created").CurrentValue = DateTime.UtcNow; // Add shadow property value
         }
 
-        public async Task<IEnumerable<Tour>> GetFeatured()
+        public async Task<IEnumerable<(Tour, IEnumerable<DealType>)>> GetFeatured()
         {
-            return await DbSet
+            var tours = await DbSet
                 .Where(t => t.IsActive)
                 .AsNoTracking()
                 .Where(t => t.IsFeatured)
                 .OrderBy(t => t.Name)
                 .ToListAsync();
+
+            return GetToursWithDealTypes(tours);
         }
 
-        public async Task<IEnumerable<Tour>> GetLastOnesCreated(int numOfTours)
+        public async Task<IEnumerable<(Tour, IEnumerable<DealType>)>> GetLastOnesCreated(int numOfTours)
         {
-            return await DbSet
+            var tours = await DbSet
                 .Where(t => t.IsActive)
                 .AsNoTracking()
                 .OrderBy(t => t.Created)
                 .Take(numOfTours)
                 .ToListAsync();
+
+            List<(Tour, IEnumerable<DealType>)> result = new List<(Tour, IEnumerable<DealType>)>();
+
+            foreach (var tour in tours)
+            {
+                var dealTypes = tour.Nodes
+                    .Where(n => n.Deal?.DealType != null)
+                    .Distinct()
+                    .Select(n => n.Deal.DealType);
+
+                result.Add((tour, dealTypes));
+            }
+
+            return result;
         }
 
-        public async Task<IEnumerable<Tour>> GetByFullTag(string fullTag)
+        public async Task<IEnumerable<(Tour, IEnumerable<DealType>)>> GetByFullTag(string fullTag)
         {
             var LowCaseFilter = fullTag.ToLower();
 
-            return await DbSet
+            var tours = await DbSet
                 .Where(t => t.IsActive)
                 .AsNoTracking()
                 .Where(tour => tour.TourTags
@@ -91,13 +107,15 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                         .Equals(LowCaseFilter)))
                 .OrderBy(t => t.Name)
                 .ToListAsync();
+
+            return GetToursWithDealTypes(tours);
         }
 
-        public async Task<IEnumerable<Tour>> GetByTag(string filter)
+        public async Task<IEnumerable<(Tour, IEnumerable<DealType>)>> GetByTag(string filter)
         {
             var LowCaseFilter = filter.ToLower();
 
-            return await DbSet
+            var tours = await DbSet
                 .Where(t => t.IsActive)
                 .AsNoTracking()
                 .Where(tour => tour.TourTags
@@ -105,13 +123,15 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                         .Contains(LowCaseFilter)))
                 .OrderBy(t => t.Name)
                 .ToListAsync();
+
+            return GetToursWithDealTypes(tours);
         }
 
-        public async Task<IEnumerable<Tour>> GetByTagOrName(string filter)
+        public async Task<IEnumerable<(Tour, IEnumerable<DealType>)>> GetByTagOrName(string filter)
         {
             var LowCaseFilter = filter.ToLower();
 
-            return await DbSet
+            var tours = await DbSet
                 .Where(t => t.IsActive)
                 .AsNoTracking()
                 .Where(tour => tour.Name.ToLower().Contains(LowCaseFilter)
@@ -119,9 +139,11 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                     .Any(tourTag => tourTag.Tag.Name.ToLower().Contains(LowCaseFilter)))
                 .OrderBy(t => t.Name)
                 .ToListAsync();
+
+            return GetToursWithDealTypes(tours);
         }
 
-        public async Task<IEnumerable<Tour>> GetByCommerceName(string filter)
+        public async Task<IEnumerable<(Tour, IEnumerable<DealType>)>> GetByCommerceName(string filter)
         {
             var LowCaseFilter = filter.ToLower();
 
@@ -129,13 +151,32 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                 .Where(com => com.Name.ToLower().Contains(LowCaseFilter))
                 .Select(c => c.LocationId);
 
-            return await DbSet
+            var tours = await DbSet
                 .Where(t => t.IsActive)
                 .AsNoTracking()
                 .Where(tour => tour.Nodes.Any(node =>
                     commercesLocationIds.Contains(node.LocationId)))
                 .OrderBy(t => t.Name)
                 .ToListAsync();
+
+            return GetToursWithDealTypes(tours);
+        }
+
+        private static List<(Tour, IEnumerable<DealType>)> GetToursWithDealTypes(List<Tour> tours)
+        {
+            List<(Tour, IEnumerable<DealType>)> result = new List<(Tour, IEnumerable<DealType>)>();
+
+            foreach (var tour in tours)
+            {
+                var dealTypes = tour.Nodes
+                    .Where(n => n.Deal?.DealType != null)
+                    .Distinct()
+                    .Select(n => n.Deal.DealType);
+
+                result.Add((tour, dealTypes));
+            }
+
+            return result;
         }
     }
 }

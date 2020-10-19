@@ -119,7 +119,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
                             .ToList();
 
             //ACT
-            var actual = UnitOfWork.Tour.GetFeatured().Result;
+            var actual = UnitOfWork.Tour.GetFeatured().Result.Select(x => x.Item1);
 
             //ASSERT
             Assert.Equal(expected, actual);
@@ -132,7 +132,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
             _databaseUtilities.RandomSeed(Context);
 
             //ACT
-            var actual = UnitOfWork.Tour.GetLastOnesCreated(1).Result;
+            var actual = UnitOfWork.Tour.GetLastOnesCreated(1).Result.Select(x => x.Item1);
 
 
             //ASSERT
@@ -158,7 +158,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
                             .ToList();
 
             //ACT
-            var actual = UnitOfWork.Tour.GetByFullTag("Supercalifragilisticexpialidocious").Result;
+            var actual = UnitOfWork.Tour.GetByFullTag("Supercalifragilisticexpialidocious").Result.Select(x => x.Item1).ToList();
 
             //ASSERT
             Assert.Equal(expected, actual);
@@ -179,7 +179,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
                             .ToList();
 
             //ACT
-            var actual = UnitOfWork.Tour.GetByTag("CaliFRAGIListIcexpIaLidoc").Result;
+            var actual = UnitOfWork.Tour.GetByTag("CaliFRAGIListIcexpIaLidoc").Result.Select(x => x.Item1).ToList();
 
             //ASSERT
             Assert.Equal(expected, actual);
@@ -200,7 +200,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
                             .ToList();
 
             //ACT
-            var actual = UnitOfWork.Tour.GetByTagOrName("Tour, Random But Unique").Result;
+            var actual = UnitOfWork.Tour.GetByTagOrName("Tour, Random But Unique").Result.Select(x => x.Item1).ToList();
 
             //ASSERT
             Assert.Equal(expected, actual);
@@ -220,7 +220,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
                             .ToList();
 
             //ACT
-            var actual = UnitOfWork.Tour.GetByCommerceName(firstCommerce.Name).Result;
+            var actual = UnitOfWork.Tour.GetByCommerceName(firstCommerce.Name).Result.Select(x => x.Item1);
 
             //ASSERT
             Assert.Equal(expected, actual);
