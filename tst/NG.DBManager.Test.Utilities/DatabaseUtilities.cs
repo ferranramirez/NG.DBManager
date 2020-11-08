@@ -30,6 +30,7 @@ namespace NG.DBManager.Test.Utilities
         private IList<Location> CommerceLocations;
         private List<Location> UsedCommerceLocation;
         private Tag TagWithManyTours;
+        private string DealName = "DealTest";
         private string FullTagName = "Supercalifragilisticexpialidocious";
         private const string TourExistingName = "Custom Tour, Random But Unique Name";
         private readonly string CommonPassword = "10000.3ETjO6DdE/yDNjDOmPC4Xw==.EROLcKmnMnnl7k8GaBN2NukE5+ClhMJa9nh+DcbtGM0=";
@@ -158,6 +159,8 @@ namespace NG.DBManager.Test.Utilities
                     .With(d => d.DealTypeId = d.DealType.Id)
                 .Build()
                 .ToList();
+
+            Deals.FirstOrDefault().Name = DealName;
 
 
             Nodes = new List<Node>();

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NG.DBManager.Infrastructure.Contracts.Entities;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.Repositories;
 using System;
@@ -188,6 +189,29 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return GetToursWithDealTypes(tours);
         }
 
+        public async Task<IEnumerable<TourWithDealType>> GetByDealType(string filter)
+        {
+            var LowCaseFilter = filter.ToLower();
+
+            var dealTypeIds = Context.Set<DealType>()
+                .Where(dt => dt.Name.ToLower().Contains(LowCaseFilter))
+                .Select(dt => dt.Id)
+                .ToList();
+
+            var tours = await DbSet
+                .Where(t => t.IsActive)
+                .AsNoTracking()
+                .OrderBy(t => t.Name)
+                .Include(t => t.Nodes)
+                    .ThenInclude(n => n.Deal)
+                        .ThenInclude(d => d.DealType)
+                .Where(tour => tour.Nodes.Any(node => node.Deal != null &&
+                    dealTypeIds.Contains(node.Deal.DealTypeId != null ? (Guid)node.Deal.DealTypeId : Guid.Empty)))
+                .ToListAsync();
+
+            return GetToursWithDealTypesWithEntity(tours);
+        }
+
         private static List<(Tour, IEnumerable<DealType>)> GetToursWithDealTypes(List<Tour> tours)
         {
             List<(Tour, IEnumerable<DealType>)> result = new List<(Tour, IEnumerable<DealType>)>();
@@ -200,6 +224,24 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                     .Select(n => n.Deal.DealType);
 
                 result.Add((tour, dealTypes));
+            }
+
+            return result;
+        }
+        private static List<TourWithDealType> GetToursWithDealTypesWithEntity(List<Tour> tours)
+        {
+            List<TourWithDealType> result = new List<TourWithDealType>();
+
+            foreach (var tour in tours)
+            {
+                TourWithDealType tourWithDealType = new TourWithDealType(tour);
+
+                tourWithDealType.DealTypes = tour.Nodes
+                    .Where(n => n.Deal?.DealType != null)
+                    .Distinct()
+                    .Select(n => n.Deal?.DealType);
+
+                result.Add(tourWithDealType);
             }
 
             return result;

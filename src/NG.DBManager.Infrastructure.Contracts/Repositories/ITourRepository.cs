@@ -1,4 +1,5 @@
-﻿using NG.DBManager.Infrastructure.Contracts.Models;
+﻿using NG.DBManager.Infrastructure.Contracts.Entities;
+using NG.DBManager.Infrastructure.Contracts.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,5 +16,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Repositories
         Task<IEnumerable<(Tour, IEnumerable<DealType>)>> GetByFullTag(string fullTag);
         Task<IEnumerable<(Tour, IEnumerable<DealType>)>> GetByTagOrName(string filter);
         Task<IEnumerable<(Tour, IEnumerable<DealType>)>> GetByCommerceName(string filter);
+        Task<IEnumerable<TourWithDealType>> GetByDealType(string filter);
     }
 }

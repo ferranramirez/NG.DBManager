@@ -226,7 +226,31 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
             Assert.Equal(expected, actual);
         }
 
+        [Fact]
+        public async Task GetByDealTypeAsync()
+        {
+            //ARRANGE
+            _databaseUtilities.RandomSeed(Context);
 
+            var dealName = "a";
+
+            var dealTypeIds = _databaseUtilities.DealTypes
+                .Where(dt => dt.Name.Contains(dealName))
+                .Select(dt => dt.Id)
+                .ToList(); 
+
+            var expected = _databaseUtilities.Tours
+                .Where(tour => tour.Nodes.Any(node => node.Deal != null &&
+                    dealTypeIds.Contains(node.Deal.DealTypeId != null ? (Guid)node.Deal.DealTypeId : Guid.Empty)))
+                .OrderBy(t => t.Name)
+                .ToList();
+
+            //ACT
+            var actual = await UnitOfWork.Tour.GetByDealType(dealName);
+
+            //ASSERT
+            Assert.Equal(expected, actual);
+        }
 
         // Dispose pattern 
         private bool _disposed;
