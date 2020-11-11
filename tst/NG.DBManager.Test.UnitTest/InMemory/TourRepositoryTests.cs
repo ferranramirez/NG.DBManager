@@ -73,7 +73,7 @@ namespace NG.DBManager.Test.UnitTest.InMemory
             var actual = await UnitOfWork.Tour.GetFeatured();
 
             //ASSERT
-            Assert.Equal(expected, actual.Select(x => x.Item1).ToList());
+            Assert.Equal(expected, actual.ToList());
         }
 
         [Fact]
@@ -87,7 +87,7 @@ namespace NG.DBManager.Test.UnitTest.InMemory
 
 
             //ASSERT
-            var lastTourCreated = actual.Select(x => x.Item1).ToList().Single();
+            var lastTourCreated = actual.ToList().Single();
             Assert.NotNull(lastTourCreated);
 
             var createdProperty = Context.Entry(lastTourCreated).Property("Created").CurrentValue;
@@ -114,7 +114,7 @@ namespace NG.DBManager.Test.UnitTest.InMemory
             var actual = await UnitOfWork.Tour.GetByFullTag("Supercalifragilisticexpialidocious");
 
             //ASSERT
-            Assert.Equal(expected, actual.Select(x => x.Item1).ToList());
+            Assert.Equal(expected, actual.ToList());
         }
 
         [Fact]
@@ -135,7 +135,7 @@ namespace NG.DBManager.Test.UnitTest.InMemory
             var actual = await UnitOfWork.Tour.GetByTag("CaliFRAGIListIcexpIaLidoc");
 
             //ASSERT
-            Assert.Equal(expected, actual.Select(x => x.Item1).ToList());
+            Assert.Equal(expected, actual.ToList());
         }
 
 
@@ -157,7 +157,7 @@ namespace NG.DBManager.Test.UnitTest.InMemory
             var actual = await UnitOfWork.Tour.GetByTagOrName("Tour, Random But Unique");
 
             //ASSERT
-            Assert.Equal(expected, actual.Select(x => x.Item1).ToList());
+            Assert.Equal(expected, actual.ToList());
         }
 
 
