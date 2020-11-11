@@ -25,20 +25,14 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                 .SingleOrDefault();
         }
 
-        public (Tour, IEnumerable<DealType>) GetWithDealTypes(Guid id)
+        public TourWithDealType GetWithDealTypes(Guid id)
         {
             var tour = Get(id);
 
-            var dealType = tour
-                .Nodes
-                .Where(n => n.Deal?.DealType != null)
-
-                .Select(n => n.Deal.DealType);
-
-            return (tour, dealType);
+            return GetSingleTourWithDealTypes(tour);
         }
 
-        public async Task<IEnumerable<(Tour, IEnumerable<DealType>)>> GetAllWithDealTypes()
+        public async Task<IEnumerable<TourWithDealType>> GetAllWithDealTypes()
         {
             var tours = await DbSet
                 .Include(t => t.Nodes)
@@ -46,19 +40,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                         .ThenInclude(d => d.DealType)
                 .ToListAsync();
 
-            List<(Tour, IEnumerable<DealType>)> result = new List<(Tour, IEnumerable<DealType>)>();
-
-            foreach (var tour in tours)
-            {
-                var dealTypes = tour.Nodes
-                    .Where(n => n.Deal?.DealType != null)
-                    .Distinct()
-                    .Select(n => n.Deal.DealType);
-
-                result.Add((tour, dealTypes));
-            }
-
-            return result;
+            return GetToursWithDealTypes(tours);
         }
 
         public override void Add(Tour entity)
@@ -68,7 +50,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             // Context.Entry(entity).Property("Created").CurrentValue = DateTime.UtcNow; // Add shadow property value
         }
 
-        public async Task<IEnumerable<(Tour, IEnumerable<DealType>)>> GetFeatured()
+        public async Task<IEnumerable<TourWithDealType>> GetFeatured()
         {
             var tours = await DbSet
                 .Where(t => t.IsActive)
@@ -83,7 +65,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return GetToursWithDealTypes(tours);
         }
 
-        public async Task<IEnumerable<(Tour, IEnumerable<DealType>)>> GetLastOnesCreated(int numOfTours)
+        public async Task<IEnumerable<TourWithDealType>> GetLastOnesCreated(int numOfTours)
         {
             var tours = await DbSet
                 .Where(t => t.IsActive)
@@ -95,22 +77,10 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                         .ThenInclude(d => d.DealType)
                 .ToListAsync();
 
-            List<(Tour, IEnumerable<DealType>)> result = new List<(Tour, IEnumerable<DealType>)>();
-
-            foreach (var tour in tours)
-            {
-                var dealTypes = tour.Nodes
-                    .Where(n => n.Deal?.DealType != null)
-                    .Distinct()
-                    .Select(n => n.Deal.DealType);
-
-                result.Add((tour, dealTypes));
-            }
-
-            return result;
+            return GetToursWithDealTypes(tours);
         }
 
-        public async Task<IEnumerable<(Tour, IEnumerable<DealType>)>> GetByFullTag(string fullTag)
+        public async Task<IEnumerable<TourWithDealType>> GetByFullTag(string fullTag)
         {
             var LowCaseFilter = fullTag.ToLower();
 
@@ -129,7 +99,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return GetToursWithDealTypes(tours);
         }
 
-        public async Task<IEnumerable<(Tour, IEnumerable<DealType>)>> GetByTag(string filter)
+        public async Task<IEnumerable<TourWithDealType>> GetByTag(string filter)
         {
             var LowCaseFilter = filter.ToLower();
 
@@ -148,7 +118,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return GetToursWithDealTypes(tours);
         }
 
-        public async Task<IEnumerable<(Tour, IEnumerable<DealType>)>> GetByTagOrName(string filter)
+        public async Task<IEnumerable<TourWithDealType>> GetByTagOrName(string filter)
         {
             var LowCaseFilter = filter.ToLower();
 
@@ -167,7 +137,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return GetToursWithDealTypes(tours);
         }
 
-        public async Task<IEnumerable<(Tour, IEnumerable<DealType>)>> GetByCommerceName(string filter)
+        public async Task<IEnumerable<TourWithDealType>> GetByCommerceName(string filter)
         {
             var LowCaseFilter = filter.ToLower();
 
@@ -209,42 +179,32 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                     dealTypeIds.Contains(node.Deal.DealTypeId != null ? (Guid)node.Deal.DealTypeId : Guid.Empty)))
                 .ToListAsync();
 
-            return GetToursWithDealTypesWithEntity(tours);
+            return GetToursWithDealTypes(tours);
         }
 
-        private static List<(Tour, IEnumerable<DealType>)> GetToursWithDealTypes(List<Tour> tours)
-        {
-            List<(Tour, IEnumerable<DealType>)> result = new List<(Tour, IEnumerable<DealType>)>();
-
-            foreach (var tour in tours)
-            {
-                var dealTypes = tour.Nodes
-                    .Where(n => n.Deal?.DealType != null)
-                    .Distinct()
-                    .Select(n => n.Deal.DealType);
-
-                result.Add((tour, dealTypes));
-            }
-
-            return result;
-        }
-        private static List<TourWithDealType> GetToursWithDealTypesWithEntity(List<Tour> tours)
+        private static List<TourWithDealType> GetToursWithDealTypes(List<Tour> tours)
         {
             List<TourWithDealType> result = new List<TourWithDealType>();
 
             foreach (var tour in tours)
             {
-                TourWithDealType tourWithDealType = new TourWithDealType(tour);
-
-                tourWithDealType.DealTypes = tour.Nodes
-                    .Where(n => n.Deal?.DealType != null)
-                    .Distinct()
-                    .Select(n => n.Deal?.DealType);
+                TourWithDealType tourWithDealType = GetSingleTourWithDealTypes(tour);
 
                 result.Add(tourWithDealType);
             }
 
             return result;
+        }
+
+        private static TourWithDealType GetSingleTourWithDealTypes(Tour tour)
+        {
+            return new TourWithDealType(tour)
+            {
+                DealTypes = tour.Nodes
+                                    .Where(n => n.Deal?.DealType != null)
+                                    .Distinct()
+                                    .Select(n => n.Deal?.DealType)
+            };
         }
     }
 }
