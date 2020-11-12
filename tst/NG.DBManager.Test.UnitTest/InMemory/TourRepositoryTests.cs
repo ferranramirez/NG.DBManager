@@ -95,7 +95,7 @@ namespace NG.DBManager.Test.UnitTest.InMemory
         }
 
         [Fact]
-        public async Task GetToursByFullTagAsync()
+        public async Task GetToursByTagAsync()
         {
             //ARRANGE
             // _database.FullTagName = "Supercalifragilisticexpialidocious"
@@ -111,14 +111,14 @@ namespace NG.DBManager.Test.UnitTest.InMemory
                             .ToList();
 
             //ACT
-            var actual = await UnitOfWork.Tour.GetByFullTag("Supercalifragilisticexpialidocious");
+            var actual = await UnitOfWork.Tour.GetByTag("Supercalifragilisticexpialidocious");
 
             //ASSERT
             Assert.Equal(expected, actual.ToList());
         }
 
         [Fact]
-        public async Task GetToursByTag()
+        public async Task GetNoToursByTag()
         {
             //ARRANGE
             _databaseUtilities.RandomSeed(Context);
@@ -135,7 +135,7 @@ namespace NG.DBManager.Test.UnitTest.InMemory
             var actual = await UnitOfWork.Tour.GetByTag("CaliFRAGIListIcexpIaLidoc");
 
             //ASSERT
-            Assert.Equal(expected, actual.ToList());
+            Assert.Empty(actual.ToList());
         }
 
 
