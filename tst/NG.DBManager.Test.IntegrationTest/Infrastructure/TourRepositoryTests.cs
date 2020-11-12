@@ -216,7 +216,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
             //ARRANGE
             _databaseUtilities.RandomSeed(Context);
 
-            var dealName = "a";
+            var dealName = _databaseUtilities.DealTypes.FirstOrDefault().Name;
 
             var dealTypeIds = _databaseUtilities.DealTypes
                 .Where(dt => dt.Name.Contains(dealName))
@@ -242,7 +242,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
             //ARRANGE
             _databaseUtilities.RandomSeed(Context);
 
-            var dealName = "Supercal";
+            var filter = _databaseUtilities.Commerces.FirstOrDefault().Name;
 
             //var dealTypeIds = _databaseUtilities.DealTypes
             //    .Where(dt => dt.Name.Contains(dealName))
@@ -265,9 +265,9 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
             //                .ToList();
 
 
-            var toursByDealType = await UnitOfWork.Tour.GetByDealType(dealName);
-            var toursByCommerceLocation = await UnitOfWork.Tour.GetByCommerceName(dealName);
-            var toursByTagOrName = await UnitOfWork.Tour.GetByTagOrName(dealName);
+            var toursByDealType = await UnitOfWork.Tour.GetByDealType(filter);
+            var toursByCommerceLocation = await UnitOfWork.Tour.GetByCommerceName(filter);
+            var toursByTagOrName = await UnitOfWork.Tour.GetByTagOrName(filter);
 
             var expected = new List<Tour>();
             expected.AddRange(toursByDealType);
@@ -275,7 +275,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
             expected.AddRange(toursByTagOrName);
 
             //ACT
-            var actual = await UnitOfWork.Tour.GetByEverything(dealName);
+            var actual = await UnitOfWork.Tour.GetByEverything(filter);
 
             //ASSERT
             Assert.Equal(expected, actual);

@@ -177,7 +177,17 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                         tour.Name.ToLower().Contains(LowCaseFilter) || 
                         tour.TourTags.Any(tourTag => tourTag.Tag.Name.ToLower().Contains(LowCaseFilter))
                     )
-                )
+                    ||
+                    (
+                        tour.Nodes.Any(node => node.Deal != null &&
+                        dealTypeIds.Contains(node.Deal.DealTypeId != null ? (Guid)node.Deal.DealTypeId : Guid.Empty))
+                    )
+                    ||
+                    (
+                        tour.Nodes.Any(node =>
+                            commercesLocationIds.Contains(node.LocationId))
+                    )
+                )                
                 .Distinct()
                 .OrderBy(t => t.Name)
                 .Include(t => t.Nodes)
