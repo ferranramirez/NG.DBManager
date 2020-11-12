@@ -91,7 +91,7 @@ namespace NG.DBManager.Test.UnitTest.SQLite
         }
 
         [Fact]
-        public async Task GetToursByFullTagAsync()
+        public async Task GetToursByTagAsync()
         {
             //ARRANGE
             // _database.FullTagName = "Supercalifragilisticexpialidocious"
@@ -107,7 +107,7 @@ namespace NG.DBManager.Test.UnitTest.SQLite
                             .ToList();
 
             //ACT
-            var actual = await UnitOfWork.Tour.GetByFullTag("Supercalifragilisticexpialidocious");
+            var actual = await UnitOfWork.Tour.GetByTag("Supercalifragilisticexpialidocious");
 
             //ASSERT
             Assert.Equal(expected, actual.ToList());

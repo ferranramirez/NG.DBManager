@@ -80,9 +80,9 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return GetToursWithDealTypes(tours);
         }
 
-        public async Task<IEnumerable<TourWithDealType>> GetByFullTag(string fullTag)
+        public async Task<IEnumerable<TourWithDealType>> GetByTag(string tag)
         {
-            var LowCaseFilter = fullTag.ToLower();
+            var LowCaseFilter = tag.ToLower();
 
             var tours = await DbSet
                 .Where(t => t.IsActive)
@@ -90,25 +90,6 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                 .Where(tour => tour.TourTags
                     .Any(tourTag => tourTag.Tag.Name.ToLower()
                         .Equals(LowCaseFilter)))
-                .OrderBy(t => t.Name)
-                .Include(t => t.Nodes)
-                    .ThenInclude(n => n.Deal)
-                        .ThenInclude(d => d.DealType)
-                .ToListAsync();
-
-            return GetToursWithDealTypes(tours);
-        }
-
-        public async Task<IEnumerable<TourWithDealType>> GetByTag(string filter)
-        {
-            var LowCaseFilter = filter.ToLower();
-
-            var tours = await DbSet
-                .Where(t => t.IsActive)
-                .AsNoTracking()
-                .Where(tour => tour.TourTags
-                    .Any(tourTag => tourTag.Tag.Name.ToLower()
-                        .Contains(LowCaseFilter)))
                 .OrderBy(t => t.Name)
                 .Include(t => t.Nodes)
                     .ThenInclude(n => n.Deal)
@@ -140,10 +121,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
         public async Task<IEnumerable<TourWithDealType>> GetByCommerceName(string filter)
         {
             var LowCaseFilter = filter.ToLower();
-
-            var commercesLocationIds = Context.Set<Commerce>()
-                .Where(com => com.Name.ToLower().Contains(LowCaseFilter))
-                .Select(c => c.LocationId);
+            IQueryable<Guid> commercesLocationIds = GetCommerceLocations(LowCaseFilter);
 
             var tours = await DbSet
                 .Where(t => t.IsActive)
@@ -159,14 +137,17 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return GetToursWithDealTypes(tours);
         }
 
+        private IQueryable<Guid> GetCommerceLocations(string LowCaseFilter)
+        {
+            return Context.Set<Commerce>()
+                .Where(com => com.Name.ToLower().Contains(LowCaseFilter))
+                .Select(c => c.LocationId);
+        }
+
         public async Task<IEnumerable<TourWithDealType>> GetByDealType(string filter)
         {
             var LowCaseFilter = filter.ToLower();
-
-            var dealTypeIds = Context.Set<DealType>()
-                .Where(dt => dt.Name.ToLower().Contains(LowCaseFilter))
-                .Select(dt => dt.Id)
-                .ToList();
+            List<Guid> dealTypeIds = GetDealTypes(LowCaseFilter);
 
             var tours = await DbSet
                 .Where(t => t.IsActive)
@@ -180,6 +161,39 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                 .ToListAsync();
 
             return GetToursWithDealTypes(tours);
+        }
+
+        public async Task<IEnumerable<TourWithDealType>> GetByEverything(string filter)
+        {
+            var LowCaseFilter = filter.ToLower();
+            List<Guid> dealTypeIds = GetDealTypes(LowCaseFilter);
+            IQueryable<Guid> commercesLocationIds = GetCommerceLocations(LowCaseFilter);
+
+            var tours = await DbSet
+                .Where(t => t.IsActive)
+                .AsNoTracking()
+                .Where(tour => 
+                    ( 
+                        tour.Name.ToLower().Contains(LowCaseFilter) || 
+                        tour.TourTags.Any(tourTag => tourTag.Tag.Name.ToLower().Contains(LowCaseFilter))
+                    )
+                )
+                .Distinct()
+                .OrderBy(t => t.Name)
+                .Include(t => t.Nodes)
+                    .ThenInclude(n => n.Deal)
+                        .ThenInclude(d => d.DealType)
+                .ToListAsync();
+
+            return GetToursWithDealTypes(tours);
+        }
+
+        private List<Guid> GetDealTypes(string LowCaseFilter)
+        {
+            return Context.Set<DealType>()
+                .Where(dt => dt.Name.ToLower().Contains(LowCaseFilter))
+                .Select(dt => dt.Id)
+                .ToList();
         }
 
         private static List<TourWithDealType> GetToursWithDealTypes(List<Tour> tours)

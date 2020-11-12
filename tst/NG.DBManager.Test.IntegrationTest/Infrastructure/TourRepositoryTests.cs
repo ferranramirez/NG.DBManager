@@ -1,4 +1,5 @@
 ﻿using NG.DBManager.Infrastructure.Contracts.Contexts;
+using NG.DBManager.Infrastructure.Contracts.Entities;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
 using NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork;
@@ -127,7 +128,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
         }
 
         [Fact]
-        public void GetToursByFullTag()
+        public void GetToursByTag()
         {
             //ARRANGE
             _databaseUtilities.RandomSeed(Context);
@@ -141,31 +142,31 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
                             .ToList();
 
             //ACT
-            var actual = UnitOfWork.Tour.GetByFullTag("Supercalifragilisticexpialidocious").Result.ToList();
+            var actual = UnitOfWork.Tour.GetByTag("Supercalifragilisticexpialidocious").Result.ToList();
 
             //ASSERT
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void GetToursByTag()
+        public void GetNoToursByPartialTag()
         {
             //ARRANGE
             _databaseUtilities.RandomSeed(Context);
 
-            var expected = _databaseUtilities.Tours
-                            .Where(t => t.TourTags
-                                .Any(tt => tt.Tag.Name
-                                    .Contains("CaliFRAGIListIcexpIaLidoc",
-                                        StringComparison.CurrentCultureIgnoreCase)))
-                            .OrderBy(t => t.Name)
-                            .ToList();
+            //var expected = _databaseUtilities.Tours
+            //                .Where(t => t.TourTags
+            //                    .Any(tt => tt.Tag.Name
+            //                        .Contains("CaliFRAGIListIcexpIaLidoc",
+            //                            StringComparison.CurrentCultureIgnoreCase)))
+            //                .OrderBy(t => t.Name)
+            //                .ToList();
 
             //ACT
             var actual = UnitOfWork.Tour.GetByTag("CaliFRAGIListIcexpIaLidoc").Result.ToList();
 
             //ASSERT
-            Assert.Equal(expected, actual);
+            Assert.Empty(actual);
         }
 
 
@@ -220,7 +221,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
             var dealTypeIds = _databaseUtilities.DealTypes
                 .Where(dt => dt.Name.Contains(dealName))
                 .Select(dt => dt.Id)
-                .ToList(); 
+                .ToList();
 
             var expected = _databaseUtilities.Tours
                 .Where(tour => tour.Nodes.Any(node => node.Deal != null &&
@@ -230,6 +231,51 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
 
             //ACT
             var actual = await UnitOfWork.Tour.GetByDealType(dealName);
+
+            //ASSERT
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task GetByEverythingAsync()
+        {
+            //ARRANGE
+            _databaseUtilities.RandomSeed(Context);
+
+            var dealName = "Supercal";
+
+            //var dealTypeIds = _databaseUtilities.DealTypes
+            //    .Where(dt => dt.Name.Contains(dealName))
+            //    .Select(dt => dt.Id)
+            //    .ToList();
+            //var toursByDealType = _databaseUtilities.Tours
+            //    .Where(tour => tour.Nodes.Any(node => node.Deal != null &&
+            //        dealTypeIds.Contains(node.Deal.DealTypeId != null ? (Guid)node.Deal.DealTypeId : Guid.Empty)))
+            //    .ToList();
+
+            //var firstCommerce = _databaseUtilities.Commerces.FirstOrDefault();
+            //var toursByCommerceLocation = _databaseUtilities.Tours
+            //                .Where(tour => tour.Nodes.Any(n => n.LocationId == firstCommerce.LocationId))
+            //                .ToList();
+
+            //var toursByTagOrName = _databaseUtilities.Tours
+            //                .Where(tour => tour.Name
+            //                    .Contains("Tour, Random But Unique",
+            //                        StringComparison.CurrentCultureIgnoreCase))
+            //                .ToList();
+
+
+            var toursByDealType = await UnitOfWork.Tour.GetByDealType(dealName);
+            var toursByCommerceLocation = await UnitOfWork.Tour.GetByCommerceName(dealName);
+            var toursByTagOrName = await UnitOfWork.Tour.GetByTagOrName(dealName);
+
+            var expected = new List<Tour>();
+            expected.AddRange(toursByDealType);
+            expected.AddRange(toursByCommerceLocation);
+            expected.AddRange(toursByTagOrName);
+
+            //ACT
+            var actual = await UnitOfWork.Tour.GetByEverything(dealName);
 
             //ASSERT
             Assert.Equal(expected, actual);

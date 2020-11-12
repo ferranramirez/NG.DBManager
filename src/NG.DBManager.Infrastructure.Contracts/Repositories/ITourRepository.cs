@@ -13,9 +13,9 @@ namespace NG.DBManager.Infrastructure.Contracts.Repositories
         Task<IEnumerable<TourWithDealType>> GetFeatured();
         Task<IEnumerable<TourWithDealType>> GetLastOnesCreated(int numOfTours);
         Task<IEnumerable<TourWithDealType>> GetByTag(string filter);
-        Task<IEnumerable<TourWithDealType>> GetByFullTag(string fullTag);
         Task<IEnumerable<TourWithDealType>> GetByTagOrName(string filter);
         Task<IEnumerable<TourWithDealType>> GetByCommerceName(string filter);
         Task<IEnumerable<TourWithDealType>> GetByDealType(string filter);
+        Task<IEnumerable<TourWithDealType>> GetByEverything(string filter);
     }
 }
