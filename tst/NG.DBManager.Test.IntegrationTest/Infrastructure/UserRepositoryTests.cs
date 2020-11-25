@@ -1,4 +1,5 @@
 ﻿using NG.DBManager.Infrastructure.Contracts.Contexts;
+using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
 using NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork;
 using NG.DBManager.Test.Utilities;
@@ -25,6 +26,31 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
             Context = databaseUtilities.GeneratePostgreSqlContext();
             Context.Database.EnsureCreated();
             UnitOfWork = new APIUnitOfWork(Context);
+        }
+
+        [Fact]
+        public async Task AddUser()
+        {
+            //ARRANGE
+            User expected = new User
+            {
+                Id = new Guid(),
+                Name = "Usersito",
+                Email = "em@ail.com",
+                Birthdate = DateTime.Now.AddYears(-18),
+                Password = "asdadas",
+                Role = DBManager.Infrastructure.Contracts.Models.Enums.Role.Commerce
+            };
+
+            //ACT
+            UnitOfWork.User.Add(expected);
+            await UnitOfWork.CommitAsync();
+
+            var actual = UnitOfWork.User.Get(expected.Id);
+
+            //ASSERT
+            Assert.NotNull(actual);
+            Assert.Equal(expected, actual);
         }
 
         [Fact]

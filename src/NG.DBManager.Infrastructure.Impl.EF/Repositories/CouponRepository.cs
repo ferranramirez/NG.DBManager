@@ -3,6 +3,7 @@ using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.Repositories;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 {
@@ -38,6 +39,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                             .SingleOrDefault();
             return commerce;
         }
+
         public int InvalidatePastCoupons(Guid userId, Guid nodeId)
         {
             var pastCoupons = DbSet.Where(c => c.UserId == userId && c.NodeId == nodeId && c.ValidationDate == default).ToList();
@@ -47,6 +49,17 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             DbSet.UpdateRange(pastCoupons);
 
             return pastCoupons.Count;
+        }
+
+        public async Task<Coupon> GetLastByNode(Guid userId, Guid nodeId)
+        {
+            return await DbSet
+                .AsNoTracking()
+                .Where(c => c.UserId == userId &&
+                    c.NodeId == nodeId &&
+                    c.ValidationDate == default)
+                .OrderBy(c => c.ValidationDate)
+                .FirstOrDefaultAsync();
         }
     }
 }

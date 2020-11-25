@@ -319,6 +319,7 @@ namespace NG.DBManager.Test.Utilities
                 .With(c => c.User = GenerateCommerceUser(c))
                 .With(c => c.UserId = c.User.Id)
                 .With(c => c.CommerceDeals = AttatchToSomeDeals(c))
+                .With(c => c.IsActive = true)
                 .Build();
 
             Commerces.Add(generatedCommerce);
@@ -348,7 +349,7 @@ namespace NG.DBManager.Test.Utilities
                 .With(u => u.PhoneNumber = Faker.Phone.Number())
                 .With(u => u.Password = CommonPassword)
                 .With(u => u.Role = Role.Commerce)
-                .With(u => u.Commerce = commerce)
+                .With(u => u.Commerce = new List<Commerce>() { commerce })
                 .With(u => u.Image = GenerateImages(1).First())
                 .Build();
 

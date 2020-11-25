@@ -130,6 +130,25 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
             Assert.Equal(expected, actual);
         }
 
+        [Fact]
+        public async Task GetLastCouponFromUserAndNode()
+        {
+            //ARRANGE
+            _databaseUtilities.RandomSeed(Context);
+
+            var refCoupon = _databaseUtilities.Coupons.FirstOrDefault();
+            var expected = _databaseUtilities.Coupons
+                .Where(c => c.UserId == refCoupon.UserId && c.NodeId == refCoupon.NodeId)
+                .OrderBy(c => c.GenerationDate)
+                .FirstOrDefault();
+
+            //ACT
+            var actual = await B2BUnitOfWork.Coupon.GetLastByNode(refCoupon.UserId, refCoupon.NodeId);
+
+            //ASSERT
+            Assert.Equal(expected, actual);
+        }
+
         // Dispose pattern 
         private bool _disposed;
         public void Dispose() => Dispose(true);

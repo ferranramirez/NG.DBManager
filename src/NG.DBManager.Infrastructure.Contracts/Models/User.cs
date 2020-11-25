@@ -1,5 +1,6 @@
 ﻿using NG.DBManager.Infrastructure.Contracts.Models.Enums;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace NG.DBManager.Infrastructure.Contracts.Models
@@ -29,7 +30,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
 
         public Guid? ImageId { get; set; }
 
-        public Commerce Commerce { get; set; }
+        public IList<Commerce> Commerce { get; set; }
         public Image Image { get; set; }
 
 
