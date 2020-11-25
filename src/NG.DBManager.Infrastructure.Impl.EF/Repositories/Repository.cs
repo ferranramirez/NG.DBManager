@@ -45,7 +45,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return DbSet.Find(id);
         }
 
-        public async Task<IEnumerable<TEntity>> GetAll(Expression<Func<TEntity, object>>[] includes)
+        public virtual async Task<IEnumerable<TEntity>> GetAll(Expression<Func<TEntity, object>>[] includes)
         {
             if (includes == null)
                 return await DbSet
