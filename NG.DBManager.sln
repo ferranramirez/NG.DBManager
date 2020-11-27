@@ -20,10 +20,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A5E26F74-84D4-49D5-8CE0-B5C220350FB2}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		ci_pipeline.yml = ci_pipeline.yml
+		develop-pipeline.yml = develop-pipeline.yml
 		docker-compose.yml = docker-compose.yml
 		docker-deploy.yml = docker-deploy.yml
 		Dockerfile = Dockerfile
+		master-pipeline.yml = master-pipeline.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NG.DBManager.Test.IntegrationTest", "tst\NG.DBManager.Test.IntegrationTest\NG.DBManager.Test.IntegrationTest.csproj", "{8E2D5AE4-8BC2-4398-B80B-246E42321952}"
