@@ -12,10 +12,10 @@ namespace NG.DBManager.Presentation.API.Controllers
     [Route("[controller]")]
     public class DealController : ControllerBase
     {
-        private readonly IFullUnitOfWork _uow;
+        private readonly IAPIUnitOfWork _uow;
         private readonly NgContext _context;
 
-        public DealController(IFullUnitOfWork uow, NgContext context)
+        public DealController(IAPIUnitOfWork uow, NgContext context)
         {
             _uow = uow;
             _context = context;
@@ -27,7 +27,7 @@ namespace NG.DBManager.Presentation.API.Controllers
         [HttpGet("{DealId}")]
         public IActionResult Get(Guid DealId)
         {
-            var Deal = _uow.Repository<Deal>().Get(DealId);
+            var Deal = _uow.Deal.Get(DealId);
             return Ok(Deal);
         }
 
@@ -37,7 +37,7 @@ namespace NG.DBManager.Presentation.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await _uow.Repository<Deal>().GetAll());
+            return Ok(await _uow.Repository<Deal>().GetAll(d => d.DealType));
         }
 
         /// <summary>

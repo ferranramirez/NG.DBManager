@@ -82,5 +82,18 @@ namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
                 return (ICommerceRepository)_repositories[typeof(Commerce)];
             }
         }
+
+        public IDealRepository Deal
+        {
+            get
+            {
+                if (_repositories[typeof(Deal)] == null)
+                {
+                    _repositories[typeof(Deal)] =
+                        (IDealRepository)Activator.CreateInstance(typeof(DealRepository), _context);
+                }
+                return (IDealRepository)_repositories[typeof(Deal)];
+            }
+        }
     }
 }
