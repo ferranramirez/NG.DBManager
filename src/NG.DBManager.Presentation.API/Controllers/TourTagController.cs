@@ -51,16 +51,6 @@ namespace NG.DBManager.Presentation.API.Controllers
         }
 
         /// <summary>
-        /// Update TourTag
-        /// </summary>
-        [HttpPut]
-        public IActionResult Update(TourTag TourTag)
-        {
-            _uow.Repository<TourTag>().Update(TourTag);
-            return Ok(_uow.Commit());
-        }
-
-        /// <summary>
         /// Remove TourTag
         /// </summary>
         [HttpDelete("{TourTagId}")]
