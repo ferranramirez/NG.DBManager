@@ -160,21 +160,6 @@ namespace NG.DBManager.Test.UnitTest.InMemory
             Assert.Equal(expected, actual.ToList());
         }
 
-        [Fact]
-        public async Task GetByDistance()
-        {
-            //ARRANGE
-            _databaseUtilities.RandomSeed(Context);
-
-            var firstLocation = _databaseUtilities.Nodes.FirstOrDefault().Location;
-
-            //ACT
-            var actual = await UnitOfWork.Tour.GetByDistance((double)firstLocation.Latitude, (double)firstLocation.Longitude, 0);
-
-            //ASSERT
-            Assert.Single(actual);
-        }
-
 
         // Dispose pattern 
         private bool _disposed;

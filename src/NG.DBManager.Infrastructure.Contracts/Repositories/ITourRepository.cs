@@ -10,6 +10,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Repositories
     {
         TourWithDealType GetWithDealTypes(Guid id);
         Task<IEnumerable<TourWithDealType>> GetAllWithDealTypes();
+        Task<IEnumerable<TourWithDealType>> GetAllWithDealTypesAndLocation();
         Task<IEnumerable<TourWithDealType>> GetFeatured();
         Task<IEnumerable<TourWithDealType>> GetLastOnesCreated(int numOfTours);
         Task<IEnumerable<TourWithDealType>> GetByTag(string filter);
@@ -17,6 +18,5 @@ namespace NG.DBManager.Infrastructure.Contracts.Repositories
         Task<IEnumerable<TourWithDealType>> GetByCommerceName(string filter);
         Task<IEnumerable<TourWithDealType>> GetByDealType(string filter);
         Task<IEnumerable<TourWithDealType>> GetByEverything(string filter);
-        Task<IEnumerable<TourWithDealType>> GetByDistance(double latitude, double longitude, double radius);
     }
 }

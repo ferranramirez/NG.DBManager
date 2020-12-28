@@ -44,6 +44,21 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return GetToursWithDealTypes(tours);
         }
 
+        public async Task<IEnumerable<TourWithDealType>> GetAllWithDealTypesAndLocation()
+        {
+            var tours = await DbSet
+                .Where(t => t.IsActive)
+                .AsNoTracking()
+                .Include(t => t.Nodes)
+                    .ThenInclude(n => n.Deal)
+                        .ThenInclude(d => d.DealType)
+                .Include(t => t.Nodes)
+                    .ThenInclude(l => l.Location)
+                .ToListAsync();
+
+            return GetToursWithDealTypes(tours);
+        }
+
         public override void Add(Tour entity)
         {
             entity.Created = DateTime.UtcNow;
@@ -230,28 +245,6 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                                     .Distinct()
                                     .Select(n => n.Deal?.DealType)
             };
-        }
-
-        public async Task<IEnumerable<TourWithDealType>> GetByDistance(double latitude, double longitude, double radius)
-        {
-            var tours = await DbSet
-                .Where(t => t.IsActive)
-                .AsNoTracking()
-                .Where(tour => GetDistance(new GeoCoordinate(latitude, longitude),
-                        new GeoCoordinate((double)tour.Nodes.First().Location.Latitude,
-                            (double)tour.Nodes.First().Location.Longitude)) <= radius)
-                .OrderBy(t => t.Name)
-                .Include(t => t.Nodes)
-                    .ThenInclude(n => n.Deal)
-                        .ThenInclude(d => d.DealType)
-                .ToListAsync();
-
-            return GetToursWithDealTypes(tours);
-        }
-
-        private double GetDistance(GeoCoordinate pin1, GeoCoordinate pin2)
-        {
-            return pin1.GetDistanceTo(pin2);
         }
     }
 }
