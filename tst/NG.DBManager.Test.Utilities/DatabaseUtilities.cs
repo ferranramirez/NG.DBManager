@@ -123,8 +123,8 @@ namespace NG.DBManager.Test.Utilities
                 .All()
                     .With(l => l.Id = Guid.NewGuid())
                     .With(l => l.Name = Faker.Address.StreetName())
-                    .With(l => l.Latitude = decimal.Parse(Faker.RandomNumber.Next(-9999, 9999).ToString()))
-                    .With(l => l.Longitude = decimal.Parse(Faker.RandomNumber.Next(-9999, 9999).ToString()))
+                    .With(l => l.Latitude = decimal.Parse(Faker.RandomNumber.Next(-90, 90).ToString()))
+                    .With(l => l.Longitude = decimal.Parse(Faker.RandomNumber.Next(-90, 90).ToString()))
                 .Build()
                 .ToList();
 
@@ -133,8 +133,8 @@ namespace NG.DBManager.Test.Utilities
                 .All()
                     .With(l => l.Id = Guid.NewGuid())
                     .With(l => l.Name = Faker.Address.StreetName())
-                    .With(l => l.Latitude = decimal.Parse(Faker.RandomNumber.Next(-9999, 9999).ToString()))
-                    .With(l => l.Longitude = decimal.Parse(Faker.RandomNumber.Next(-9999, 9999).ToString()))
+                    .With(l => l.Latitude = decimal.Parse(Faker.RandomNumber.Next(-90, 90).ToString()))
+                    .With(l => l.Longitude = decimal.Parse(Faker.RandomNumber.Next(-90, 90).ToString()))
                 .Build()
                 .ToList();
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using GeoCoordinatePortable;
+using Microsoft.EntityFrameworkCore;
 using NG.DBManager.Infrastructure.Contracts.Entities;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.Repositories;
@@ -196,6 +197,38 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                 .ToListAsync();
 
             return GetToursWithDealTypes(tours);
+        }
+
+        public async Task<IEnumerable<TourWithDealType>> GetByDistance(Location location, double radius)
+        {
+            var lat = (double)location.Latitude;
+            var lon = (double)location.Longitude;
+
+            var pin1 = new GeoCoordinate(lat, lon);
+
+            var dist = GetDistance(pin1, pin1);
+
+
+            var tours = await DbSet
+                .Where(t => t.IsActive)
+                .AsNoTracking()
+                .Where(tour =>
+                    GetDistance(new GeoCoordinate((double)location.Latitude, (double)location.Longitude),
+                        new GeoCoordinate((double)tour.Nodes.First().Location.Latitude, (double)tour.Nodes.First().Location.Longitude))
+                    <= radius)
+                .OrderBy(t => t.Name)
+                .Include(t => t.Nodes)
+                    .ThenInclude(n => n.Deal)
+                        .ThenInclude(d => d.DealType)
+                .ToListAsync();
+
+            return GetToursWithDealTypes(tours);
+        }
+
+        private double GetDistance(GeoCoordinate pin1, GeoCoordinate pin2)
+        {
+            var dist = pin1.GetDistanceTo(pin2);
+            return pin1.GetDistanceTo(pin2);
         }
 
         private List<Guid> GetDealTypes(string LowCaseFilter)
