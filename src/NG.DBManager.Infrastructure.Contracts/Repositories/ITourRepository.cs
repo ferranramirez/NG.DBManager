@@ -17,6 +17,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Repositories
         Task<IEnumerable<TourWithDealType>> GetByCommerceName(string filter);
         Task<IEnumerable<TourWithDealType>> GetByDealType(string filter);
         Task<IEnumerable<TourWithDealType>> GetByEverything(string filter);
-        Task<IEnumerable<TourWithDealType>> GetByDistance(Location location, double radius);
+        Task<IEnumerable<TourWithDealType>> GetByDistance(double latitude, double longitude, double radius);
     }
 }

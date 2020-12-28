@@ -169,7 +169,7 @@ namespace NG.DBManager.Test.UnitTest.InMemory
             var firstLocation = _databaseUtilities.Nodes.FirstOrDefault().Location;
 
             //ACT
-            var actual = await UnitOfWork.Tour.GetByDistance(firstLocation, 0);
+            var actual = await UnitOfWork.Tour.GetByDistance((double)firstLocation.Latitude, (double)firstLocation.Longitude, 0);
 
             //ASSERT
             Assert.Single(actual);
