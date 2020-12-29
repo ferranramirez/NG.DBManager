@@ -19,5 +19,23 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Extensions
 
             return query;
         }
+
+        public static IQueryable<T> SetPagination<T>(this DbSet<T> source, int? pageNumber, int? pageSize)
+            where T : class
+        {
+            if (pageNumber != default || pageNumber != default)
+                return source.Skip((int)pageNumber).Take((int)pageSize);
+
+            return source;
+        }
+
+        public static IQueryable<T> SetPagination<T>(this IQueryable<T> query, int? pageNumber, int? pageSize)
+            where T : class
+        {
+            if (pageNumber != default || pageNumber != default)
+                return query.Skip((int)pageNumber).Take((int)pageSize);
+
+            return query;
+        }
     }
 }

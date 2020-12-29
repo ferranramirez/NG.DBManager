@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using NG.DBManager.Infrastructure.Contracts.Entities;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.Repositories;
+using NG.DBManager.Infrastructure.Impl.EF.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,28 +34,33 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return GetSingleTourWithDealTypes(tour);
         }
 
-        public async Task<IEnumerable<TourWithDealType>> GetAllWithDealTypes()
+        public async Task<IEnumerable<TourWithDealType>> GetAllWithDealTypes(int? pageNumber, int? pageSize)
         {
-            var tours = await DbSet
-                .Include(t => t.Nodes)
-                    .ThenInclude(n => n.Deal)
-                        .ThenInclude(d => d.DealType)
-                .ToListAsync();
+            List<Tour> tours = await DbSet
+                    .OrderBy(t => t.Name)
+                    .SetPagination(pageNumber, pageSize)
+                    .Include(t => t.Nodes)
+                        .ThenInclude(n => n.Deal)
+                            .ThenInclude(d => d.DealType)
+                    .ToListAsync();
 
             return GetToursWithDealTypes(tours);
         }
 
-        public async Task<IEnumerable<TourWithDealType>> GetAllWithDealTypesAndLocation()
+
+        public async Task<IEnumerable<TourWithDealType>> GetAllWithDealTypesAndLocation(int? pageNumber, int? pageSize)
         {
-            var tours = await DbSet
-                .Where(t => t.IsActive)
-                .AsNoTracking()
-                .Include(t => t.Nodes)
-                    .ThenInclude(n => n.Deal)
-                        .ThenInclude(d => d.DealType)
-                .Include(t => t.Nodes)
-                    .ThenInclude(l => l.Location)
-                .ToListAsync();
+            List<Tour> tours = await DbSet
+                    .Where(t => t.IsActive)
+                    .OrderBy(t => t.Name)
+                    .SetPagination(pageNumber, pageSize)
+                    .AsNoTracking()
+                    .Include(t => t.Nodes)
+                        .ThenInclude(n => n.Deal)
+                            .ThenInclude(d => d.DealType)
+                    .Include(t => t.Nodes)
+                        .ThenInclude(l => l.Location)
+                    .ToListAsync();
 
             return GetToursWithDealTypes(tours);
         }
@@ -66,89 +72,95 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             // Context.Entry(entity).Property("Created").CurrentValue = DateTime.UtcNow; // Add shadow property value
         }
 
-        public async Task<IEnumerable<TourWithDealType>> GetFeatured()
+        public async Task<IEnumerable<TourWithDealType>> GetFeatured(int? pageNumber, int? pageSize)
         {
-            var tours = await DbSet
-                .Where(t => t.IsActive)
-                .AsNoTracking()
-                .Where(t => t.IsFeatured)
-                .OrderBy(t => t.Name)
-                .Include(t => t.Nodes)
-                    .ThenInclude(n => n.Deal)
-                        .ThenInclude(d => d.DealType)
-                .ToListAsync();
+            List<Tour> tours = await DbSet
+                    .Where(t => t.IsActive)
+                    .AsNoTracking()
+                    .Where(t => t.IsFeatured)
+                    .OrderBy(t => t.Name)
+                    .SetPagination(pageNumber, pageSize)
+                    .Include(t => t.Nodes)
+                        .ThenInclude(n => n.Deal)
+                            .ThenInclude(d => d.DealType)
+                    .ToListAsync();
 
             return GetToursWithDealTypes(tours);
         }
 
-        public async Task<IEnumerable<TourWithDealType>> GetLastOnesCreated(int numOfTours)
+        public async Task<IEnumerable<TourWithDealType>> GetLastOnesCreated(int numOfTours, int? pageNumber, int? pageSize)
         {
-            var tours = await DbSet
-                .Where(t => t.IsActive)
-                .AsNoTracking()
-                .OrderBy(t => t.Created)
-                .Take(numOfTours)
-                .Include(t => t.Nodes)
-                    .ThenInclude(n => n.Deal)
-                        .ThenInclude(d => d.DealType)
-                .ToListAsync();
-
+            List<Tour> tours = await DbSet
+                    .Where(t => t.IsActive)
+                    .OrderBy(t => t.Name)
+                    .SetPagination(pageNumber, pageSize)
+                    .AsNoTracking()
+                    .OrderBy(t => t.Created)
+                    .Take(numOfTours)
+                    .Include(t => t.Nodes)
+                        .ThenInclude(n => n.Deal)
+                            .ThenInclude(d => d.DealType)
+                    .ToListAsync();
             return GetToursWithDealTypes(tours);
         }
 
-        public async Task<IEnumerable<TourWithDealType>> GetByTag(string tag)
+        public async Task<IEnumerable<TourWithDealType>> GetByTag(string tag, int? pageNumber, int? pageSize)
         {
             var LowCaseFilter = tag.ToLower();
 
-            var tours = await DbSet
-                .Where(t => t.IsActive)
-                .AsNoTracking()
-                .Where(tour => tour.TourTags
-                    .Any(tourTag => tourTag.Tag.Name.ToLower()
-                        .Equals(LowCaseFilter)))
-                .OrderBy(t => t.Name)
-                .Include(t => t.Nodes)
-                    .ThenInclude(n => n.Deal)
-                        .ThenInclude(d => d.DealType)
-                .ToListAsync();
+            List<Tour> tours = await DbSet
+                    .Where(t => t.IsActive)
+                    .AsNoTracking()
+                    .Where(tour => tour.TourTags
+                        .Any(tourTag => tourTag.Tag.Name.ToLower()
+                            .Equals(LowCaseFilter)))
+                    .OrderBy(t => t.Name)
+                    .SetPagination(pageNumber, pageSize)
+                    .Include(t => t.Nodes)
+                        .ThenInclude(n => n.Deal)
+                            .ThenInclude(d => d.DealType)
+                    .ToListAsync();
 
             return GetToursWithDealTypes(tours);
         }
 
-        public async Task<IEnumerable<TourWithDealType>> GetByTagOrName(string filter)
+        public async Task<IEnumerable<TourWithDealType>> GetByTagOrName(string filter, int? pageNumber, int? pageSize)
         {
             var LowCaseFilter = filter.ToLower();
 
-            var tours = await DbSet
-                .Where(t => t.IsActive)
-                .AsNoTracking()
-                .Where(tour => tour.Name.ToLower().Contains(LowCaseFilter)
-                    || tour.TourTags
-                    .Any(tourTag => tourTag.Tag.Name.ToLower().Contains(LowCaseFilter)))
-                .OrderBy(t => t.Name)
-                .Include(t => t.Nodes)
-                    .ThenInclude(n => n.Deal)
-                        .ThenInclude(d => d.DealType)
-                .ToListAsync();
+            List<Tour> tours = await DbSet
+                    .Where(t => t.IsActive)
+                    .AsNoTracking()
+                    .Where(tour => tour.Name.ToLower().Contains(LowCaseFilter)
+                        || tour.TourTags
+                        .Any(tourTag => tourTag.Tag.Name.ToLower().Contains(LowCaseFilter)))
+                    .OrderBy(t => t.Name)
+                    .SetPagination(pageNumber, pageSize)
+                    .Include(t => t.Nodes)
+                        .ThenInclude(n => n.Deal)
+                            .ThenInclude(d => d.DealType)
+                    .ToListAsync();
 
             return GetToursWithDealTypes(tours);
         }
 
-        public async Task<IEnumerable<TourWithDealType>> GetByCommerceName(string filter)
+
+        public async Task<IEnumerable<TourWithDealType>> GetByCommerceName(string filter, int? pageNumber, int? pageSize)
         {
             var LowCaseFilter = filter.ToLower();
             IQueryable<Guid> commercesLocationIds = GetCommerceLocations(LowCaseFilter);
 
-            var tours = await DbSet
-                .Where(t => t.IsActive)
-                .AsNoTracking()
-                .Where(tour => tour.Nodes.Any(node =>
-                    commercesLocationIds.Contains(node.LocationId)))
-                .OrderBy(t => t.Name)
-                .Include(t => t.Nodes)
-                    .ThenInclude(n => n.Deal)
-                        .ThenInclude(d => d.DealType)
-                .ToListAsync();
+            List<Tour> tours = await DbSet
+                    .Where(t => t.IsActive)
+                    .AsNoTracking()
+                    .Where(tour => tour.Nodes.Any(node =>
+                        commercesLocationIds.Contains(node.LocationId)))
+                    .OrderBy(t => t.Name)
+                    .SetPagination(pageNumber, pageSize)
+                    .Include(t => t.Nodes)
+                        .ThenInclude(n => n.Deal)
+                            .ThenInclude(d => d.DealType)
+                    .ToListAsync();
 
             return GetToursWithDealTypes(tours);
         }
@@ -160,37 +172,38 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                 .Select(c => c.LocationId);
         }
 
-        public async Task<IEnumerable<TourWithDealType>> GetByDealType(string filter)
+        public async Task<IEnumerable<TourWithDealType>> GetByDealType(string filter, int? pageNumber, int? pageSize)
         {
             var LowCaseFilter = filter.ToLower();
             List<Guid> dealTypeIds = GetDealTypes(LowCaseFilter);
 
-            var tours = await DbSet
-                .Where(t => t.IsActive)
-                .AsNoTracking()
-                .OrderBy(t => t.Name)
-                .Include(t => t.Nodes)
-                    .ThenInclude(n => n.Deal)
-                        .ThenInclude(d => d.DealType)
-                .Where(tour => tour.Nodes.Any(node => node.Deal != null &&
-                    dealTypeIds.Contains(node.Deal.DealTypeId != null ? (Guid)node.Deal.DealTypeId : Guid.Empty)))
-                .ToListAsync();
+            List<Tour> tours = await DbSet
+                    .Where(t => t.IsActive)
+                    .AsNoTracking()
+                    .Include(t => t.Nodes)
+                        .ThenInclude(n => n.Deal)
+                            .ThenInclude(d => d.DealType)
+                    .Where(tour => tour.Nodes.Any(node => node.Deal != null &&
+                        dealTypeIds.Contains(node.Deal.DealTypeId != null ? (Guid)node.Deal.DealTypeId : Guid.Empty)))
+                    .OrderBy(t => t.Name)
+                    .SetPagination(pageNumber, pageSize)
+                    .ToListAsync();
 
             return GetToursWithDealTypes(tours);
         }
 
-        public async Task<IEnumerable<TourWithDealType>> GetByEverything(string filter)
+        public async Task<IEnumerable<TourWithDealType>> GetByEverything(string filter, int? pageNumber, int? pageSize)
         {
             var LowCaseFilter = filter.ToLower();
             List<Guid> dealTypeIds = GetDealTypes(LowCaseFilter);
             IQueryable<Guid> commercesLocationIds = GetCommerceLocations(LowCaseFilter);
 
-            var tours = await DbSet
+            List<Tour> tours = await DbSet
                 .Where(t => t.IsActive)
                 .AsNoTracking()
-                .Where(tour => 
-                    ( 
-                        tour.Name.ToLower().Contains(LowCaseFilter) || 
+                .Where(tour =>
+                    (
+                        tour.Name.ToLower().Contains(LowCaseFilter) ||
                         tour.TourTags.Any(tourTag => tourTag.Tag.Name.ToLower().Contains(LowCaseFilter))
                     )
                     ||
@@ -203,9 +216,10 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                         tour.Nodes.Any(node =>
                             commercesLocationIds.Contains(node.LocationId))
                     )
-                )                
+                )
                 .Distinct()
                 .OrderBy(t => t.Name)
+                .SetPagination(pageNumber, pageSize)
                 .Include(t => t.Nodes)
                     .ThenInclude(n => n.Deal)
                         .ThenInclude(d => d.DealType)
@@ -241,9 +255,9 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return new TourWithDealType(tour)
             {
                 DealTypes = tour.Nodes
-                                    .Where(n => n.Deal?.DealType != null)
-                                    .Distinct()
-                                    .Select(n => n.Deal?.DealType)
+                    .Where(n => n.Deal?.DealType != null)
+                    .Distinct()
+                    .Select(n => n.Deal?.DealType)
             };
         }
     }

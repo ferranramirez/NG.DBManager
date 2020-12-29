@@ -95,5 +95,18 @@ namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
                 return (IDealRepository)_repositories[typeof(Deal)];
             }
         }
+
+        public ITourTagRepository TourTag
+        {
+            get
+            {
+                if (_repositories[typeof(TourTag)] == null)
+                {
+                    _repositories[typeof(TourTag)] =
+                        (ITourTagRepository)Activator.CreateInstance(typeof(TourTagRepository), _context);
+                }
+                return (ITourTagRepository)_repositories[typeof(TourTag)];
+            }
+        }
     }
 }

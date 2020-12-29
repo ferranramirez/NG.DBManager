@@ -12,10 +12,10 @@ namespace NG.DBManager.Presentation.API.Controllers
     [Route("[controller]")]
     public class TourTagController : ControllerBase
     {
-        private readonly IFullUnitOfWork _uow;
+        private readonly IAPIUnitOfWork _uow;
         private readonly NgContext _context;
 
-        public TourTagController(IFullUnitOfWork uow, NgContext context)
+        public TourTagController(IAPIUnitOfWork uow, NgContext context)
         {
             _uow = uow;
             _context = context;
@@ -53,11 +53,10 @@ namespace NG.DBManager.Presentation.API.Controllers
         /// <summary>
         /// Remove TourTag
         /// </summary>
-        [HttpDelete("{TourTagId}")]
+        [HttpDelete("{TourId}/{TagId}")]
         public IActionResult Remove(Guid TourId, Guid TagId)
         {
-            var TourTag = _uow.Repository<TourTag>().Find(tt => tt.TourId == TourId && tt.TagId == TagId);
-            _uow.Repository<TourTag>().Remove(TourTag);
+            _uow.TourTag.Remove(TourId, TagId);
             return Ok(_uow.Commit());
         }
     }

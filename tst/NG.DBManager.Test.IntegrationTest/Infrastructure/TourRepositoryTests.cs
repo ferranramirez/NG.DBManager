@@ -77,7 +77,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
             Assert.Equal(expected, actual);
         }
 
-        [Fact(Skip = "Doesn't work at the moment")]
+        [Fact]//(Skip = "Doesn't work at the moment")]
         public async void GetAllWithDealTypes()
         {
             //ARRANGE
@@ -87,6 +87,11 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
 
             //ACT
             var actual = await UnitOfWork.Tour.GetAllWithDealTypes();
+            var actual2 = await UnitOfWork.Tour.GetAllWithDealTypes(0, 1);
+            var actual22 = await UnitOfWork.Tour.GetAllWithDealTypes(1, 1);
+            var actual23 = await UnitOfWork.Tour.GetAllWithDealTypes(2, 1);
+            var actual3 = await UnitOfWork.Tour.GetAllWithDealTypes(2, 5);
+            var actual4 = await UnitOfWork.Tour.GetAllWithDealTypes(1, 1);
 
             //ASSERT
             Assert.Equal(expected, actual);

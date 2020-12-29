@@ -9,14 +9,14 @@ namespace NG.DBManager.Infrastructure.Contracts.Repositories
     public interface ITourRepository : IRepository<Tour>
     {
         TourWithDealType GetWithDealTypes(Guid id);
-        Task<IEnumerable<TourWithDealType>> GetAllWithDealTypes();
-        Task<IEnumerable<TourWithDealType>> GetAllWithDealTypesAndLocation();
-        Task<IEnumerable<TourWithDealType>> GetFeatured();
-        Task<IEnumerable<TourWithDealType>> GetLastOnesCreated(int numOfTours);
-        Task<IEnumerable<TourWithDealType>> GetByTag(string filter);
-        Task<IEnumerable<TourWithDealType>> GetByTagOrName(string filter);
-        Task<IEnumerable<TourWithDealType>> GetByCommerceName(string filter);
-        Task<IEnumerable<TourWithDealType>> GetByDealType(string filter);
-        Task<IEnumerable<TourWithDealType>> GetByEverything(string filter);
+        Task<IEnumerable<TourWithDealType>> GetAllWithDealTypes(int? pageNumber = default, int? pageSize = default);
+        Task<IEnumerable<TourWithDealType>> GetAllWithDealTypesAndLocation(int? pageNumber = default, int? pageSize = default);
+        Task<IEnumerable<TourWithDealType>> GetFeatured(int? pageNumber = default, int? pageSize = default);
+        Task<IEnumerable<TourWithDealType>> GetLastOnesCreated(int numOfTours, int? pageNumber = default, int? pageSize = default);
+        Task<IEnumerable<TourWithDealType>> GetByTag(string filter, int? pageNumber = default, int? pageSize = default);
+        Task<IEnumerable<TourWithDealType>> GetByTagOrName(string filter, int? pageNumber = default, int? pageSize = default);
+        Task<IEnumerable<TourWithDealType>> GetByCommerceName(string filter, int? pageNumber = default, int? pageSize = default);
+        Task<IEnumerable<TourWithDealType>> GetByDealType(string filter, int? pageNumber = default, int? pageSize = default);
+        Task<IEnumerable<TourWithDealType>> GetByEverything(string filter, int? pageNumber = default, int? pageSize = default);
     }
 }
