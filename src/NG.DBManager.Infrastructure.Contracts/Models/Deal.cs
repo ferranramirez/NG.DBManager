@@ -9,6 +9,9 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
 
         [Required]
         public string Name { get; set; }
+        public string BusinessMessage { get; set; }
+        public string Conditions { get; set; }
+        public string UserMessage { get; set; }
 
         public DealType DealType { get; set; }
 
