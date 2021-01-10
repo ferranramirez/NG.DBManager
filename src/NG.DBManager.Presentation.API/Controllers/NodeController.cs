@@ -12,10 +12,10 @@ namespace NG.DBManager.Presentation.API.Controllers
     [Route("[controller]")]
     public class NodeController : ControllerBase
     {
-        private readonly IFullUnitOfWork _uow;
+        private readonly IAPIUnitOfWork _uow;
         private readonly NgContext _context;
 
-        public NodeController(IFullUnitOfWork uow, NgContext context)
+        public NodeController(IAPIUnitOfWork uow, NgContext context)
         {
             _uow = uow;
             _context = context;
@@ -27,7 +27,7 @@ namespace NG.DBManager.Presentation.API.Controllers
         [HttpGet("{NodeId}")]
         public IActionResult Get(Guid NodeId)
         {
-            var Node = _uow.Repository<Node>().Get(NodeId);
+            var Node = _uow.Node.Get(NodeId);
             return Ok(Node);
         }
 
