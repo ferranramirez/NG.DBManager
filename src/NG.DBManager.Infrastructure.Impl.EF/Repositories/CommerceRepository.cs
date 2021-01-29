@@ -13,6 +13,13 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
     {
         public CommerceRepository(DbContext context) : base(context) { }
 
+        public override Commerce Get(object id)
+        {
+            return DbSet
+                .Include(c => c.CommerceDeals)
+                    .ThenInclude(cd => cd.Deal)
+                .SingleOrDefault(c => c.Id == (Guid)id);
+        }
         public override async Task<IEnumerable<Commerce>> GetAll(Expression<Func<Commerce, object>>[] includes)
         {
             return await DbSet

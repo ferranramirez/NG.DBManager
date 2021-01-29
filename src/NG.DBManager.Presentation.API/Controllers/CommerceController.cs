@@ -12,10 +12,10 @@ namespace NG.DBManager.Presentation.API.Controllers
     [Route("[controller]")]
     public class CommerceController : ControllerBase
     {
-        private readonly IFullUnitOfWork _uow;
+        private readonly IAPIUnitOfWork _uow;
         private readonly NgContext _context;
 
-        public CommerceController(IFullUnitOfWork uow, NgContext context)
+        public CommerceController(IAPIUnitOfWork uow, NgContext context)
         {
             _uow = uow;
             _context = context;
@@ -25,9 +25,9 @@ namespace NG.DBManager.Presentation.API.Controllers
         /// Get Commerce
         /// </summary>
         [HttpGet("{CommerceId}")]
-        public IActionResult Get(Guid CommerceId)
+        public IActionResult Get(Guid CommerceId) 
         {
-            var commerce = _uow.Repository<Commerce>().Get(CommerceId);
+            var commerce = _uow.Commerce.Get(CommerceId);
             return Ok(commerce);
         }
 
