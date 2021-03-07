@@ -1,4 +1,5 @@
-﻿using NG.DBManager.Infrastructure.Contracts.Contexts;
+﻿using NG.Common.Services.AuthorizationProvider;
+using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
 using NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork;
 using NG.DBManager.Test.Utilities;
@@ -15,6 +16,7 @@ namespace NG.DBManager.Test.UnitTest.InMemory
         private readonly DatabaseUtilities _databaseUtilities;
 
         private readonly NgContext Context;
+        private readonly IPasswordHasher passwordHasher;
         private readonly IAPIUnitOfWork UnitOfWork;
         private readonly IB2BUnitOfWork B2BUnitOfWork;
 
@@ -23,9 +25,10 @@ namespace NG.DBManager.Test.UnitTest.InMemory
         {
             _databaseUtilities = databaseUtilities;
 
+            passwordHasher = null;
             Context = databaseUtilities.GenerateInMemoryContext();
             Context.Database.EnsureCreated();
-            UnitOfWork = new APIUnitOfWork(Context);
+            UnitOfWork = new APIUnitOfWork(Context, passwordHasher);
             B2BUnitOfWork = new B2BUnitOfWork(Context);
         }
 

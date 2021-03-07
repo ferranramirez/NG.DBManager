@@ -1,4 +1,5 @@
-﻿using NG.DBManager.Infrastructure.Contracts.Contexts;
+﻿using NG.Common.Services.AuthorizationProvider;
+using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.Repositories;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
@@ -12,10 +13,12 @@ namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
     {
         private readonly NgContext _context;
         private Hashtable _repositories;
+        private readonly IPasswordHasher _passwordHasher;
 
-        public APIUnitOfWork(NgContext context) : base(context)
+        public APIUnitOfWork(NgContext context, IPasswordHasher passwordHasher) : base(context)
         {
             _context = context;
+            _passwordHasher = passwordHasher;
             _repositories = new Hashtable();
         }
 
@@ -52,7 +55,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
                 if (_repositories[typeof(User)] == null)
                 {
                     _repositories[typeof(User)] =
-                        (IUserRepository)Activator.CreateInstance(typeof(UserRepository), _context);
+                        (IUserRepository)Activator.CreateInstance(typeof(UserRepository), _context, _passwordHasher);
                 }
                 return (IUserRepository)_repositories[typeof(User)];
             }

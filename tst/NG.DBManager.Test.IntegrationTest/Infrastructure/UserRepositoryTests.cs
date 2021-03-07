@@ -25,7 +25,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
 
             Context = databaseUtilities.GeneratePostgreSqlContext();
             Context.Database.EnsureCreated();
-            UnitOfWork = new APIUnitOfWork(Context);
+            UnitOfWork = new APIUnitOfWork(Context, null);
         }
 
         [Fact]

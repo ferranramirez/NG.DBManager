@@ -1,4 +1,5 @@
-﻿using NG.DBManager.Infrastructure.Contracts.Contexts;
+﻿using NG.Common.Services.AuthorizationProvider;
+using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.Repositories;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
 using NG.DBManager.Infrastructure.Impl.EF.Repositories;
@@ -9,12 +10,14 @@ namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
     public class AuthUnitOfWork : UnitOfWork, IAuthUnitOfWork
     {
         private readonly NgContext _context;
+        private readonly IPasswordHasher _passwordHasher;
 
         private IUserRepository _userRepository { get; set; }
 
-        public AuthUnitOfWork(NgContext context) : base(context)
+        public AuthUnitOfWork(NgContext context, IPasswordHasher passwordHasher) : base(context)
         {
             _context = context;
+            _passwordHasher = passwordHasher;
         }
 
         public IUserRepository User

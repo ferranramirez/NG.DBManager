@@ -1,4 +1,5 @@
-﻿using NG.DBManager.Infrastructure.Contracts.Contexts;
+﻿using NG.Common.Services.AuthorizationProvider;
+using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.Entities;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
@@ -18,15 +19,18 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
         private readonly DatabaseUtilities _databaseUtilities;
 
         private readonly NgContext Context;
+        private readonly IPasswordHasher passwordHasher;
         private readonly IAPIUnitOfWork UnitOfWork;
 
         public TourRepositoryTests(DatabaseUtilities databaseUtilities)
         {
             _databaseUtilities = databaseUtilities;
 
+            passwordHasher = null;
+
             Context = databaseUtilities.GeneratePostgreSqlContext();
             Context.Database.EnsureCreated();
-            UnitOfWork = new APIUnitOfWork(Context);
+            UnitOfWork = new APIUnitOfWork(Context, passwordHasher);
         }
 
         [Fact]
@@ -50,7 +54,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
             //ASSERT
             using (var assertContext = _databaseUtilities.GeneratePostgreSqlContext())
             {
-                var assertUOW = new APIUnitOfWork(assertContext);
+                var assertUOW = new APIUnitOfWork(assertContext, passwordHasher);
                 var tourFromDb = assertUOW.Tour.Get(newTourId);
 
                 Assert.NotNull(tourFromDb);

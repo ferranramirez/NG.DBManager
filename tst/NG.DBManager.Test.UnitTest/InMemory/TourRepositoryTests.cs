@@ -1,4 +1,5 @@
-﻿using NG.DBManager.Infrastructure.Contracts.Contexts;
+﻿using NG.Common.Services.AuthorizationProvider;
+using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
 using NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork;
@@ -16,6 +17,7 @@ namespace NG.DBManager.Test.UnitTest.InMemory
         private readonly DatabaseUtilities _databaseUtilities;
 
         private readonly NgContext Context;
+        private readonly IPasswordHasher passwordHasher;
         private readonly IAPIUnitOfWork UnitOfWork;
 
 
@@ -23,9 +25,10 @@ namespace NG.DBManager.Test.UnitTest.InMemory
         {
             _databaseUtilities = databaseUtilities;
 
+            passwordHasher = null;
             Context = databaseUtilities.GenerateInMemoryContext();
             Context.Database.EnsureCreated();
-            UnitOfWork = new APIUnitOfWork(Context);
+            UnitOfWork = new APIUnitOfWork(Context, passwordHasher);
         }
 
 
@@ -48,7 +51,7 @@ namespace NG.DBManager.Test.UnitTest.InMemory
             //ASSERT
             using (var assertContext = _databaseUtilities.GenerateInMemoryContext())
             {
-                var assertUOW = new APIUnitOfWork(assertContext);
+                var assertUOW = new APIUnitOfWork(assertContext, passwordHasher);
                 var tourFromDb = assertUOW.Tour.Get(newTourId);
 
                 Assert.NotNull(tourFromDb);
