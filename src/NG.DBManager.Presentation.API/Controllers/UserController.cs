@@ -12,10 +12,10 @@ namespace NG.DBManager.Presentation.API.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IFullUnitOfWork _uow;
+        private readonly IAPIUnitOfWork _uow;
         private readonly NgContext _context;
 
-        public UserController(IFullUnitOfWork uow, NgContext context)
+        public UserController(IAPIUnitOfWork uow, NgContext context)
         {
             _uow = uow;
             _context = context;
@@ -60,8 +60,9 @@ namespace NG.DBManager.Presentation.API.Controllers
         [HttpPost]
         public IActionResult Add(User user)
         {
-            _uow.Repository<User>().Add(user);
-            return Ok(_uow.Commit());
+            _uow.User.Add(user);
+            _uow.Commit();
+            return Ok(user.Id);
         }
 
         /// <summary>

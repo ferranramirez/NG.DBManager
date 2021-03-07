@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NG.Common.Services.AuthorizationProvider;
 using NG.DBManager.Infrastructure.Contracts.Contexts;
 using System;
 
@@ -20,6 +21,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Extensions
             {
                 builder.UseNpgsql(provider.GetService<IConfiguration>().GetConnectionString("NotGuiriDb"));
             });
+            services.AddSingleton<IPasswordHasher, PasswordHasher>();
 
             return services;
         }
