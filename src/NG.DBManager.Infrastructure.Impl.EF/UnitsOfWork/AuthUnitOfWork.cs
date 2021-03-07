@@ -27,7 +27,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
                 if (_userRepository == null)
                 {
                     return (_userRepository =
-                        (IUserRepository)Activator.CreateInstance(typeof(UserRepository), _context));
+                        (IUserRepository)Activator.CreateInstance(typeof(UserRepository), _context, _passwordHasher));
                 }
                 return _userRepository;
             }
