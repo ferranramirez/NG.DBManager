@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NG.Common.Services.AuthorizationProvider;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.Repositories;
 using System;
@@ -8,12 +9,26 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 {
     public class UserRepository : Repository<User>, IUserRepository
     {
-        public UserRepository(DbContext context) : base(context) { }
+        IPasswordHasher _passwordHasher;
+
+        public UserRepository(DbContext context, IPasswordHasher passwordHasher) : base(context)
+        {
+            _passwordHasher = passwordHasher;
+        }
 
         public User GetByEmail(string emailAddress)
         {
             return DbSet
                 .SingleOrDefault(u => u.Email.ToLower() == emailAddress.ToLower());
+        }
+
+        public void Add(User entity)
+        {
+            if (entity == null) { return; }
+
+            entity.Password = _passwordHasher.Hash(entity.Password);
+
+            DbSet.Add(entity);
         }
 
         public User Edit(User entity)
@@ -28,7 +43,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             if (entity.Birthdate != default) updatedUser.Birthdate = entity.Birthdate;
             if (entity.PhoneNumber != null) updatedUser.PhoneNumber = entity.PhoneNumber;
             if (entity.Email != null) updatedUser.Email = entity.Email.ToLower();
-            if (entity.Password != null) updatedUser.Password = entity.Password;
+            if (entity.Password != null) updatedUser.Password = _passwordHasher.Hash(entity.Password);
 
             DbSet.Update(updatedUser);
 
