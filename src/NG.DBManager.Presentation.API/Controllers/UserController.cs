@@ -58,20 +58,20 @@ namespace NG.DBManager.Presentation.API.Controllers
         /// Add User
         /// </summary>
         [HttpPost]
-        public IActionResult Add(User user)
+        public IActionResult Add(User User)
         {
-            _uow.User.Add(user);
+            _uow.User.Add(User);
             _uow.Commit();
-            return Ok(user.Id);
+            return Ok(User.Id);
         }
 
         /// <summary>
         /// Update User
         /// </summary>
         [HttpPut]
-        public IActionResult Update(User user)
+        public IActionResult Update(User User)
         {
-            _uow.Repository<User>().Update(user);
+            _uow.Repository<User>().Update(User);
             return Ok(_uow.Commit());
         }
 

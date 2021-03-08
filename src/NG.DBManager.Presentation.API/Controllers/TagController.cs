@@ -47,7 +47,8 @@ namespace NG.DBManager.Presentation.API.Controllers
         public IActionResult Add(Tag Tag)
         {
             _uow.Repository<Tag>().Add(Tag);
-            return Ok(_uow.Commit());
+            _uow.Commit();
+            return Ok(Tag.Id);
         }
 
         /// <summary>

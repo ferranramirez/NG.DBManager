@@ -47,7 +47,8 @@ namespace NG.DBManager.Presentation.API.Controllers
         public IActionResult Add(Deal Deal)
         {
             _uow.Repository<Deal>().Add(Deal);
-            return Ok(_uow.Commit());
+            _uow.Commit();
+            return Ok(Deal.Id);
         }
 
         /// <summary>

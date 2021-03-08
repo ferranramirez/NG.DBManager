@@ -42,10 +42,11 @@ namespace NG.DBManager.Presentation.API.Controllers
         /// Add Coupon
         /// </summary>
         [HttpPost()]
-        public IActionResult Add(Coupon coupon)
+        public IActionResult Add(Coupon Coupon)
         {
-            _uow.Repository<Coupon>().Add(coupon);
-            return Ok(_uow.Commit());
+            _uow.Repository<Coupon>().Add(Coupon);
+            _uow.Commit();
+            return Ok(Coupon.Id);
         }
 
         /// <summary>

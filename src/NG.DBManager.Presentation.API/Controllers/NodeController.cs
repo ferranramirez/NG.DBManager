@@ -37,8 +37,11 @@ namespace NG.DBManager.Presentation.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await _uow.Repository<Node>()
-                        .GetAll(n => n.Deal));
+            var result = await _uow.Repository<Node>()
+                        .GetAll(n => n.Deal,
+                                n => n.Deal.DealType);
+
+            return Ok(result);
         }
 
         /// <summary>
@@ -48,7 +51,8 @@ namespace NG.DBManager.Presentation.API.Controllers
         public IActionResult Add(Node Node)
         {
             _uow.Repository<Node>().Add(Node);
-            return Ok(_uow.Commit());
+            _uow.Commit();
+            return Ok(Node.Id);
         }
 
         /// <summary>

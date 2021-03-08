@@ -47,7 +47,8 @@ namespace NG.DBManager.Presentation.API.Controllers
         public IActionResult Add(Image Image)
         {
             _uow.Repository<Image>().Add(Image);
-            return Ok(_uow.Commit());
+            _uow.Commit();
+            return Ok(Image.Id);
         }
 
         /// <summary>

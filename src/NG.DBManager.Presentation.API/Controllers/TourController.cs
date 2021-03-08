@@ -48,7 +48,8 @@ namespace NG.DBManager.Presentation.API.Controllers
         public IActionResult Add(Tour Tour)
         {
             _uow.Repository<Tour>().Add(Tour);
-            return Ok(_uow.Commit());
+            _uow.Commit();
+            return Ok(Tour.Id);
         }
 
         /// <summary>

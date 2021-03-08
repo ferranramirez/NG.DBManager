@@ -47,7 +47,8 @@ namespace NG.DBManager.Presentation.API.Controllers
         public IActionResult Add(Audio Audio)
         {
             _uow.Repository<Audio>().Add(Audio);
-            return Ok(_uow.Commit());
+            _uow.Commit();
+            return Ok(Audio.Id);
         }
 
         /// <summary>

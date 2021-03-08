@@ -25,7 +25,7 @@ namespace NG.DBManager.Presentation.API.Controllers
         /// Get Commerce
         /// </summary>
         [HttpGet("{CommerceId}")]
-        public IActionResult Get(Guid CommerceId) 
+        public IActionResult Get(Guid CommerceId)
         {
             var commerce = _uow.Commerce.Get(CommerceId);
             return Ok(commerce);
@@ -45,10 +45,11 @@ namespace NG.DBManager.Presentation.API.Controllers
         /// Add Commerce
         /// </summary>
         [HttpPost()]
-        public IActionResult Add(Commerce commerce)
+        public IActionResult Add(Commerce Commerce)
         {
-            _uow.Repository<Commerce>().Add(commerce);
-            return Ok(_uow.Commit());
+            _uow.Repository<Commerce>().Add(Commerce);
+            _uow.Commit();
+            return Ok(Commerce.Id);
         }
 
         /// <summary>

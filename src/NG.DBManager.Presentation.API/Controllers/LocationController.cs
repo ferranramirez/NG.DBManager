@@ -47,7 +47,8 @@ namespace NG.DBManager.Presentation.API.Controllers
         public IActionResult Add(Location Location)
         {
             _uow.Repository<Location>().Add(Location);
-            return Ok(_uow.Commit());
+            _uow.Commit();
+            return Ok(Location.Id);
         }
 
         /// <summary>
