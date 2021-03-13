@@ -22,6 +22,10 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return DbSet
                 .SingleOrDefault(u => u.Email.ToLower() == emailAddress.ToLower());
         }
+        public IEnumerable<Commerce> GetCommerces(Guid userId)
+        {
+            return DbSet.Find(userId).Commerces;
+        }
 
         public override void Add(User entity)
         {

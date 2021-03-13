@@ -30,7 +30,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
 
         public Guid? ImageId { get; set; }
 
-        public IList<Commerce> Commerce { get; set; }
+        public IList<Commerce> Commerces { get; set; }
         public Image Image { get; set; }
 
 
