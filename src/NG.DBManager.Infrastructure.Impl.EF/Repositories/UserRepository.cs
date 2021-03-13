@@ -26,9 +26,11 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
         public bool ContainsCommerce(Guid UserId, Guid CommerceId)
         {
             var commerce = _context.Set<Commerce>().SingleOrDefault(com => com.Id == CommerceId);
-            var userCommerces = DbSet.Find(UserId).Commerces;
+            var userCommerces = DbSet
+                .Include(u => u.Commerces)
+                .SingleOrDefault(u => u.Id == UserId);
 
-            return userCommerces.Contains(commerce);
+            return userCommerces.Commerces.Contains(commerce);
         }
 
         public override void Add(User entity)

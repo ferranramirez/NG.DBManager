@@ -1,5 +1,6 @@
 ﻿using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.Models;
+using NG.DBManager.Infrastructure.Contracts.Models.Enums;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
 using NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork;
 using NG.DBManager.Test.Utilities;
@@ -68,6 +69,23 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
             //ASSERT
             Assert.NotNull(actual);
             Assert.Equal(expected, expected);
+        }
+
+        [Fact]
+        public void ContainsCommerce()
+        {
+            //ARRANGE
+            _databaseUtilities.RandomSeed(Context);
+
+            var commerceUser = _databaseUtilities.Users.FirstOrDefault(u => u.Role == Role.Commerce);
+            var commerce = _databaseUtilities.Commerces.FirstOrDefault();
+
+            //ACT
+            var actual = UnitOfWork.User.ContainsCommerce(commerceUser.Id, commerce.Id);
+
+            //ASSERT
+            Assert.NotNull(actual);
+            Assert.Equal(true, false);
         }
 
         [Fact]
