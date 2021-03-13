@@ -30,7 +30,7 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
             Context = databaseUtilities.GeneratePostgreSqlContext();
             Context.Database.EnsureCreated();
             UnitOfWork = new APIUnitOfWork(Context, passwordHasher);
-            B2BUnitOfWork = new B2BUnitOfWork(Context);
+            B2BUnitOfWork = new B2BUnitOfWork(Context, passwordHasher);
         }
 
         [Fact]
@@ -150,6 +150,27 @@ namespace NG.DBManager.Test.IntegrationTest.Infrastructure
 
             //ASSERT
             Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task GetByCommerce()
+        {
+            //ARRANGE
+            _databaseUtilities.RandomSeed(Context);
+
+            var refCoupon = _databaseUtilities.Coupons.FirstOrDefault();
+            //var expected = _databaseUtilities.Coupons
+            //    .Where(c => c.UserId == refCoupon.UserId && c.NodeId == refCoupon.NodeId)
+            //    .OrderBy(c => c.GenerationDate)
+            //    .FirstOrDefault();
+
+            var commerce = _databaseUtilities.Commerces.FirstOrDefault();
+
+            //ACT
+            var actual = await UnitOfWork.Coupon.GetByCommerce(commerce.Id);
+
+            //ASSERT
+            Assert.True(false);
         }
 
         // Dispose pattern 

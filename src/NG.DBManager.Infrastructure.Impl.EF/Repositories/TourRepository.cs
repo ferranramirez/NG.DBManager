@@ -47,7 +47,6 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return GetToursWithDealTypes(tours);
         }
 
-
         public async Task<IEnumerable<TourWithDealType>> GetAllWithDealTypesAndLocation(int? pageNumber, int? pageSize)
         {
             List<Tour> tours = await DbSet

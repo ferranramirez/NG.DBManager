@@ -11,9 +11,9 @@ namespace NG.DBManager.Presentation.API.Controllers
     [Route("[controller]")]
     public class CouponController : ControllerBase
     {
-        private readonly IFullUnitOfWork _uow;
+        private readonly IAPIUnitOfWork _uow;
 
-        public CouponController(IFullUnitOfWork uow)
+        public CouponController(IAPIUnitOfWork uow)
         {
             _uow = uow;
         }
@@ -36,6 +36,16 @@ namespace NG.DBManager.Presentation.API.Controllers
         {
             var coupon = await _uow.Repository<Coupon>().GetAll();
             return Ok(coupon);
+        }
+
+        /// <summary>
+        /// Get All Coupons By Commerce
+        /// </summary>
+        [HttpGet("ByCommerce/{CommerceId}")]
+        public async Task<IActionResult> GetByCommerce(Guid CommerceId)
+        {
+            var coupons = await _uow.Coupon.GetByCommerce(CommerceId);
+            return Ok(coupons);
         }
 
         /// <summary>

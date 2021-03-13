@@ -30,7 +30,7 @@ namespace NG.DBManager.Test.UnitTest.InMemory
             Context = databaseUtilities.GenerateInMemoryContext();
             Context.Database.EnsureCreated();
             UnitOfWork = new APIUnitOfWork(Context, passwordHasher);
-            B2BUnitOfWork = new B2BUnitOfWork(Context);
+            B2BUnitOfWork = new B2BUnitOfWork(Context, passwordHasher);
         }
 
         [Fact]

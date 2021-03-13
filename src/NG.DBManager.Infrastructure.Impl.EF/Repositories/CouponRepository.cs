@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NG.DBManager.Infrastructure.Contracts.Entities;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.Repositories;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -60,6 +62,29 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                     c.ValidationDate == default)
                 .OrderBy(c => c.ValidationDate)
                 .FirstOrDefaultAsync();
+        }
+
+
+        public async Task<IEnumerable<CouponInfo>> GetByCommerce(Guid CommerceId)
+        {
+            var commerce = _context.Set<Commerce>().SingleOrDefault(com => com.Id == CommerceId);
+
+            var couponInfo = await DbSet
+                .Where(c => c.Node.LocationId == commerce.LocationId)
+                .Where(c => c.ValidationDate != default)
+                .Include(c => c.Node)
+                    .ThenInclude(n => n.Tour)
+                .Include(c => c.User)
+                .Select(c => new CouponInfo
+                {
+                    TourInfo = new TourInfo { Id = c.Node.TourId, Name = c.Node.Tour.Name },
+                    ValidationDate = c.ValidationDate,
+                    DealType = c.Node.Deal.DealType,
+                    UserName = c.User.Name
+                })
+                .ToListAsync();
+
+            return couponInfo;
         }
     }
 }

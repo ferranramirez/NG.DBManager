@@ -3,6 +3,7 @@ using NG.Common.Services.AuthorizationProvider;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.Repositories;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
@@ -22,7 +23,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                 .SingleOrDefault(u => u.Email.ToLower() == emailAddress.ToLower());
         }
 
-        public void Add(User entity)
+        public override void Add(User entity)
         {
             if (entity == null) { return; }
 
