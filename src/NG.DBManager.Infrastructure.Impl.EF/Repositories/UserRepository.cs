@@ -3,28 +3,32 @@ using NG.Common.Services.AuthorizationProvider;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.Repositories;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 {
     public class UserRepository : Repository<User>, IUserRepository
     {
+        DbContext _context;
         IPasswordHasher _passwordHasher;
 
         public UserRepository(DbContext context, IPasswordHasher passwordHasher) : base(context)
         {
+            _context = context;
             _passwordHasher = passwordHasher;
         }
 
-        public User GetByEmail(string emailAddress)
+        public User GetByEmail(string EmailAddress)
         {
             return DbSet
-                .SingleOrDefault(u => u.Email.ToLower() == emailAddress.ToLower());
+                .SingleOrDefault(u => u.Email.ToLower() == EmailAddress.ToLower());
         }
-        public IEnumerable<Commerce> GetCommerces(Guid userId)
+        public bool ContainsCommerce(Guid UserId, Guid CommerceId)
         {
-            return DbSet.Find(userId).Commerces;
+            var commerce = _context.Set<Commerce>().SingleOrDefault(com => com.Id == CommerceId);
+            var userCommerces = DbSet.Find(UserId).Commerces;
+
+            return userCommerces.Contains(commerce);
         }
 
         public override void Add(User entity)
