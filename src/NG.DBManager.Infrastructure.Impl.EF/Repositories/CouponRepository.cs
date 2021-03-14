@@ -64,10 +64,11 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                 .FirstOrDefaultAsync();
         }
 
-
         public async Task<IEnumerable<CouponInfo>> GetByCommerce(Guid CommerceId)
         {
             var commerce = _context.Set<Commerce>().SingleOrDefault(com => com.Id == CommerceId);
+
+            if (commerce == null) return null;
 
             var couponInfo = await DbSet
                 .Where(c => c.Node.LocationId == commerce.LocationId)

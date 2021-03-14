@@ -23,14 +23,17 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return DbSet
                 .SingleOrDefault(u => u.Email.ToLower() == EmailAddress.ToLower());
         }
-        public bool ContainsCommerce(Guid UserId, Guid CommerceId)
+        public bool? ContainsCommerce(Guid UserId, Guid CommerceId)
         {
             var commerce = _context.Set<Commerce>().SingleOrDefault(com => com.Id == CommerceId);
+
+            if (commerce == null) return null;
+
             var userCommerces = DbSet
                 .Include(u => u.Commerces)
                 .SingleOrDefault(u => u.Id == UserId);
 
-            return userCommerces.Commerces.Contains(commerce);
+            return userCommerces?.Commerces.Contains(commerce);
         }
 
         public override void Add(User entity)
@@ -65,8 +68,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
         {
             var user = DbSet.Find(UserId);
 
-            if (user == null)
-                return null;
+            if (user == null) return null;
 
             user.EmailConfirmed = true;
             DbSet.Update(user);
