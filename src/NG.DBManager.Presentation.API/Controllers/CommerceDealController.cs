@@ -24,7 +24,7 @@ namespace NG.DBManager.Presentation.API.Controllers
         /// <summary>
         /// Get CommerceDeal
         /// </summary>
-        [HttpGet("{AudioDealId}")]
+        [HttpGet("{CommerceId}/{DealId}")]
         public IActionResult Get(Guid CommerceId, Guid DealId)
         {
             var CommerceDeal = _uow.Repository<CommerceDeal>()
@@ -48,16 +48,6 @@ namespace NG.DBManager.Presentation.API.Controllers
         public IActionResult Add(CommerceDeal CommerceDeal)
         {
             _uow.Repository<CommerceDeal>().Add(CommerceDeal);
-            return Ok(_uow.Commit());
-        }
-
-        /// <summary>
-        /// Update CommerceDeal
-        /// </summary>
-        [HttpPut]
-        public IActionResult Update(CommerceDeal CommerceDeal)
-        {
-            _uow.Repository<CommerceDeal>().Update(CommerceDeal);
             return Ok(_uow.Commit());
         }
 

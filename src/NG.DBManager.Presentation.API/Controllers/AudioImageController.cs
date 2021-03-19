@@ -24,10 +24,11 @@ namespace NG.DBManager.Presentation.API.Controllers
         /// <summary>
         /// Get AudioImage
         /// </summary>
-        [HttpGet("{AudioImageId}")]
+        [HttpGet("{AudioId}/{ImageId}")]
         public IActionResult Get(Guid AudioId, Guid ImageId)
         {
-            var AudioImage = _uow.Repository<AudioImage>().Find(ai => ai.AudioId == AudioId && ai.ImageId == ImageId);
+            var AudioImage = _uow.Repository<AudioImage>()
+                .Find(ai => ai.AudioId == AudioId && ai.ImageId == ImageId);
             return Ok(AudioImage);
         }
 
@@ -51,22 +52,13 @@ namespace NG.DBManager.Presentation.API.Controllers
         }
 
         /// <summary>
-        /// Update AudioImage
-        /// </summary>
-        [HttpPut]
-        public IActionResult Update(AudioImage AudioImage)
-        {
-            _uow.Repository<AudioImage>().Update(AudioImage);
-            return Ok(_uow.Commit());
-        }
-
-        /// <summary>
         /// Remove AudioImage
         /// </summary>
         [HttpDelete("{AudioId}/{ImageId}")]
         public IActionResult Remove(Guid AudioId, Guid ImageId)
         {
-            var AudioImage = _uow.Repository<AudioImage>().Find(ai => ai.AudioId == AudioId && ai.ImageId == ImageId);
+            var AudioImage = _uow.Repository<AudioImage>()
+                .Find(ai => ai.AudioId == AudioId && ai.ImageId == ImageId);
             _uow.Repository<AudioImage>().Remove(AudioImage);
             return Ok(_uow.Commit());
         }
