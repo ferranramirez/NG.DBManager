@@ -63,7 +63,7 @@ namespace NG.DBManager.Presentation.API.Controllers
         /// <summary>
         /// Remove AudioImage
         /// </summary>
-        [HttpDelete("{AudioImageId}")]
+        [HttpDelete("{AudioId}/{ImageId}")]
         public IActionResult Remove(Guid AudioId, Guid ImageId)
         {
             var AudioImage = _uow.Repository<AudioImage>().Find(ai => ai.AudioId == AudioId && ai.ImageId == ImageId);

@@ -64,11 +64,11 @@ namespace NG.DBManager.Presentation.API.Controllers
         /// <summary>
         /// Remove CommerceDeal
         /// </summary>
-        [HttpDelete("{AudioDealId}")]
+        [HttpDelete("{CommerceId}/{DealId}")]
         public IActionResult Remove(Guid CommerceId, Guid DealId)
         {
             var CommerceDeal = _uow.Repository<CommerceDeal>()
-                .Find(ad => ad.CommerceId == CommerceId && ad.DealId == DealId);
+                .Find(cd => cd.CommerceId == CommerceId && cd.DealId == DealId);
             _uow.Repository<CommerceDeal>().Remove(CommerceDeal);
             return Ok(_uow.Commit());
         }
