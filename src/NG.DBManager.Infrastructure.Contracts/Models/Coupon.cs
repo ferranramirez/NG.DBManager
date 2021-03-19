@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.Json.Serialization;
 
 namespace NG.DBManager.Infrastructure.Contracts.Models
 {
@@ -15,6 +14,8 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
 
         public Guid UserId { get; set; }
         public Guid NodeId { get; set; }
+
+        public Guid Validator { get; set; }
 
         public bool IsValidated => ValidationDate != default;
 
