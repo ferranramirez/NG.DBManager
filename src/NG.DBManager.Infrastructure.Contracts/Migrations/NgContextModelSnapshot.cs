@@ -115,7 +115,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                     b.Property<DateTime>("ValidationDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("Validator")
+                    b.Property<Guid?>("ValidatorId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -123,6 +123,8 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                     b.HasIndex("NodeId");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("ValidatorId");
 
                     b.ToTable("Coupon");
                 });
@@ -522,6 +524,10 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("NG.DBManager.Infrastructure.Contracts.Models.User", "Validator")
+                        .WithMany()
+                        .HasForeignKey("ValidatorId");
                 });
 
             modelBuilder.Entity("NG.DBManager.Infrastructure.Contracts.Models.Deal", b =>

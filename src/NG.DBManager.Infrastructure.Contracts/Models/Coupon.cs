@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace NG.DBManager.Infrastructure.Contracts.Models
 {
@@ -10,12 +11,15 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
         public DateTime GenerationDate { get; set; }
 
         public User User { get; set; }
+
+        [JsonIgnore]
+        public User Validator { get; set; }
         public Node Node { get; set; }
 
         public Guid UserId { get; set; }
         public Guid NodeId { get; set; }
 
-        public Guid Validator { get; set; }
+        public Guid? ValidatorId { get; set; }
 
         public bool IsValidated => ValidationDate != default;
 
