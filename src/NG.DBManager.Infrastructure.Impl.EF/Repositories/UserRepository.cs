@@ -20,6 +20,8 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 
         public User GetByEmail(string EmailAddress)
         {
+            if (EmailAddress == null) return null;
+
             return DbSet
                 .SingleOrDefault(u => u.Email.ToLower() == EmailAddress.ToLower());
         }
