@@ -9,6 +9,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Entities
         public DateTime ValidationDate { get; set; }
         public DealType DealType { get; set; }
         public string UserName { get; set; }
+        public bool IsSelfValidated { get; set; }
     }
 
     public class TourInfo

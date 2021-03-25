@@ -18,6 +18,16 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             _passwordHasher = passwordHasher;
         }
 
+        public override User Get(object Id)
+        {
+            if (Id == null) return null;
+
+            var user = DbSet
+                .Include(u => u.Commerces)
+                .SingleOrDefault(u => u.Id == (Guid)Id);
+
+            return user;
+        }
         public User GetByEmail(string EmailAddress)
         {
             if (EmailAddress == null) return null;
@@ -25,6 +35,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return DbSet
                 .SingleOrDefault(u => u.Email.ToLower() == EmailAddress.ToLower());
         }
+
         public bool? ContainsCommerce(Guid UserId, Guid CommerceId)
         {
             var commerce = _context.Set<Commerce>().SingleOrDefault(com => com.Id == CommerceId);

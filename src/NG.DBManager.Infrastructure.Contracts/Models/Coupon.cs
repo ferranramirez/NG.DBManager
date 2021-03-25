@@ -22,6 +22,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
         public Guid? ValidatorId { get; set; }
 
         public bool IsValidated => ValidationDate != default;
+        public bool IsSelfValidated => ValidatorId == UserId;
 
         public override bool Equals(object obj)
         {

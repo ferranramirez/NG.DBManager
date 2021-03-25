@@ -38,7 +38,8 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 
             var commerce = commerceSet
                             .Where(com => com.LocationId == couponLocationId)
-                            .SingleOrDefault();
+                            .FirstOrDefault();
+
             return commerce;
         }
 
@@ -72,7 +73,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 
             var couponInfo = await DbSet
                 .Where(c => c.Node.LocationId == commerce.LocationId)
-                .Where(c => c.ValidationDate != default)
+                .Where(c => c.IsValidated)
                 .Include(c => c.Node)
                     .ThenInclude(n => n.Tour)
                 .Include(c => c.User)
@@ -81,7 +82,8 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                     TourInfo = new TourInfo { Id = c.Node.TourId, Name = c.Node.Tour.Name },
                     ValidationDate = c.ValidationDate,
                     DealType = c.Node.Deal.DealType,
-                    UserName = c.User.Name
+                    UserName = c.User.Name,
+                    IsSelfValidated = c.IsSelfValidated,
                 })
                 .ToListAsync();
 

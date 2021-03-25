@@ -27,7 +27,7 @@ namespace NG.DBManager.Presentation.API.Controllers
         [HttpGet("{UserId}")]
         public IActionResult Get(Guid UserId)
         {
-            var user = _uow.Repository<User>().Get(UserId);
+            var user = _uow.User.Get(UserId);
             return Ok(user);
         }
 
