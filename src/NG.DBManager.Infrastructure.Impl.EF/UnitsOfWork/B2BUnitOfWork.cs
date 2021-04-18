@@ -15,6 +15,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
 
         private ICouponRepository _couponRepository;
         private IUserRepository _userRepository;
+        private IVisitRepository _visitRepository;
         private IRepository<Commerce> _commerceRepository;
         private IRepository<Node> _nodeRepository;
 
@@ -46,6 +47,18 @@ namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
                         (IUserRepository)Activator.CreateInstance(typeof(UserRepository), _context, _passwordHasher));
                 }
                 return _userRepository;
+            }
+        }
+        public IVisitRepository Visit
+        {
+            get
+            {
+                if (_visitRepository == null)
+                {
+                    return (_visitRepository =
+                        (IVisitRepository)Activator.CreateInstance(typeof(VisitRepository), _context));
+                }
+                return _visitRepository;
             }
         }
 

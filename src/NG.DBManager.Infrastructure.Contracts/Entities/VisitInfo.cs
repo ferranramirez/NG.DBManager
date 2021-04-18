@@ -3,12 +3,12 @@ using System;
 
 namespace NG.DBManager.Infrastructure.Contracts.Entities
 {
-    public class CouponInfo
+    public class VisitInfo
     {
         public TourInfo TourInfo { get; set; }
-        public DateTime ValidationDate { get; set; }
-        public DealType DealType { get; set; }
-        public string UserName { get; set; }
+        public Deal Deal { get; set; }
+        public DateTime RegistryDate { get; set; }
+        public UserInfo UserInfo { get; set; }
         public bool IsSelfValidated { get; set; }
     }
 }

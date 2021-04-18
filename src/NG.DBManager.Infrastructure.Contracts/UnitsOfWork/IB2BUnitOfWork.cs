@@ -7,6 +7,7 @@ namespace NG.DBManager.Infrastructure.Contracts.UnitsOfWork
     {
         ICouponRepository Coupon { get; }
         IUserRepository User { get; }
+        IVisitRepository Visit { get; }
         IRepository<Commerce> Commerce { get; }
         IRepository<Node> Node { get; }
     }
