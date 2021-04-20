@@ -24,7 +24,7 @@ namespace NG.DBManager.Presentation.API.Controllers
         /// <summary>
         /// Get CommerceDeal
         /// </summary>
-        [HttpGet("{AudioDealId}")]
+        [HttpGet("{CommerceId}/{DealId}")]
         public IActionResult Get(Guid CommerceId, Guid DealId)
         {
             var CommerceDeal = _uow.Repository<CommerceDeal>()
@@ -52,23 +52,13 @@ namespace NG.DBManager.Presentation.API.Controllers
         }
 
         /// <summary>
-        /// Update CommerceDeal
-        /// </summary>
-        [HttpPut]
-        public IActionResult Update(CommerceDeal CommerceDeal)
-        {
-            _uow.Repository<CommerceDeal>().Update(CommerceDeal);
-            return Ok(_uow.Commit());
-        }
-
-        /// <summary>
         /// Remove CommerceDeal
         /// </summary>
-        [HttpDelete("{AudioDealId}")]
+        [HttpDelete("{CommerceId}/{DealId}")]
         public IActionResult Remove(Guid CommerceId, Guid DealId)
         {
             var CommerceDeal = _uow.Repository<CommerceDeal>()
-                .Find(ad => ad.CommerceId == CommerceId && ad.DealId == DealId);
+                .Find(cd => cd.CommerceId == CommerceId && cd.DealId == DealId);
             _uow.Repository<CommerceDeal>().Remove(CommerceDeal);
             return Ok(_uow.Commit());
         }

@@ -1,5 +1,7 @@
-﻿using NG.DBManager.Infrastructure.Contracts.Models;
+﻿using NG.DBManager.Infrastructure.Contracts.Entities;
+using NG.DBManager.Infrastructure.Contracts.Models;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace NG.DBManager.Infrastructure.Contracts.Repositories
@@ -9,5 +11,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Repositories
         Commerce GetCommerce(Guid couponId);
         int InvalidatePastCoupons(Guid userId, Guid nodeId);
         Task<Coupon> GetLastByNode(Guid userId, Guid nodeId);
+        Task<IEnumerable<CouponInfo>> GetByCommerce(Guid CommerceId);
     }
 }

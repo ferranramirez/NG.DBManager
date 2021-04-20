@@ -26,6 +26,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
         public DbSet<Tour> Tour { get; set; }
         public DbSet<TourTag> TourTag { get; set; }
         public DbSet<User> User { get; set; }
+        public DbSet<Visit> Visit { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

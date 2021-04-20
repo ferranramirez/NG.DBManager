@@ -8,7 +8,11 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 {
     public class NodeRepository : Repository<Node>, INodeRepository
     {
-        public NodeRepository(DbContext context) : base(context) { }
+        private readonly DbContext _context;
+        public NodeRepository(DbContext context) : base(context)
+        {
+            _context = context;
+        }
 
         public override Node Get(object id)
         {
@@ -20,6 +24,20 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                 .Include(n => n.Images)
                 .Include(n => n.Location)
                 .SingleOrDefault();
+        }
+
+        public override void Add(Node node)
+        {
+            if (node == null) { return; }
+
+            var commerceSet = _context.Set<Commerce>();
+
+            var commerceIds = commerceSet.Select(c => c.LocationId).ToList();
+
+            if (node.Location.Nodes.Any(n => commerceIds.Contains(n.LocationId)))
+                throw new DbUpdateException("The given location is being used by a Commerce");
+
+            DbSet.Add(node);
         }
     }
 }

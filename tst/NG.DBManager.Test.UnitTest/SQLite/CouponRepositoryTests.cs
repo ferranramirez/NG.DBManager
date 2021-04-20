@@ -29,7 +29,7 @@ namespace NG.DBManager.Test.UnitTest.SQLite
             Context = databaseUtilities.GenerateSQLiteContext();
             Context.Database.EnsureCreated();
             UnitOfWork = new APIUnitOfWork(Context, passwordHasher);
-            B2BUnitOfWork = new B2BUnitOfWork(Context);
+            B2BUnitOfWork = new B2BUnitOfWork(Context, passwordHasher);
         }
 
         [Fact]

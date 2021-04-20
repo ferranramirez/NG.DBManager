@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NG.DBManager.Infrastructure.Contracts.Contexts;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -9,9 +10,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NG.DBManager.Infrastructure.Contracts.Migrations
 {
     [DbContext(typeof(NgContext))]
-    partial class NgContextModelSnapshot : ModelSnapshot
+    [Migration("20210319113027_AddValidator_InCouponTable")]
+    partial class AddValidator_InCouponTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -474,35 +476,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                         });
                 });
 
-            modelBuilder.Entity("NG.DBManager.Infrastructure.Contracts.Models.Visit", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CommerceId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("RegistryDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid>("TourId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CommerceId");
-
-                    b.HasIndex("TourId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Visit");
-                });
-
             modelBuilder.Entity("NG.DBManager.Infrastructure.Contracts.Models.Audio", b =>
                 {
                     b.HasOne("NG.DBManager.Infrastructure.Contracts.Models.Node", null)
@@ -643,27 +616,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                     b.HasOne("NG.DBManager.Infrastructure.Contracts.Models.Image", "Image")
                         .WithMany()
                         .HasForeignKey("ImageId");
-                });
-
-            modelBuilder.Entity("NG.DBManager.Infrastructure.Contracts.Models.Visit", b =>
-                {
-                    b.HasOne("NG.DBManager.Infrastructure.Contracts.Models.Commerce", "Commerce")
-                        .WithMany()
-                        .HasForeignKey("CommerceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NG.DBManager.Infrastructure.Contracts.Models.Tour", "Tour")
-                        .WithMany()
-                        .HasForeignKey("TourId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NG.DBManager.Infrastructure.Contracts.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

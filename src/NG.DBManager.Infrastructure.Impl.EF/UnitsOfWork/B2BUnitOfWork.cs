@@ -1,4 +1,5 @@
-﻿using NG.DBManager.Infrastructure.Contracts.Contexts;
+﻿using NG.Common.Services.AuthorizationProvider;
+using NG.DBManager.Infrastructure.Contracts.Contexts;
 using NG.DBManager.Infrastructure.Contracts.Models;
 using NG.DBManager.Infrastructure.Contracts.Repositories;
 using NG.DBManager.Infrastructure.Contracts.UnitsOfWork;
@@ -10,14 +11,18 @@ namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
     public class B2BUnitOfWork : UnitOfWork, IB2BUnitOfWork
     {
         private readonly NgContext _context;
+        private readonly IPasswordHasher _passwordHasher;
 
         private ICouponRepository _couponRepository;
+        private IUserRepository _userRepository;
+        private IVisitRepository _visitRepository;
         private IRepository<Commerce> _commerceRepository;
         private IRepository<Node> _nodeRepository;
 
-        public B2BUnitOfWork(NgContext context) : base(context)
+        public B2BUnitOfWork(NgContext context, IPasswordHasher passwordHasher) : base(context)
         {
             _context = context;
+            _passwordHasher = passwordHasher;
         }
 
         public ICouponRepository Coupon
@@ -30,6 +35,30 @@ namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
                         (ICouponRepository)Activator.CreateInstance(typeof(CouponRepository), _context));
                 }
                 return _couponRepository;
+            }
+        }
+        public IUserRepository User
+        {
+            get
+            {
+                if (_userRepository == null)
+                {
+                    return (_userRepository =
+                        (IUserRepository)Activator.CreateInstance(typeof(UserRepository), _context, _passwordHasher));
+                }
+                return _userRepository;
+            }
+        }
+        public IVisitRepository Visit
+        {
+            get
+            {
+                if (_visitRepository == null)
+                {
+                    return (_visitRepository =
+                        (IVisitRepository)Activator.CreateInstance(typeof(VisitRepository), _context));
+                }
+                return _visitRepository;
             }
         }
 

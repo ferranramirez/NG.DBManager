@@ -24,10 +24,11 @@ namespace NG.DBManager.Presentation.API.Controllers
         /// <summary>
         /// Get TourTag
         /// </summary>
-        [HttpGet("{TourTagId}")]
+        [HttpGet("{TourId}/{TagId}")]
         public IActionResult Get(Guid TourId, Guid TagId)
         {
-            var TourTag = _uow.Repository<TourTag>().Find(tt => tt.TourId == TourId && tt.TagId == TagId);
+            var TourTag = _uow.Repository<TourTag>()
+                .Find(tt => tt.TourId == TourId && tt.TagId == TagId);
             return Ok(TourTag);
         }
 

@@ -349,7 +349,7 @@ namespace NG.DBManager.Test.Utilities
                 .With(u => u.PhoneNumber = Faker.Phone.Number())
                 .With(u => u.Password = CommonPassword)
                 .With(u => u.Role = Role.Commerce)
-                .With(u => u.Commerce = new List<Commerce>() { commerce })
+                .With(u => u.Commerces = new List<Commerce>() { commerce })
                 .With(u => u.Image = GenerateImages(1).First())
                 .Build();
 

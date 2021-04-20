@@ -9,20 +9,47 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 {
     public class UserRepository : Repository<User>, IUserRepository
     {
+        DbContext _context;
         IPasswordHasher _passwordHasher;
 
         public UserRepository(DbContext context, IPasswordHasher passwordHasher) : base(context)
         {
+            _context = context;
             _passwordHasher = passwordHasher;
         }
 
-        public User GetByEmail(string emailAddress)
+        public override User Get(object Id)
         {
+            if (Id == null) return null;
+
+            var user = DbSet
+                .Include(u => u.Commerces)
+                .SingleOrDefault(u => u.Id == (Guid)Id);
+
+            return user;
+        }
+        public User GetByEmail(string EmailAddress)
+        {
+            if (EmailAddress == null) return null;
+
             return DbSet
-                .SingleOrDefault(u => u.Email.ToLower() == emailAddress.ToLower());
+                .SingleOrDefault(u => u.Email.ToLower() == EmailAddress.ToLower());
         }
 
-        public void Add(User entity)
+        public bool? ContainsCommerce(Guid UserId, Guid CommerceId)
+        {
+            var commerce = _context.Set<Commerce>().SingleOrDefault(com => com.Id == CommerceId);
+
+            if (commerce == null) return null;
+
+            var userCommerces = DbSet
+                .Include(u => u.Commerces)
+                .SingleOrDefault(u => u.Id == UserId);
+
+            return userCommerces?.Commerces.Contains(commerce);
+        }
+
+        public override void Add(User entity)
         {
             if (entity == null) { return; }
 
@@ -54,8 +81,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
         {
             var user = DbSet.Find(UserId);
 
-            if (user == null)
-                return null;
+            if (user == null) return null;
 
             user.EmailConfirmed = true;
             DbSet.Update(user);

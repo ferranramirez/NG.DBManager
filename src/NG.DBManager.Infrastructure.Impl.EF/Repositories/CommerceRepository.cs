@@ -26,5 +26,14 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                 .Where(c => c.IsActive)
                 .ToListAsync();
         }
+        public override void Add(Commerce commerce)
+        {
+            if (commerce == null) { return; }
+
+            if (commerce.Location.Nodes.Any())
+                throw new DbUpdateException("The selected location is being used by another node");
+
+            DbSet.Add(commerce);
+        }
     }
 }
