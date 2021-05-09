@@ -45,7 +45,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 
         public int InvalidatePastCoupons(Guid userId, Guid nodeId)
         {
-            var pastCoupons = DbSet.Where(c => c.UserId == userId && c.NodeId == nodeId && c.ValidationDate == default).ToList();
+            var pastCoupons = DbSet.Where(c => c.UserId == userId && c.NodeId == nodeId && !c.IsValidated).ToList();
 
             pastCoupons.ForEach(pc => pc.ValidationDate = pc.GenerationDate);
 
@@ -59,8 +59,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return await DbSet
                 .AsNoTracking()
                 .Where(c => c.UserId == userId &&
-                    c.NodeId == nodeId &&
-                    c.ValidationDate == default)
+                    c.NodeId == nodeId)
                 .OrderBy(c => c.ValidationDate)
                 .FirstOrDefaultAsync();
         }
