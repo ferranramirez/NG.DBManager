@@ -45,7 +45,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 
         public int InvalidatePastCoupons(Guid userId, Guid nodeId)
         {
-            var pastCoupons = DbSet.Where(c => c.UserId == userId && c.NodeId == nodeId && !c.IsValidated).ToList();
+            var pastCoupons = DbSet.Where(c => c.UserId == userId && c.NodeId == nodeId && c.ValidationDate == default).ToList();
 
             pastCoupons.ForEach(pc => pc.ValidationDate = pc.GenerationDate);
 
@@ -59,7 +59,8 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return await DbSet
                 .AsNoTracking()
                 .Where(c => c.UserId == userId &&
-                    c.NodeId == nodeId)
+                    c.NodeId == nodeId &&
+                    c.ValidationDate == default)
                 .OrderBy(c => c.ValidationDate)
                 .FirstOrDefaultAsync();
         }
@@ -72,7 +73,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 
             var couponInfo = await DbSet
                 .Where(c => c.Node.LocationId == commerce.LocationId)
-                .Where(c => c.IsValidated)
+                .Where(c => c.ValidationDate == default)
                 .Include(c => c.Node)
                     .ThenInclude(n => n.Tour)
                 .Include(c => c.User)
