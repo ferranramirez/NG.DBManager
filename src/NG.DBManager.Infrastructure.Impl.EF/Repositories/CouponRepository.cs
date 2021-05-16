@@ -73,7 +73,6 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 
             var couponInfo = await DbSet
                 .Where(c => c.Node.LocationId == commerce.LocationId)
-                .Where(c => c.ValidationDate == default)
                 .Include(c => c.Node)
                     .ThenInclude(n => n.Tour)
                 .Include(c => c.User)
