@@ -27,22 +27,6 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                 .SingleOrDefault();
         }
 
-        public Commerce GetCommerce(Guid couponId)
-        {
-            var commerceSet = _context.Set<Commerce>();
-            var couponLocationId = DbSet
-                        .Where(c => c.Id == couponId)
-                        // .Include(c => c.Node)
-                        .Select(x => x.Node.LocationId)
-                        .SingleOrDefault();
-
-            var commerce = commerceSet
-                            .Where(com => com.LocationId == couponLocationId)
-                            .FirstOrDefault();
-
-            return commerce;
-        }
-
         public int InvalidatePastCoupons(Guid userId, Guid nodeId)
         {
             var pastCoupons = DbSet.Where(c => c.UserId == userId && c.NodeId == nodeId && c.ValidationDate == default).ToList();
@@ -59,15 +43,15 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return await DbSet
                 .AsNoTracking()
                 .Where(c => c.UserId == userId &&
-                    c.NodeId == nodeId &&
-                    c.ValidationDate == default)
+                    c.NodeId == nodeId)
                 .OrderBy(c => c.ValidationDate)
                 .FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<CouponInfo>> GetByCommerce(Guid CommerceId)
         {
-            var commerce = _context.Set<Commerce>().SingleOrDefault(com => com.Id == CommerceId);
+            var commerce = _context.Set<Commerce>()
+                .SingleOrDefault(com => com.Id == CommerceId);
 
             if (commerce == null) return null;
 
@@ -78,6 +62,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                 .Include(c => c.User)
                 .Select(c => new CouponInfo
                 {
+                    CouponId = c.Id,
                     TourInfo = new TourInfo { Id = c.Node.TourId, Name = c.Node.Tour.Name },
                     ValidationDate = c.ValidationDate,
                     DealType = c.Node.Deal.DealType,

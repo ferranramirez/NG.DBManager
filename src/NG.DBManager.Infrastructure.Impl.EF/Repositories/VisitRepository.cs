@@ -25,6 +25,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             if (commerce == null) return null;
 
             var VisitInfo = await DbSet
+                .Where(vh => vh.CommerceId == commerce.Id)
                 .Select(vh =>
                 new VisitInfo
                 {
