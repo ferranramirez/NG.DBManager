@@ -16,7 +16,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
         private ICouponRepository _couponRepository;
         private IUserRepository _userRepository;
         private IVisitRepository _visitRepository;
-        private IRepository<Commerce> _commerceRepository;
+        private ICommerceRepository _commerceRepository;
         private IRepository<Node> _nodeRepository;
 
         public B2BUnitOfWork(NgContext context, IPasswordHasher passwordHasher) : base(context)
@@ -62,14 +62,14 @@ namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
             }
         }
 
-        public IRepository<Commerce> Commerce
+        public ICommerceRepository Commerce
         {
             get
             {
                 if (_commerceRepository == null)
                 {
                     return (_commerceRepository =
-                        (IRepository<Commerce>)Activator.CreateInstance(typeof(Repository<Commerce>), _context));
+                        (ICommerceRepository)Activator.CreateInstance(typeof(CommerceRepository), _context));
                 }
                 return _commerceRepository;
             }
