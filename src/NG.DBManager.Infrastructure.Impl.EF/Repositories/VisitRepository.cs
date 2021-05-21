@@ -25,15 +25,15 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             if (commerce == null) return null;
 
             var VisitInfo = await DbSet
-                .Where(vh => vh.CommerceId == commerce.Id)
+                .Where(vh => vh.CommerceId == CommerceId)
                 .Select(vh =>
-                new VisitInfo
-                {
-                    TourInfo = new TourInfo { Id = vh.TourId, Name = vh.Tour.Name },
-                    Deal = GetTourDeal(vh.Tour, vh.Commerce),
-                    UserInfo = new UserInfo { Name = vh.User.Name, Email = vh.User.Email },
-                    RegistryDate = vh.RegistryDate,
-                })
+                    new VisitInfo
+                    {
+                        TourInfo = new TourInfo { Id = vh.TourId, Name = vh.Tour.Name },
+                        Deal = GetTourDeal(vh.Tour, vh.Commerce),
+                        UserInfo = new UserInfo { Name = vh.User.Name, Email = vh.User.Email },
+                        RegistryDate = vh.RegistryDate,
+                    })
                 .ToListAsync();
 
             return VisitInfo;
