@@ -5,6 +5,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Entities
 {
     public class CouponInfo
     {
+        public Guid CouponId { get; set; }
         public TourInfo TourInfo { get; set; }
         public DateTime ValidationDate { get; set; }
         public DealType DealType { get; set; }

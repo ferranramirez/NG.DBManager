@@ -11,7 +11,12 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 {
     public class CommerceRepository : Repository<Commerce>, ICommerceRepository
     {
-        public CommerceRepository(DbContext context) : base(context) { }
+        private readonly DbContext _context;
+
+        public CommerceRepository(DbContext context) : base(context)
+        {
+            _context = context;
+        }
 
         public override Commerce Get(object id)
         {
@@ -20,6 +25,23 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                     .ThenInclude(cd => cd.Deal)
                 .SingleOrDefault(c => c.Id == (Guid)id);
         }
+
+        public Commerce GetByCoupon(Guid couponId)
+        {
+            var couponSet = _context.Set<Coupon>();
+            var couponLocationId = couponSet
+                        .Where(c => c.Id == couponId)
+                        // .Include(c => c.Node)
+                        .Select(x => x.Node.LocationId)
+                        .SingleOrDefault();
+
+            var commerce = DbSet
+                            .Where(com => com.LocationId == couponLocationId)
+                            .FirstOrDefault();
+
+            return commerce;
+        }
+
         public override async Task<IEnumerable<Commerce>> GetAll(Expression<Func<Commerce, object>>[] includes)
         {
             return await DbSet
