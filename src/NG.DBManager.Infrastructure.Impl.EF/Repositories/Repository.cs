@@ -56,7 +56,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
                         .ToListAsync();
         }
 
-        public void Update(TEntity entity)
+        public virtual void Update(TEntity entity)
         {
             if (entity == null) { return; }
 
