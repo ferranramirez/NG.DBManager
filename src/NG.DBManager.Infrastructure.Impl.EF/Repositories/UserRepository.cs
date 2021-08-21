@@ -49,15 +49,6 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return userCommerces?.Commerces.Contains(commerce);
         }
 
-        public override void Add(User entity)
-        {
-            if (entity == null) { return; }
-
-            entity.Password = _passwordHasher.Hash(entity.Password);
-
-            DbSet.Add(entity);
-        }
-
         public User Edit(User entity)
         {
             if (entity == null) { return null; }
@@ -70,7 +61,6 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             if (entity.Birthdate != default) updatedUser.Birthdate = entity.Birthdate;
             if (entity.PhoneNumber != null) updatedUser.PhoneNumber = entity.PhoneNumber;
             if (entity.Email != null) updatedUser.Email = entity.Email.ToLower();
-            if (entity.Password != null) updatedUser.Password = _passwordHasher.Hash(entity.Password);
 
             DbSet.Update(updatedUser);
 
@@ -83,7 +73,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 
             if (user == null) return null;
 
-            user.EmailConfirmed = true;
+            //user.EmailConfirmed = true;
             DbSet.Update(user);
 
             return DbSet.Find(UserId);

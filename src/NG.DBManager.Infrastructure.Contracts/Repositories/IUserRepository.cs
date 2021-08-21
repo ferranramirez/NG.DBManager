@@ -7,7 +7,5 @@ namespace NG.DBManager.Infrastructure.Contracts.Repositories
     {
         User GetByEmail(string emailAddress);
         bool? ContainsCommerce(Guid UserId, Guid CommerceId);
-        User Edit(User user);
-        User ConfirmEmail(Guid UserId);
     }
 }

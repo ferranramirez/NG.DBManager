@@ -12,6 +12,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
 
         public DbSet<Audio> Audio { get; set; }
         //public DbSet<AudioImage> AudioImage { get; set; }
+        public DbSet<User> BasicUser { get; set; }
         public DbSet<Commerce> Commerce { get; set; }
         public DbSet<CommerceDeal> CommerceDeal { get; set; }
         public DbSet<Coupon> Coupon { get; set; }
@@ -22,6 +23,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
         public DbSet<Node> Node { get; set; }
         public DbSet<Restaurant> Restaurant { get; set; }
         public DbSet<Review> Review { get; set; }
+        public DbSet<User> SocialUser { get; set; }
         public DbSet<Tag> Tag { get; set; }
         public DbSet<Tour> Tour { get; set; }
         public DbSet<TourTag> TourTag { get; set; }
@@ -46,6 +48,13 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
             {
                 entity.HasIndex(u => u.Email).IsUnique();
                 entity.HasIndex(u => u.PhoneNumber).IsUnique();
+            });
+
+            modelBuilder.Entity<SocialUser>(entity =>
+            {
+                entity.HasIndex(su => su.SocialId).IsUnique();
+                entity.HasKey(su => new { su.UserId, su.Provider });
+                entity.HasOne(su => su.User);
             });
 
             modelBuilder.Entity<User>().HasData(DataUtils.UserSeed());
