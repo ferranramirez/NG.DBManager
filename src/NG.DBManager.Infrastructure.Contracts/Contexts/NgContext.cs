@@ -23,8 +23,8 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
         public DbSet<Node> Node { get; set; }
         public DbSet<Restaurant> Restaurant { get; set; }
         public DbSet<Review> Review { get; set; }
-        public DbSet<User> SocialUser { get; set; }
-        public DbSet<User> StandardlUser { get; set; }
+        public DbSet<SocialUser> SocialUser { get; set; }
+        public DbSet<StandardUser> StandardUser { get; set; }
         public DbSet<Tag> Tag { get; set; }
         public DbSet<Tour> Tour { get; set; }
         public DbSet<TourTag> TourTag { get; set; }
