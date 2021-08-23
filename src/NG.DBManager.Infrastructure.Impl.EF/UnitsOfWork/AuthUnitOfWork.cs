@@ -13,6 +13,8 @@ namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
         private readonly IPasswordHasher _passwordHasher;
 
         private IUserRepository _userRepository { get; set; }
+        private IStandardUserRepository _standardUserRepository { get; set; }
+        private ISocialUserRepository _socialUserRepository { get; set; }
 
         public AuthUnitOfWork(NgContext context, IPasswordHasher passwordHasher) : base(context)
         {
@@ -30,6 +32,30 @@ namespace NG.DBManager.Infrastructure.Impl.EF.UnitsOfWork
                         (IUserRepository)Activator.CreateInstance(typeof(UserRepository), _context, _passwordHasher));
                 }
                 return _userRepository;
+            }
+        }
+        public IStandardUserRepository StandardUser
+        {
+            get
+            {
+                if (_standardUserRepository == null)
+                {
+                    return (_standardUserRepository =
+                        (IStandardUserRepository)Activator.CreateInstance(typeof(StandardUserRepository), _context, _passwordHasher));
+                }
+                return _standardUserRepository;
+            }
+        }
+        public ISocialUserRepository SocialUser
+        {
+            get
+            {
+                if (_socialUserRepository == null)
+                {
+                    return (_socialUserRepository =
+                        (ISocialUserRepository)Activator.CreateInstance(typeof(SocialUserRepository), _context, _passwordHasher));
+                }
+                return _socialUserRepository;
             }
         }
     }

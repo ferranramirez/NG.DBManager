@@ -9,7 +9,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
     {
         public Guid UserId { get; set; }
         
-        public SocialProvider Provider { get; set; }
+        public string Provider { get; set; }
         
         public Guid SocialId { get; set; }
 

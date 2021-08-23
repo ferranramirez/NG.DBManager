@@ -28,6 +28,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 
             return user;
         }
+
         public User GetByEmail(string EmailAddress)
         {
             if (EmailAddress == null) return null;
@@ -67,16 +68,16 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             return DbSet.Find(entity.Id);
         }
 
-        public User ConfirmEmail(Guid UserId)
-        {
-            var user = DbSet.Find(UserId);
+        //public User ConfirmEmail(Guid UserId)
+        //{
+        //    var user = DbSet.Find(UserId);
 
-            if (user == null) return null;
+        //    if (user == null) return null;
 
-            //user.EmailConfirmed = true;
-            DbSet.Update(user);
+        //    //user.EmailConfirmed = true;
+        //    DbSet.Update(user);
 
-            return DbSet.Find(UserId);
-        }
+        //    return DbSet.Find(UserId);
+        //}
     }
 }

@@ -26,6 +26,14 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
 
             DbSet.Add(entity);
         }
+        public StandardUser GetByEmail(string EmailAddress)
+        {
+            if (EmailAddress == null) return null;
+
+            return DbSet
+                .Include(su => su.User)
+                .SingleOrDefault(su => su.User.Email.ToLower() == EmailAddress.ToLower());
+        }
 
         public StandardUser Edit(StandardUser entity)
         {

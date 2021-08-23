@@ -12,7 +12,7 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(nullable: false),
-                    Provider = table.Column<int>(nullable: false),
+                    Provider = table.Column<string>(nullable: false),
                     SocialId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>

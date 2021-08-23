@@ -304,8 +304,8 @@ namespace NG.DBManager.Infrastructure.Contracts.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Provider")
-                        .HasColumnType("integer");
+                    b.Property<string>("Provider")
+                        .HasColumnType("text");
 
                     b.Property<Guid>("SocialId")
                         .HasColumnType("uuid");
