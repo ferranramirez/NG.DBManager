@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace NG.DBManager.Infrastructure.Contracts.Models
 {
@@ -17,16 +18,13 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
 
         public string PhoneNumber { get; set; }
 
-        [Required]
+
+        [Required] 
         public string Email { get; set; }
 
-        [Required]
-        public string Password { get; set; }
 
-        [Required]
+        [Required] 
         public Role Role { get; set; }
-
-        public bool EmailConfirmed { get; set; }
 
         public Guid? ImageId { get; set; }
 

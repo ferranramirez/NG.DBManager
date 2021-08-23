@@ -17,9 +17,9 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
                     Birthdate = DateTime.Parse("01/01/2000"),
                     PhoneNumber = "+222222222",
                     Email = "basic@test.org",
-                    Password = "10000.+2PnZrnAWQRgqlMx+l8kyA==.ALiUC3pHYJJ7cr8Xqnn1y16XROosvjHNTDmf+Em+pMM=",
+                    //Password = "10000.+2PnZrnAWQRgqlMx+l8kyA==.ALiUC3pHYJJ7cr8Xqnn1y16XROosvjHNTDmf+Em+pMM=",
                     Role = Role.Basic,
-                    EmailConfirmed = true
+                    //EmailConfirmed = true
                 },
                 new User()
                 {
@@ -28,9 +28,9 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
                     Birthdate = DateTime.Parse("01/01/2000"),
                     PhoneNumber = "+000000000",
                     Email = "admin@test.org",
-                    Password = "10000.r1m2AhgohtRKaAYihSdiFQ==.9jOF0O4zo3WoBYq+H1f3XTPG9An8LZfEJd1uwB66N0s=",
+                    //Password = "10000.r1m2AhgohtRKaAYihSdiFQ==.9jOF0O4zo3WoBYq+H1f3XTPG9An8LZfEJd1uwB66N0s=",
                     Role = Role.Admin,
-                    EmailConfirmed = true
+                    //EmailConfirmed = true
                 },
                 new User()
                 {
@@ -39,9 +39,9 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
                     Birthdate = DateTime.Parse("01/01/2000"),
                     PhoneNumber = "+111111111",
                     Email = "commerce@test.org",
-                    Password = "10000.NcEE328o58z2KLy1cIiKMA==.5+Mwrqw7XVP2dE+RtcMorXI/Ri6daF4nCRZB4+xJUAY=",
+                    //Password = "10000.NcEE328o58z2KLy1cIiKMA==.5+Mwrqw7XVP2dE+RtcMorXI/Ri6daF4nCRZB4+xJUAY=",
                     Role = Role.Commerce,
-                    EmailConfirmed = true
+                    //EmailConfirmed = true
                 },
                 new User()
                 {
@@ -50,9 +50,9 @@ namespace NG.DBManager.Infrastructure.Contracts.Contexts
                     Birthdate = DateTime.Parse("01/01/2000"),
                     PhoneNumber = "+0111111111",
                     Email = "fullcommerce@test.org",
-                    Password = "10000./LphyV3IUSMjgcllhGg/HA==.ZeBKs4MVq3+BKEQw9ejzr/HbAwI7/KOGr10FqkuGSmE=",
+                    //Password = "10000./LphyV3IUSMjgcllhGg/HA==.ZeBKs4MVq3+BKEQw9ejzr/HbAwI7/KOGr10FqkuGSmE=",
                     Role = Role.Commerce,
-                    EmailConfirmed = true
+                    //EmailConfirmed = true
                 }
             };
         }
