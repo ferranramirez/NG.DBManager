@@ -16,7 +16,7 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             _context = context;
         }
 
-        public SocialUser Get(Guid SocialId, string Provider)
+        public SocialUser Get(string SocialId, string Provider)
         {
             if (SocialId == default || string.IsNullOrEmpty(Provider)) return null;
 

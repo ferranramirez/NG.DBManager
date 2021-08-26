@@ -5,6 +5,6 @@ namespace NG.DBManager.Infrastructure.Contracts.Repositories
 {
     public interface ISocialUserRepository : IRepository<SocialUser>
     {
-        SocialUser Get(Guid SocialId, string Provider);
+        SocialUser Get(string SocialId, string Provider);
     }
 }
