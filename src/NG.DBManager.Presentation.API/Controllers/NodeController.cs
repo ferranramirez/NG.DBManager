@@ -50,7 +50,7 @@ namespace NG.DBManager.Presentation.API.Controllers
         [HttpPost()]
         public IActionResult Add(Node Node)
         {
-            _uow.Repository<Node>().Add(Node);
+            _uow.Node.Add(Node);
             _uow.Commit();
             return Ok(Node.Id);
         }
@@ -61,7 +61,7 @@ namespace NG.DBManager.Presentation.API.Controllers
         [HttpPut]
         public IActionResult Update(Node Node)
         {
-            _uow.Repository<Node>().Update(Node);
+            _uow.Node.Update(Node);
             return Ok(_uow.Commit());
         }
 

@@ -8,10 +8,11 @@ namespace NG.DBManager.Infrastructure.Contracts.Models
     public class SocialUser
     {
         public Guid UserId { get; set; }
-        
+
         public string Provider { get; set; }
         
-        public Guid SocialId { get; set; }
+        [Required]
+        public string SocialId { get; set; }
 
         public User User { get; set; }
     }

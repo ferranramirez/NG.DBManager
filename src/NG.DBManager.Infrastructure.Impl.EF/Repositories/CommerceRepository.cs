@@ -52,10 +52,31 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
         {
             if (commerce == null) { return; }
 
-            if (commerce.Location.Nodes.Any())
-                throw new DbUpdateException("The selected location is being used by another node");
+            LocationUsedException(commerce.LocationId, default);
 
             DbSet.Add(commerce);
+        }
+
+        public override void Update(Commerce commerce)
+        {
+            if (commerce == null) { return; }
+
+            var oldCommerce = DbSet.Find(commerce.Id);
+            LocationUsedException(commerce.LocationId, oldCommerce.LocationId);
+
+            if (Context.Entry(commerce).State != EntityState.Detached) { return; }
+
+            Context.Entry(commerce).State = EntityState.Modified;
+        }
+
+        private void LocationUsedException(Guid commerceLocationId, Guid oldLocationId)
+        {
+            var locationAlreadyUsed = _context.Set<Node>()
+                .Where(c => c.LocationId != oldLocationId)
+                .Any(c => c.LocationId == commerceLocationId);
+
+            if (locationAlreadyUsed)
+                throw new DbUpdateException("The given location is being used by a Commerce");
         }
     }
 }

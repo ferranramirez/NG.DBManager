@@ -47,7 +47,7 @@ namespace NG.DBManager.Presentation.API.Controllers
         [HttpPost()]
         public IActionResult Add(Commerce Commerce)
         {
-            _uow.Repository<Commerce>().Add(Commerce);
+            _uow.Commerce.Add(Commerce);
             _uow.Commit();
             return Ok(Commerce.Id);
         }
@@ -58,7 +58,7 @@ namespace NG.DBManager.Presentation.API.Controllers
         [HttpPut]
         public IActionResult Update(Commerce commerce)
         {
-            _uow.Repository<Commerce>().Update(commerce);
+            _uow.Commerce.Update(commerce);
             return Ok(_uow.Commit());
         }
 

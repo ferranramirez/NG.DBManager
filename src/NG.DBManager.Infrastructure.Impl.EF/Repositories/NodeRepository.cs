@@ -30,14 +30,35 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
         {
             if (node == null) { return; }
 
-            var commerceSet = _context.Set<Commerce>();
-
-            var commerceIds = commerceSet.Select(c => c.LocationId).ToList();
-
-            if (node.Location.Nodes.Any(n => commerceIds.Contains(n.LocationId)))
-                throw new DbUpdateException("The given location is being used by a Commerce");
+            LocationUsedException(node, default);
 
             DbSet.Add(node);
+        }
+
+        public override void Update(Node node)
+        {
+            if (node == null) { return; }
+
+            var oldNode = DbSet.Find(node);
+            LocationUsedException(node, oldNode.LocationId);
+
+            if (Context.Entry(node).State != EntityState.Detached) { return; }
+
+            Context.Entry(node).State = EntityState.Modified;
+        }
+
+        private void LocationUsedException(Node node, Guid oldNodeLocationId)
+        {
+            var commerceSet = _context.Set<Commerce>();
+            var commerceIds = commerceSet
+                .Where(c => c.LocationId != oldNodeLocationId)
+                .Select(c => c.LocationId)
+                .ToList();
+
+            var location = _context.Set<Location>().Find(node.LocationId);
+
+            if (commerceIds.Contains(node.LocationId))
+                throw new DbUpdateException("The given location is being used by a Commerce");
         }
     }
 }
