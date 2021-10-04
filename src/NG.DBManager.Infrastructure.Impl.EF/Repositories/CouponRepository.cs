@@ -18,6 +18,21 @@ namespace NG.DBManager.Infrastructure.Impl.EF.Repositories
             _context = context;
         }
 
+        public Commerce GetCommerce(Guid couponId)
+        {
+            var commerceSet = _context.Set<Commerce>();
+            var couponLocationId = DbSet
+                        .Where(c => c.Id == couponId)
+                        // .Include(c => c.Node)
+                        .Select(x => x.Node.LocationId)
+                        .SingleOrDefault();
+
+            var commerce = commerceSet
+                            .Where(com => com.LocationId == couponLocationId)
+                            .FirstOrDefault();
+
+            return commerce;
+        }
         public override Coupon Get(object id)
         {
             return DbSet
